@@ -1,6 +1,6 @@
 from django.db import models
 from apps.customers.models import CustomerProfile
-
+import uuid
 
 class Asset(models.Model):
 
@@ -16,7 +16,7 @@ class Asset(models.Model):
     product_id = models.CharField(max_length=10, unique=True, editable=False)
     serial_number = models.CharField(max_length=100)
     model_number = models.CharField(max_length=100)
-    id = models.AutoField(primary_key=True, unique=True, blnak=True, null=True)
+    id = models.AutoField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
 
 
     def save(self, *args, **kwargs):

@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
-# Create your models here.
-
+from django.conf import settings
+import uuid
+from django.core.validators import RegexValidator
+# Create your models here. 
 # class User(AbstractUser):
 
 #     ROLE_CHOICES = (
@@ -23,13 +25,6 @@ from django.contrib.auth.models import User
 
 #     def __str__(self):
 #         return self.username
-
-from django.db import models
-from django.conf import settings
-from django.contrib.auth.models import User
-import uuid
-from django.core.validators import RegexValidator
-# Create your models here.
 
 # accounts/models.py
 class User(AbstractUser):
