@@ -1,3 +1,50 @@
 from django.db import models
-
+import uuid
 # Create your models here.
+
+class Component(models.Model):
+    GROUPS = (
+        ('engine', 'ENGINE'),
+        ('generators', 'GENERATORS'),
+        ('electrical', 'ELECTRICAL'),
+        ('transmissions', 'TRANSMISSIONS'),
+    )
+    group = models.CharField(max_length=50, choices=GROUPS)
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.name
+    
+
+class Part(models.Model):
+    component = models.ForeignKey(Component, on_delete=models.CASCADE, related_name='parts')
+    part_number = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=255)
+    quantity_available = models.IntegerField(default=0)
+    reorder_threshold = models.IntegerField(default=5)
+    supplier = models.CharField(max_length=255)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.part_number
+
+
+class InventoryTransaction(models.Model):
+
+    TRANSACTION_TYPE = (
+        ("addition", "Addition"),
+        ("removal", "Removal"),
+    )
+
+    part = models.ForeignKey(Part, on_delete=models.CASCADE)
+    transaction_type = models.CharField(max_length=20, choices=TRANSACTION_TYPE)
+    quantity = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    def __str__(self):
+        return f"{self.transaction_type} of {self.quantity} for {self.part.part_number}"
+    
