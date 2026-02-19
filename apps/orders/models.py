@@ -2,7 +2,7 @@ from django.db import models
 from apps.inventory.models import Part
 
 
-class PurchaseOrder(models.Model):
+class Order(models.Model):
 
     STATUS_CHOICES = (
         ("pending", "Pending Approval"),

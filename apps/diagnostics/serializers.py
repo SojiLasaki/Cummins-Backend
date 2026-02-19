@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Diagnostic
+from .models import DiagnosticReport
 
-class DiagnosticSerializer(serializers.ModelSerializer):
+class DiagnosticReportSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Diagnostic
+        model = DiagnosticReport
         fields = '__all__'

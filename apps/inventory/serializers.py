@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Component, Part, InveInventoryTransaction
+from .models import Component, Part, InventoryTransaction
 
 class ComponentSerializer(serializers.ModelSerializer):
     class Meta:
