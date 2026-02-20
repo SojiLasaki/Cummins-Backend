@@ -12,7 +12,14 @@ class Ticket(models.Model):
         ("awaiting_approval", "Awaiting Approval"),
         ("completed", "Completed"),
     )
+    PRIOIRITY_LEVEL = (
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+        ('severe', "Severe")
+    )
     customer = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="tickets")
+    priority = models.CharField(max_length=20, choices=PRIOIRITY_LEVEL, default="medium")
     product_id = models.CharField(max_length=100)
     issue_description = models.TextField()
     assigned_to = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tickets")

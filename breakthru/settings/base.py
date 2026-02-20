@@ -54,9 +54,11 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'channels',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -115,6 +117,12 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    # add other origins if needed
+]
+
 
 AUTH_USER_MODEL = "users.User"
 

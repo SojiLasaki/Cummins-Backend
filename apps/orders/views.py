@@ -6,6 +6,7 @@ from .serializers import OrderSerializer
 from .permissions import CanApproveOrder
 from apps.inventory.models import Part
 from apps.notifications.models import Notification
+from apps.core.utils import is_connected
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -17,6 +18,15 @@ class OrderViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         order = serializer.save(requested_by=self.request.user)
 
+        if is_connected():
+            # push immediately to Supabase
+            from apps.sync.services.sync_service import sync_orders
+            sync_orders()
+        else:
+            # set to sync later
+            order.synced = False
+            order.save()
+            
         # Notify office/admin that new order is waiting approval
         Notification.objects.create(
             recipient=self.request.user,

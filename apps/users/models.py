@@ -138,13 +138,9 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-
     profile_image = models.ImageField(upload_to="profile_images/", null=True, blank=True)
-
     phone_number = models.CharField(
         max_length=20,
         validators=[
@@ -156,18 +152,18 @@ class Profile(models.Model):
         null=True,
         blank=True
     )
-
-    preferences = models.JSONField(default=dict, blank=True)
-
+    username = models.CharField(max_length=150, null=True, blank=True, unique=True, validators=[RegexValidator(regex=r'^[\w.@+-]+$', message="Username may contain letters, digits and @/./+/-/_ characters.")])
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    email = models.EmailField(blank=True, null=True)
+    preferences = models.JSONField(default=dict, blank=True, null=True)
     street_address = models.CharField(max_length=255, blank=True)
     street_address_2 = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100, blank=True)
     state = models.CharField(max_length=100, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=100, blank=True)
-
     is_active = models.BooleanField(default=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
