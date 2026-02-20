@@ -39,7 +39,7 @@ class Part(models.Model):
     quantity_available = models.IntegerField(default=0)
     reorder_threshold = models.IntegerField(default=5)
     category = models.CharField(max_length=50, choices=CATEGORY, default='other')
-    weight = models.IntegerField(null=True, blank=True) 
+    weight_kg = models.IntegerField(null=True, blank=True) 
     cost_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     resale_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS, default='in_stock')
