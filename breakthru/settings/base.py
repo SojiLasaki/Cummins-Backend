@@ -50,8 +50,10 @@ INSTALLED_APPS = [
     'apps.technicians.apps.TechniciansConfig',
     'apps.tickets.apps.TicketsConfig',
     'apps.users.apps.UsersConfig',
+    'apps.notifications.apps.NotificationsConfig',
 
     'rest_framework',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +107,14 @@ REST_FRAMEWORK = {
     )
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],  # Redis server
+        },
+    },
+}
 
 AUTH_USER_MODEL = "users.User"
 

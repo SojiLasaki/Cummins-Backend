@@ -17,3 +17,29 @@ def deduct_inventory_on_approval(sender, instance, created, **kwargs):
             part.save()
             instance.inventory_deducted = True
             instance.save(update_fields=["inventory_deducted"])
+
+
+@receiver(post_save, sender=Order)
+def order_status_change(sender, instance, created, **kwargs):
+    if created:
+        # New order created
+        send_order_notification(
+            instance.requested_by,
+            "Order Created",
+            f"Your order #{instance.id} has been created.",
+            "order_created"
+        )
+    elif instance.status == "approved":
+        send_order_notification(
+            instance.requested_by,
+            "Order Approved",
+            f"Your order #{instance.id} has been approved.",
+            "order_approved"
+        )
+    elif instance.status == "rejected":
+        send_order_notification(
+            instance.requested_by,
+            "Order Rejected",
+            f"Your order #{instance.id} has been rejected.",
+            "order_rejected"
+        )
