@@ -47,7 +47,7 @@ User = get_user_model()
 #         )
 
 class ProfileViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
 class AdminUserProfileViewSet(viewsets.ModelViewSet):
