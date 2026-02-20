@@ -24,3 +24,9 @@ class ManualSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manual
         fields = '__all__'
+
+    def get_component(self, obj):
+        return [c.name for c in obj.component.all()]
+
+    def get_tags(self, obj):
+        return [t.name for t in obj.tags.all()]
