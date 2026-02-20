@@ -22,11 +22,13 @@ class Part(models.Model):
     component = models.ForeignKey(Component, on_delete=models.CASCADE, related_name='parts')
     part_number = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
     quantity_available = models.IntegerField(default=0)
     reorder_threshold = models.IntegerField(default=5)
     supplier = models.CharField(max_length=255)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    inventory_deducted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.part_number

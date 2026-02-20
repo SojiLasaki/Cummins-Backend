@@ -15,6 +15,7 @@ class Order(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     customer = models.ForeignKey("customers.CustomerProfile", verbose_name=("Customer"), on_delete=models.CASCADE)
     reason = models.TextField()
+    inventory_deducted = models.BooleanField(default=False)
     quantity = models.IntegerField()
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="pending")
     requested_by_agent = models.BooleanField(default=False)
