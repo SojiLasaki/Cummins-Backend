@@ -17,7 +17,7 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ManualSerializer(serializers.ModelSerializer):
-    component = ComponentSerializer(read_only=True)
+    component = ComponentSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     images = ImageSerializer(many=True, read_only=True)
 
