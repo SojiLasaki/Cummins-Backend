@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from .models import Manual, Component, Tag, Image
-
-class ComponentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Component
-        fields = '__all__'
+from apps.inventory.serializers import ComponentSerializer
+# class ComponentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Component
+#         fields = '__all__'
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
