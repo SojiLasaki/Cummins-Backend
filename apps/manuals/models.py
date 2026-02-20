@@ -14,12 +14,20 @@ from apps.inventory.models import Component
     
 
 class Manual(models.Model):
+    CATEGORY_CHOICES = (
+        ("engine", "ENGINE"),
+        ("generators", "GENERATORS"),
+        ("electrical", "ELECTRICAL"),
+        ("transmissions", "TRANSMISSIONS"),
+        ("other", "OTHER"),
+    )
     title = models.CharField(max_length=255)
     component = models.ManyToManyField(Component, related_name="manuals", blank=True)
     parts_needed = models.ManyToManyField("inventory.Part", blank=True, related_name="manuals")
     version = models.CharField(max_length=50, blank=True, null=True)
     tags = models.ManyToManyField("Tag", blank=True, related_name="manuals")
     file = models.FileField(upload_to="manuals/", blank=True, null=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="other")
     content = models.TextField(blank=True, null=True)
     created_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="manuals_created")
     created_at = models.DateTimeField(auto_now_add=True)
