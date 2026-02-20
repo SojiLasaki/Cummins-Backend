@@ -4,7 +4,6 @@ import uuid
 # Create your models here.
 
 class Ticket(models.Model):
-
     STATUS_CHOICES = (
         ("open", "Open"),
         ("assigned", "Assigned"),
@@ -18,6 +17,7 @@ class Ticket(models.Model):
     issue_description = models.TextField()
     assigned_to = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tickets")
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="open")
+    created_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets_created_by")
     created_at = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
