@@ -32,7 +32,7 @@ class Part(models.Model):
         ('transmissions', 'TRANSMISSIONS'),
         ('other', 'OTHER'),
     )
-    component = models.ForeignKey(Component, on_delete=models.CASCADE, related_name='parts')
+    components = models.ManyToManyField(Component, related_name="parts")
     part_number = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)

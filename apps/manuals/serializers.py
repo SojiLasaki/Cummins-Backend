@@ -20,7 +20,8 @@ class ManualSerializer(serializers.ModelSerializer):
     component = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
     images = ImageSerializer(many=True, read_only=True)
-
+    created_by = serializers.CharField(source='created_by.get_full_name', read_only=True)
+   
     class Meta:
         model = Manual
         fields = '__all__'
@@ -30,3 +31,4 @@ class ManualSerializer(serializers.ModelSerializer):
 
     def get_tags(self, obj):
         return [t.name for t in obj.tags.all()]
+    

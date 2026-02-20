@@ -29,7 +29,7 @@ class Manual(models.Model):
     file = models.FileField(upload_to="manuals/", blank=True, null=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="other")
     content = models.TextField(blank=True, null=True)
-    created_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="manuals_created")
+    created_by = models.ForeignKey("users.Profile", on_delete=models.SET_NULL, null=True, blank=True, related_name="manuals_created")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     id = models.UUIDField(primary_key=True, editable=False, unique=True, default=uuid.uuid4)
