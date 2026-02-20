@@ -17,8 +17,8 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ManualSerializer(serializers.ModelSerializer):
-    component = ComponentSerializer(many=True, read_only=True)
-    tags = TagSerializer(many=True, read_only=True)
+    component = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
     images = ImageSerializer(many=True, read_only=True)
 
     class Meta:
