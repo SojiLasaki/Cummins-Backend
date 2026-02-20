@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.db import transaction
 from apps.orders.models import Order
 from apps.inventory.models import Part
+from apps.notifications.utils import send_order_notification
 
 
 @receiver(post_save, sender=Order)
