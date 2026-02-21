@@ -40,7 +40,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             "country",
             "specialization",
             "expertise",
-            'is_available',
+            'status',
             'station',
             'notes'
         ]
