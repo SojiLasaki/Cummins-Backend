@@ -54,11 +54,6 @@ class Profile(models.Model):
         null=True,
         blank=True
     )
-    # username = models.CharField(max_length=150, null=True, blank=True, unique=True, validators=[RegexValidator(regex=r'^[\w.@+-]+$', message="Username may contain letters, digits and @/./+/-/_ characters.")])
-    # first_name = models.CharField(max_length=30, blank=True)
-    # last_name = models.CharField(max_length=30, blank=True)
-    # role = models.CharField(max_length=20, blank=True)
-    # email = models.EmailField(blank=True, null=True)
     preferences = models.JSONField(default=dict, blank=True, null=True)
     street_address = models.CharField(max_length=255, blank=True)
     street_address_2 = models.CharField(max_length=255, blank=True)
@@ -68,6 +63,7 @@ class Profile(models.Model):
     country = models.CharField(max_length=100, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
@@ -79,9 +75,22 @@ class Profile(models.Model):
         return ""
 
 
-class AdminUserProfile(Profile):
-    notes = models.TextField(blank=True)
-    
+class AdminUserProfile(Profile):    
     class Meta:
         verbose_name = "Admin User Profile"
         verbose_name_plural = "Admin User Profiles"
+
+
+class Station(models.Model):
+    name = models.CharField
+    street_address = models.CharField(max_length=255, blank=True)
+    street_address_2 = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    state = models.CharField(max_length=100, blank=True)
+    postal_code = models.CharField(max_length=20, blank=True)
+    country = models.CharField(max_length=100, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
