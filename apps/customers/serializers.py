@@ -38,7 +38,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
             "postal_code",
             "country",
             "company_name",
-            'notes,'
+            'notes'
         ]
 
     def create(self, validated_data):

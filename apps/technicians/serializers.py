@@ -41,8 +41,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             "specialization",
             "expertise",
             'is_available',
-            'latitude',
-            'longitude',
+            'station',
             'notes'
         ]
 
