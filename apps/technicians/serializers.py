@@ -51,7 +51,11 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
         # Create profile
         profile = TechnicianProfile.objects.create(
             user=user,
+            username=user.username,
+            email=user.email,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            role=User.Roles.TECHNICIAN
             **validated_data
         )
-
         return profile
