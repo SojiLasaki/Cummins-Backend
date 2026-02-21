@@ -6,4 +6,4 @@ class CustomerProfile(Profile):
     company_name = models.CharField(max_length=255, blank=True)
     
     def __str__(self):
-        return f"{self.username} - {self.company_name}"
+        return f"{self.user.username} - {self.company_name}"

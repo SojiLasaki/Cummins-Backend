@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import CustomerProfile
+from django.utils.crypto import get_random_string
 
 User = get_user_model()
 
@@ -47,13 +48,14 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
         email = validated_data.pop("email")
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
+        password = get_random_string(length=10)
 
         user = User.objects.create_user(
             username=username,
             email=email,
             first_name=first_name,
             last_name=last_name,
-            password=User.objects.make_random_password(),
+            password=password,
             role=User.Roles.ADMIN,
         )
 
