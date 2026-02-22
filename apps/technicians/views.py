@@ -7,3 +7,4 @@ from .serializers import TechnicianProfileSerializer
 class TechnicianProfileViewSet(viewsets.ModelViewSet):
     queryset = TechnicianProfile.objects.all()
     serializer_class = TechnicianProfileSerializer
+    lookup_field = "id"

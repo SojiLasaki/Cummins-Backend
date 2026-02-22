@@ -60,7 +60,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             first_name=first_name,
             last_name=last_name,
             password=password,
-            role=User.Roles.ADMIN,
+            role=User.Roles.TECHNICIAN,
         )
 
         # Create AdminUserProfile directly

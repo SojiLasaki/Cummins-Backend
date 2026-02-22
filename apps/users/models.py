@@ -82,7 +82,7 @@ class AdminUserProfile(Profile):
 
 
 class Station(models.Model):
-    name = models.CharField
+    name = models.CharField(max_length=255, null=True, blank=True)
     street_address = models.CharField(max_length=255, blank=True)
     street_address_2 = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100, blank=True)
@@ -90,6 +90,7 @@ class Station(models.Model):
     postal_code = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=100, blank=True)
     is_active = models.BooleanField(default=True)
+    id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

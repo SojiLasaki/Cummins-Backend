@@ -4,13 +4,13 @@ from apps.users.models import Profile, Station
 
 class TechnicianProfile(Profile):
     LEVEL = (
-        ('junior', 'Junior'),
-        ('mid', 'Mid'),
-        ('senior', 'Senior'),
+        ('Junior', 'Junior'),
+        ('Mid', 'Mid'),
+        ('Senior', 'Senior'),
     )
     POSITION_CHOICES = (
-        ("engine", "Engine Technician"),
-        ("electrical", "Electrical Technician"),
+        ("Engine", "Engine_Technician"),
+        ("Electrical", "Electrical_Technician"),
     )
     STATUS = {
         ('available', "Available"),
