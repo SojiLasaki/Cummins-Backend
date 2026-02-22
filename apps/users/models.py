@@ -76,6 +76,12 @@ class Profile(models.Model):
 
 
 class AdminUserProfile(Profile):    
+    STATUS = {
+        ('Available', "Available"),
+        ('Busy', 'Busy'),
+        ('Unavailable', 'Unavailable')
+    }
+    status = models.CharField(max_length=50, default="Available")
     class Meta:
         verbose_name = "Admin User Profile"
         verbose_name_plural = "Admin User Profiles"

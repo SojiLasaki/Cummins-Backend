@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.tickets.apps.TicketsConfig',
     'apps.users.apps.UsersConfig',
     'apps.notifications.apps.NotificationsConfig',
+    'apps.staffs.apps.StaffsConfig',
 
     'rest_framework',
     'channels',

@@ -1,22 +1,29 @@
+# from rest_framework import serializers
+# from .models import *
+
+
+# class StaffProfileSerializer:
+#     class Meta:
+#         model = StaffProfile
+#         fields = "__all__"
+
+
 from rest_framework import serializers
-from .models import TechnicianProfile
+from .models import StaffProfile
 from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
 
 User = get_user_model()
 
 
-class TechnicianProfileSerializer(serializers.ModelSerializer):
+class StaffProfileSerializer(serializers.ModelSerializer):
     # Read-only user fields
     username_display = serializers.CharField(source="user.username", read_only=True)
     email_display = serializers.EmailField(source="user.email", read_only=True)
     first_name_display = serializers.CharField(source="user.first_name", read_only=True)
     last_name_display = serializers.CharField(source="user.last_name", read_only=True)
     role = serializers.CharField(source="user.role", read_only=True)
-    station_name = serializers.CharField(source="station.name", read_only=True)
-    station_name = serializers.CharField(source="station.name", read_only=True)
-    station_name = serializers.CharField(source="station.name", read_only=True)
-    station_name = serializers.CharField(source="station.name", read_only=True)
+
     # Write fields
     username = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
@@ -24,7 +31,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(write_only=True)
 
     class Meta:
-        model = TechnicianProfile
+        model = StaffProfile
         fields = [
             "id",
             "username",
@@ -43,11 +50,8 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             "state",
             "postal_code",
             "country",
-            "specialization",
-            "expertise",
             'status',
             'station',
-            'station_name',
             'notes'
         ]
 
@@ -65,11 +69,11 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             first_name=first_name,
             last_name=last_name,
             password=password,
-            role=User.Roles.TECHNICIAN,
+            role=User.Roles.OFFICE,
         )
 
         # Create AdminUserProfile directly
-        profile = TechnicianProfile.objects.create(
+        profile = StaffProfile.objects.create(
             user=user,
             **validated_data  # now only profile fields like notes, phone_number
         )
