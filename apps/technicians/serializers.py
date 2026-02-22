@@ -5,6 +5,7 @@ from django.utils.crypto import get_random_string
 
 User = get_user_model()
 
+
 class TechnicianProfileSerializer(serializers.ModelSerializer):
     # Read-only user fields
     username_display = serializers.CharField(source="user.username", read_only=True)

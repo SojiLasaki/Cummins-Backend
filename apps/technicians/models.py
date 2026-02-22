@@ -13,9 +13,9 @@ class TechnicianProfile(Profile):
         ("Electrical", "Electrical_Technician"),
     )
     STATUS = {
-        ('available', "Available"),
-        ('busy', 'Busy'),
-        ('unavailable', 'Unavailable')
+        ('Available', "Available"),
+        ('Busy', 'Busy'),
+        ('Unavailable', 'Unavailable')
     }
     specialization = models.CharField(max_length=50, choices=POSITION_CHOICES)
     expertise = models.CharField(max_length=10, blank=True, choices=LEVEL)

@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Profile, AdminUserProfile
+from .models import Profile, AdminUserProfile, Station
 
 User = get_user_model()
 
@@ -111,3 +111,8 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
 
         return instance
     
+
+class StatioinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Station
+        fields = "__all__"
