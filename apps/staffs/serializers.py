@@ -1,13 +1,3 @@
-# from rest_framework import serializers
-# from .models import *
-
-
-# class StaffProfileSerializer:
-#     class Meta:
-#         model = StaffProfile
-#         fields = "__all__"
-
-
 from rest_framework import serializers
 from .models import StaffProfile
 from django.contrib.auth import get_user_model
@@ -23,6 +13,8 @@ class StaffProfileSerializer(serializers.ModelSerializer):
     first_name_display = serializers.CharField(source="user.first_name", read_only=True)
     last_name_display = serializers.CharField(source="user.last_name", read_only=True)
     role = serializers.CharField(source="user.role", read_only=True)
+    station_name = serializers.CharField(source="station.name", read_only=True)
+
 
     # Write fields
     username = serializers.CharField(write_only=True)
@@ -51,7 +43,7 @@ class StaffProfileSerializer(serializers.ModelSerializer):
             "postal_code",
             "country",
             'status',
-            'station',
+            'station_name',
             'notes'
         ]
 
