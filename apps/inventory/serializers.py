@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Component, Part, InventoryTransaction
 
 class ComponentSerializer(serializers.ModelSerializer):
+    parts_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Component
         fields = '__all__'

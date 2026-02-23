@@ -4,12 +4,14 @@ import uuid
 
 class Component(models.Model):
     GROUPS = (
-        ('engine', 'ENGINE'),
-        ('generators', 'GENERATORS'),
-        ('electrical', 'ELECTRICAL'),
-        ('transmissions', 'TRANSMISSIONS'),
+        ('Engine', 'ENGINE'),
+        ('Generators', 'GENERATORS'),
+        ('Electrical', 'ELECTRICAL'),
+        ('Transmissions', 'TRANSMISSIONS'),
     )
-    group = models.CharField(max_length=50, choices=GROUPS)
+    group = models.CharField(max_length=50, choices=GROUPS, default='engine')
+    component_number = models.CharField(max_length=100, unique=True, null=True, blank=True)
+    quantity_available = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

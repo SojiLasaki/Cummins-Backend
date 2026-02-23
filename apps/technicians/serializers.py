@@ -14,9 +14,12 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
     last_name_display = serializers.CharField(source="user.last_name", read_only=True)
     role = serializers.CharField(source="user.role", read_only=True)
     station_name = serializers.CharField(source="station.name", read_only=True)
-    station_name = serializers.CharField(source="station.name", read_only=True)
-    station_name = serializers.CharField(source="station.name", read_only=True)
-    station_name = serializers.CharField(source="station.name", read_only=True)
+    station_street_address = serializers.CharField(source="station.astreet_ddress", read_only=True)
+    station_street_address_2 = serializers.CharField(source="station.street_address_2", read_only=True)
+    station_city = serializers.CharField(source="station.city", read_only=True)
+    station_state = serializers.CharField(source="station.state", read_only=True)
+    station_postal_code = serializers.CharField(source="station.postal_code", read_only=True)
+    station_country = serializers.CharField(source="station.country", read_only=True)
     # Write fields
     username = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
@@ -48,6 +51,12 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             'status',
             'station',
             'station_name',
+            'station_street_address',
+            'station_street_address_2',
+            'station_city',
+            'station_state',
+            'station_postal_code',
+            'station_country',
             'notes'
         ]
 

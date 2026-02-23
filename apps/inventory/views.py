@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Component, Part, InventoryTransaction
+from django.db.models import Count
 from .serializers import *
 # Create your views here.
 
 class ComponentViewSet(viewsets.ModelViewSet):
-    queryset = Component.objects.all()
+    queryset = Component.objects.annotate(
+        parts_count=Count('parts')
+    )
     serializer_class = ComponentSerializer
 
 class PartViewSet(viewsets.ModelViewSet):

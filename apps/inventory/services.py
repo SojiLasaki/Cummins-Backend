@@ -22,3 +22,23 @@ def add_inventory(part_id, quantity):
         part.refresh_from_db()
 
         return part
+
+
+def add_component(component_id, quantity):
+    with transaction.atomic():
+        component = Part.objects.select_for_update().get(id=component_id)
+        component.quantity_available = F("quantity_available") + quantity
+        component.save(update_fields=["quantity_available"])
+        component.refresh_from_db()
+
+        return component
+
+def deduct_component(component_id, quantity):
+    with transaction.atomic():
+        component = Part.objects.select_for_update().get(id=component_id)
+        if component.quantity_available < quantity:
+            raise ValueError("Not enough inventory available")
+        component.quantity_available = F("quantity_available") - quantity
+        component.save(update_fields=["quantity_available"])
+        component.refresh_from_db()
+        return component
