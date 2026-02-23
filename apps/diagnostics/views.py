@@ -7,3 +7,4 @@ from rest_framework import viewsets
 class DiagnosticReportViewSet(viewsets.ModelViewSet):
     queryset = DiagnosticReport.objects.all()
     serializer_class = DiagnosticReportSerializer
+    lookup_field = "id"
