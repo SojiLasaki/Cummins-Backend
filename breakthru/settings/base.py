@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     'apps.users.apps.UsersConfig',
     'apps.notifications.apps.NotificationsConfig',
     'apps.staffs.apps.StaffsConfig',
+    'apps.schedules.apps.SchedulesConfig',
+    # 'apps.regions.apps.RegionsConfig',
+    'apps.playbooks.apps.PlaybooksConfig',
 
     'rest_framework',
     'channels',

@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from apps.users.models import Profile, Station
 # Create your models here.
 
@@ -28,3 +29,15 @@ class TechnicianProfile(Profile):
     def __str__(self):
         return f"{self.user.username} - {self.specialization}"
     
+
+class Certification(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, unique=True, default=uuid.uuid4)
+    name = models.CharField(max_length=100)
+    technician = models.ForeignKey(TechnicianProfile, on_delete=models.CASCADE, related_name='certifications')
+    certification_id = models.CharField(max_length=50, unique=True)
+    institution = models.CharField(max_length=100)
+    date_obtained = models.DateField()
+    expiration_date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.certification_id}"

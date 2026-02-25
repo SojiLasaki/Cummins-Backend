@@ -44,6 +44,7 @@ class DiagnosticReport(models.Model):
     ai_summary = models.TextField()
     probable_cause = models.TextField()
     description = models.TextField(null=True, blank=True)
+    expected_repair_time = models.DurationField(null=True, blank=True)
     recommended_actions = models.TextField()
     confidence_score = models.FloatField()
     identified_at = models.DateTimeField(null=True, blank=True)

@@ -1,10 +1,14 @@
 from rest_framework import serializers
-from .models import TechnicianProfile
+from .models import TechnicianProfile, Certification
 from django.contrib.auth import get_user_model
 from django.utils.crypto import get_random_string
 
 User = get_user_model()
 
+class CertificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certification
+        fields = ['id', 'name', 'certification_id', 'institution', 'date_obtained', 'expiration_date', 'technician']
 
 class TechnicianProfileSerializer(serializers.ModelSerializer):
     # Read-only user fields
@@ -57,7 +61,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             'station_state',
             'station_postal_code',
             'station_country',
-            'notes'
+            'notes',
         ]
 
     def create(self, validated_data):

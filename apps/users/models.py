@@ -89,12 +89,24 @@ class AdminUserProfile(Profile):
 
 class Station(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
+    region = models.ForeignKey("Region", on_delete=models.SET_NULL, null=True, blank=True, related_name="stations")
     street_address = models.CharField(max_length=255, blank=True)
     street_address_2 = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100, blank=True)
     state = models.CharField(max_length=100, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=100, blank=True)
+    is_active = models.BooleanField(default=True)
+    id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Region(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)

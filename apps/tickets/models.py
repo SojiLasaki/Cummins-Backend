@@ -1,5 +1,6 @@
 from django.db import models
 from apps.technicians.models import TechnicianProfile
+from apps.customers.models import CustomerProfile
 from apps.diagnostics.models import DiagnosticReport
 import uuid
 # Create your models here.
@@ -24,7 +25,8 @@ class Ticket(models.Model):
     priority = models.CharField(max_length=20, choices=PRIOIRITY_LEVEL, default="medium")
     product_id = models.CharField(max_length=100)
     issue_description = models.TextField()
-    assigned_to = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tickets")
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="tickets")
+    technician = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tickets")
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="open")
     created_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets_created_by")
     created_at = models.DateTimeField(auto_now_add=True)

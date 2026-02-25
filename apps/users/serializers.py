@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Profile, AdminUserProfile, Station
+from .models import Profile, AdminUserProfile, Station, Region
 
 User = get_user_model()
 
@@ -113,6 +113,26 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
     
 
 class StatioinSerializer(serializers.ModelSerializer):
+    region_name = serializers.CharField(source="region.name", read_only=True)
     class Meta:
         model = Station
+        fields = [
+            "id",
+            "name",
+            "region",
+            "region_name",
+            'street_address',
+            'street_address_2',
+            'city',
+            'state',
+            'postal_code',
+            'country',
+            'is_active',
+            'created_at',
+        ]
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
         fields = "__all__"

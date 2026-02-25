@@ -70,3 +70,15 @@ class InventoryTransaction(models.Model):
     def __str__(self):
         return f"{self.transaction_type} of {self.quantity} for {self.part.part_number}"
     
+
+
+class Tool(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    quantity_available = models.IntegerField(default=1)
+    station = models.CharField(max_length=255, blank=True, null=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
