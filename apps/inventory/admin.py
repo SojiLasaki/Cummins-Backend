@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Component)
 admin.site.register(Part)
 admin.site.register(InventoryTransaction)
+admin.site.register(Tool)

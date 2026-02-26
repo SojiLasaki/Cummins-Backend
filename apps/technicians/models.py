@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from apps.users.models import Profile, Station
 from apps.tickets.models import Ticket
 # Create your models here.
@@ -38,6 +39,7 @@ class TechnicianProfile(models.Model):
     total_jobs_completed = models.IntegerField(default=0)
 
     def __str__(self):
+<<<<<<< HEAD
         return f"{self.profile.user.username} - {self.specialization}"
     
 
@@ -52,3 +54,19 @@ class TechnicianJob(models.Model):
 
     def __str__(self):
         return f"Job for {self.technician.user.username} - {self.severity} - {self.ticket.title}"
+=======
+        return f"{self.user.username} - {self.specialization}"
+    
+
+class Certification(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, unique=True, default=uuid.uuid4)
+    name = models.CharField(max_length=100)
+    technician = models.ForeignKey(TechnicianProfile, on_delete=models.CASCADE, related_name='certifications')
+    certification_id = models.CharField(max_length=50, unique=True)
+    institution = models.CharField(max_length=100)
+    date_obtained = models.DateField()
+    expiration_date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.certification_id}"
+>>>>>>> 711c585b969e405ba1d25a18bdf7bc53636a4dfc

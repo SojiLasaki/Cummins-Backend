@@ -1,6 +1,12 @@
 from django.db import models
+<<<<<<< HEAD
 from apps.customers.models import CustomerProfile
 from django.conf import settings
+=======
+from apps.technicians.models import TechnicianProfile
+from apps.customers.models import CustomerProfile
+from apps.diagnostics.models import DiagnosticReport
+>>>>>>> 711c585b969e405ba1d25a18bdf7bc53636a4dfc
 import uuid
 
 
@@ -67,6 +73,18 @@ class Ticket(models.Model):
         blank=True,
         related_name="tickets_created"
     )
+<<<<<<< HEAD
+=======
+    diagnosticReport = models.ForeignKey(DiagnosticReport, on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets")
+    # customer = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="tickets")
+    priority = models.CharField(max_length=20, choices=PRIOIRITY_LEVEL, default="medium")
+    product_id = models.CharField(max_length=100)
+    issue_description = models.TextField()
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="tickets")
+    technician = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tickets")
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="open")
+    created_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets_created_by")
+>>>>>>> 711c585b969e405ba1d25a18bdf7bc53636a4dfc
     created_at = models.DateTimeField(auto_now_add=True)
     assigned_at = models.DateTimeField(null=True, blank=True)
     resolved_at = models.DateTimeField(null=True, blank=True)
