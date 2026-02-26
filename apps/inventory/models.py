@@ -14,7 +14,7 @@ class Component(models.Model):
     quantity_available = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name
@@ -49,6 +49,7 @@ class Part(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     inventory_deducted = models.BooleanField(default=False)
+    last_ordered_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.part_number + " - " + self.name

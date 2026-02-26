@@ -1,64 +1,86 @@
 from django.db import models
 from apps.customers.models import CustomerProfile
 from apps.inventory.models import Component, Part
-from apps.technicians.models import TechnicianProfile
-# from apps.tickets.models import Ticket
-# from apps.tickets.models import Ticket
+from apps.tickets.models import Ticket
 import uuid
 
+
 class DiagnosticReport(models.Model):
+
     LEVEL = (
-        ('Junior', 'Junior'),
-        ('Mid', 'Mid'),
-        ('Senior', 'Senior'),
+        ('junior', 'Junior'),
+        ('mid', 'Mid'),
+        ('senior', 'Senior'),
     )
     POSITION_CHOICES = (
-        ("Engine", "Engine_Technician"),
-        ("Electrical", "Electrical_Technician"),
+        ("engine", "Engine Technician"),
+        ("electrical", "Electrical Technician"),
     )
     SEVERITY = (
-        ("Low", "Low"),
-        ("Medium", "Medium"),
-        ("Critical", "Critical"),
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+        ("severe", "Severe"),
     )
     STATUS = (
-        ("Pending", "Pending"),
-        ("In_Progress", "In Progress"),
-        ("Resolved", "Resolved"),
-        ("Failed", "Failed"),
+        ("pending", "Pending"),
+        ("in_progress", "In Progress"),
+        ("resolved", "Resolved"),
+        ("failed", "Failed"),
     )
-    diagnostics_id = models.CharField(max_length=190, unique=True,  null=True, blank=True)
-    # ticket_id = models.ForeignKey(Ticket, on_delete=models.SET_NULL, null=True, blank=True)
-    title = models.CharField(max_length=200, null=True, blank=True)
-    severity = models.CharField(max_length=20, choices=SEVERITY, default="Low")
-    status = models.CharField(max_length=20, choices=STATUS, default="Pending")
-    # ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-    specialization = models.CharField(max_length=50, choices=POSITION_CHOICES, default="Engine")
-    expertise_requirement = models.CharField(max_length=50, choices=LEVEL, default="Junior")
-    assigned_technician = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True)
-    fault_code = models.CharField(max_length=100, null=True, blank=True)
-    # customer = models.ForeignKey("users.User", on_delete=models.CASCADE, null=True, blank=True, related_name="diagnostic_reports")
-    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="diagnostic_reports")
-    component = models.ForeignKey(Component, on_delete=models.SET_NULL, null=True, blank=True, related_name="diagnostic_reports")
-    part = models.ManyToManyField(Part, related_name="diagnostic_reports")
-    ai_summary = models.TextField()
-    probable_cause = models.TextField()
-    description = models.TextField(null=True, blank=True)
-    recommended_actions = models.TextField()
-    confidence_score = models.FloatField()
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    diagnostics_id = models.CharField(max_length=190, unique=True, null=True, blank=True)
+    ticket_id = models.ForeignKey(
+        Ticket,
+        on_delete=models.CASCADE,
+        related_name="diagnostic_reports",
+        blank=True,
+        null=True
+    )
+    title = models.CharField(max_length=200, blank=True, null=True)
+    severity = models.CharField(max_length=20, choices=SEVERITY, default="low")
+    status = models.CharField(max_length=20, choices=STATUS, default="pending")
+    specialization = models.CharField(max_length=50, choices=POSITION_CHOICES, default="engine")
+    expertise_requirement = models.CharField(max_length=50, choices=LEVEL, default="junior")
+    customer = models.ForeignKey(CustomerProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="diagnostic_reports")
+    assigned_technician = models.ForeignKey(
+        "technicians.TechnicianProfile",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="diagnostic_reports"
+    )
+    fault_code = models.CharField(max_length=100, blank=True, null=True)
+    component = models.ForeignKey(
+        Component,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="diagnostic_reports"
+    )
+    parts = models.ManyToManyField(
+        Part,
+        blank=True,
+        related_name="diagnostic_reports"
+    )
+    ai_summary = models.TextField(blank=True, null=True)
+    probable_cause = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    recommended_actions = models.TextField(blank=True, null=True)
+    confidence_score = models.FloatField(null=True, blank=True)
     identified_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     resolved_at = models.DateTimeField(null=True, blank=True)
-
-    # AI agent - change to model
-    performed_by = models.CharField(max_length=100, null=True, blank=True)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    requires_follow_up = models.BooleanField(default=False)
+    repeat_issue = models.BooleanField(default=False)
+    diagnostic_duration_minutes = models.IntegerField(null=True, blank=True)
+    performed_by = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        customer_name = self.customer.user.username if self.customer else "Unknown"
-        component_name = self.component.name if self.component else "Unknown Component"
-        return f"Customer {customer_name or '' } - Component: {component_name} - Specializaton {self.specialization} - Expertise: {self.expertise_requirement}"
-    
+        return f"{self.ticket_id} - {self.specialization} - {self.expertise_requirement}"
+
     class Meta:
+        ordering = ["-created_at"]
         verbose_name = "Diagnostic Report"
         verbose_name_plural = "Diagnostic Reports"

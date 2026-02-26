@@ -75,7 +75,8 @@ class Profile(models.Model):
         return ""
 
 
-class AdminUserProfile(Profile):    
+class AdminUserProfile(models.Model):    
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="admin_profile")
     STATUS = {
         ('Available', "Available"),
         ('Busy', 'Busy'),
@@ -85,7 +86,8 @@ class AdminUserProfile(Profile):
     class Meta:
         verbose_name = "Admin User Profile"
         verbose_name_plural = "Admin User Profiles"
-
+    def __str__(self):
+        return f"{self.profile.user.username} - {self.profile.user.role}"
 
 class Station(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)

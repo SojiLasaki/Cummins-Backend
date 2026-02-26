@@ -3,6 +3,14 @@ from django.db import models
 from django.conf import settings
 
 
+
+class AgentExecutionLog(models.Model):
+    agent_name = models.CharField(max_length=100)
+    status = models.CharField(max_length=50)
+    started_at = models.DateTimeField()
+    finished_at = models.DateTimeField(null=True, blank=True)
+    metadata = models.JSONField()
+
 class ActivityLog(models.Model):
 
     EVENT_TYPES = (

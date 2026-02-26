@@ -10,6 +10,7 @@ class ComponentSerializer(serializers.ModelSerializer):
 
 class PartSerializer(serializers.ModelSerializer):
     components = serializers.SerializerMethodField()
+    components_id = serializers.PrimaryKeyRelatedField(many=True, read_only=True, source='components')
 
     class Meta:
         model = Part
@@ -29,6 +30,8 @@ class PartSerializer(serializers.ModelSerializer):
             'inventory_deducted',
             'created_at',
             'components', 
+            'last_ordered_at',
+            'components_id',
         ]
 
     def get_components(self, obj):

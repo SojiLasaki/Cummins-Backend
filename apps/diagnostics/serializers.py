@@ -1,13 +1,18 @@
 from rest_framework import serializers
 from .models import DiagnosticReport
 
+from rest_framework import serializers
+from .models import DiagnosticReport
+
 class DiagnosticReportSerializer(serializers.ModelSerializer):
-    # assigned_technician = serializers.CharField(source='technicians.user.first_name' 'technicians.user.last_name', read_only=True)
-    assigned_technician = serializers.SerializerMethodField()
+    assigned_technician = serializers.SerializerMethodField(read_only=True)
+    
     def get_assigned_technician(self, obj):
         if not obj.assigned_technician:
             return None
         return f"{obj.assigned_technician.user.first_name} {obj.assigned_technician.user.last_name}"
+
+    # Customer fields
     company_name = serializers.CharField(source='customer.company_name', read_only=True)
     customer_first_name = serializers.CharField(source='customer.user.first_name', read_only=True)
     customer_last_name = serializers.CharField(source='customer.user.last_name', read_only=True)
@@ -17,10 +22,15 @@ class DiagnosticReportSerializer(serializers.ModelSerializer):
     customer_state = serializers.CharField(source='customer.state', read_only=True)
     customer_country = serializers.CharField(source='customer.country', read_only=True)
     customer_postal_code = serializers.CharField(source='customer.postal_code', read_only=True)
-    component_name = serializers.CharField(source='component.name', read_only=True)
+
+    # Component fields
     component_id = serializers.CharField(source='component.id', read_only=True)
-    part_id = serializers.CharField(source='part.id', read_only=True)
-    part_name = serializers.StringRelatedField(many=True, read_only=True)
+    component_name = serializers.CharField(source='component.name', read_only=True)
+
+    # Part fields
+    part_ids = serializers.PrimaryKeyRelatedField(source='parts', many=True, read_only=True)
+    part_names = serializers.StringRelatedField(source='parts', many=True, read_only=True)
+
     class Meta:
         model = DiagnosticReport
         fields = [
@@ -45,8 +55,8 @@ class DiagnosticReportSerializer(serializers.ModelSerializer):
             "customer_postal_code",
             "component_id",
             "component_name",
-            "part_id",
-            "part_name",
+            "part_ids",
+            "part_names",
             "ai_summary",
             "probable_cause",
             'description',

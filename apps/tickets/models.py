@@ -1,34 +1,79 @@
 from django.db import models
-from apps.technicians.models import TechnicianProfile
-from apps.diagnostics.models import DiagnosticReport
+from apps.customers.models import CustomerProfile
+from django.conf import settings
 import uuid
-# Create your models here.
+
 
 class Ticket(models.Model):
+    SPECIALIZATION_CHOICES = (
+        ("engine", "Engine Technician"),
+        ("electrical", "Electrical Technician"),
+    )
+
     STATUS_CHOICES = (
-        ("open", "Open"),
+        ("pending", "Pending"),
         ("assigned", "Assigned"),
         ("in_progress", "In Progress"),
         ("awaiting_parts", "Awaiting Parts"),
         ("awaiting_approval", "Awaiting Approval"),
         ("completed", "Completed"),
+        ("closed", "Closed"),
+        ("cancelled", "Cancelled"),
     )
-    PRIOIRITY_LEVEL = (
+
+    SEVERITY = (
         ("low", "Low"),
         ("medium", "Medium"),
         ("high", "High"),
-        ('severe', "Severe")
+        ("severe", "Severe"),
     )
-    diagnosticReport = models.ForeignKey(DiagnosticReport, on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets")
-    # customer = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="tickets")
-    priority = models.CharField(max_length=20, choices=PRIOIRITY_LEVEL, default="medium")
-    product_id = models.CharField(max_length=100)
-    issue_description = models.TextField()
-    assigned_to = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tickets")
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="open")
-    created_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets_created_by")
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
+    ticket_id = models.CharField(max_length=190, unique=True, null=True, blank=True)
+    customer = models.ForeignKey(
+        "customers.CustomerProfile",
+        on_delete=models.CASCADE,
+        related_name="tickets",
+        null=True,
+        blank=True,
+    )
+    assigned_technician = models.ForeignKey(
+        "technicians.TechnicianProfile",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="assigned_tickets"
+    )
+    specialization = models.CharField(max_length=50, choices=SPECIALIZATION_CHOICES, default="engine")
+    title = models.CharField(max_length=200, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    severity = models.CharField(max_length=20, choices=SEVERITY, default="medium")
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="pending")
+
+    # Performance Tracking
+    customer_satisfaction_rating = models.FloatField(null=True, blank=True)
+    estimated_resolution_time_minutes = models.IntegerField(null=True, blank=True)
+    actual_resolution_time_minutes = models.IntegerField(null=True, blank=True)
+
+    # AI Insights
+    predicted_resolution_summary = models.TextField(null=True, blank=True)
+    auto_assigned = models.BooleanField(default=False)
+
+    created_by = models.ForeignKey(
+        'users.Profile',
+        # settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="tickets_created"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    assigned_at = models.DateTimeField(null=True, blank=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"Ticket {self.id} - {self.product_id} - {self.status}"
+        return f"{self.ticket_id or self.id} - {self.status}"
+
+    class Meta:
+        ordering = ["-created_at"]
