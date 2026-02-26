@@ -17,10 +17,10 @@ class DiagnosticReport(models.Model):
         ("electrical", "Electrical Technician"),
     )
     SEVERITY = (
-        ("low", "Low"),
-        ("medium", "Medium"),
-        ("high", "High"),
-        ("severe", "Severe"),
+        (1, "Low"),
+        (2, "Medium"),
+        (3, "High"),
+        (4, "Severe"),
     )
     STATUS = (
         ("pending", "Pending"),
@@ -28,7 +28,6 @@ class DiagnosticReport(models.Model):
         ("resolved", "Resolved"),
         ("failed", "Failed"),
     )
-<<<<<<< HEAD
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     diagnostics_id = models.CharField(max_length=190, unique=True, null=True, blank=True)
@@ -40,7 +39,7 @@ class DiagnosticReport(models.Model):
         null=True
     )
     title = models.CharField(max_length=200, blank=True, null=True)
-    severity = models.CharField(max_length=20, choices=SEVERITY, default="low")
+    severity = models.CharField(max_length=20, choices=SEVERITY, default=2)
     status = models.CharField(max_length=20, choices=STATUS, default="pending")
     specialization = models.CharField(max_length=50, choices=POSITION_CHOICES, default="engine")
     expertise_requirement = models.CharField(max_length=50, choices=LEVEL, default="junior")
@@ -70,28 +69,6 @@ class DiagnosticReport(models.Model):
     description = models.TextField(blank=True, null=True)
     recommended_actions = models.TextField(blank=True, null=True)
     confidence_score = models.FloatField(null=True, blank=True)
-=======
-    diagnostics_id = models.CharField(max_length=190, unique=True,  null=True, blank=True)
-    # ticket_id = models.ForeignKey(Ticket, on_delete=models.SET_NULL, null=True, blank=True)
-    title = models.CharField(max_length=200, null=True, blank=True)
-    severity = models.CharField(max_length=20, choices=SEVERITY, default="Low")
-    status = models.CharField(max_length=20, choices=STATUS, default="Pending")
-    # ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-    specialization = models.CharField(max_length=50, choices=POSITION_CHOICES, default="Engine")
-    expertise_requirement = models.CharField(max_length=50, choices=LEVEL, default="Junior")
-    assigned_technician = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True)
-    fault_code = models.CharField(max_length=100, null=True, blank=True)
-    # customer = models.ForeignKey("users.User", on_delete=models.CASCADE, null=True, blank=True, related_name="diagnostic_reports")
-    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="diagnostic_reports")
-    component = models.ForeignKey(Component, on_delete=models.SET_NULL, null=True, blank=True, related_name="diagnostic_reports")
-    part = models.ManyToManyField(Part, related_name="diagnostic_reports")
-    ai_summary = models.TextField()
-    probable_cause = models.TextField()
-    description = models.TextField(null=True, blank=True)
-    expected_repair_time = models.DurationField(null=True, blank=True)
-    recommended_actions = models.TextField()
-    confidence_score = models.FloatField()
->>>>>>> 711c585b969e405ba1d25a18bdf7bc53636a4dfc
     identified_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     resolved_at = models.DateTimeField(null=True, blank=True)
@@ -107,3 +84,29 @@ class DiagnosticReport(models.Model):
         ordering = ["-created_at"]
         verbose_name = "Diagnostic Report"
         verbose_name_plural = "Diagnostic Reports"
+
+
+
+class TechnicianReport(models.Model):
+    ticket = models.ForeignKey(
+        "tickets.Ticket",
+        on_delete=models.CASCADE,
+        related_name="technician_reports"
+    )
+
+    technician = models.ForeignKey(
+        'technicians.TechnicianProfile',
+        on_delete=models.CASCADE
+    )
+
+    findings = models.TextField()
+    actions_taken = models.TextField()
+    parts_used = models.ManyToManyField("inventory.Part", blank=True)
+    report_id = models.CharField(max_length=190, unique=True, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Technician Report"
+        verbose_name_plural = "Technician Reports"

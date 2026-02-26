@@ -18,6 +18,7 @@ class TicketSerializer(serializers.ModelSerializer):
             'description',
             'severity',
             'status',
+            'priority',
             'customer_satisfaction_rating',
             'estimated_resolution_time_minutes',
             'actual_resolution_time_minutes',

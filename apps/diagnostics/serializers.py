@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import DiagnosticReport
-
+from .models import DiagnosticReport, TechnicianReport
 from rest_framework import serializers
 from .models import DiagnosticReport
 
@@ -67,3 +66,9 @@ class DiagnosticReportSerializer(serializers.ModelSerializer):
             "created_at",
             'performed_by',
         ]
+
+    
+class TechnicianReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnicianReport
+        fields = ['id', 'ticket', 'technician', 'findings', 'actions_taken', 'parts_used', 'report_id', 'created_at']

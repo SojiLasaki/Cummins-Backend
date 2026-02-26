@@ -1,12 +1,8 @@
 from django.db import models
-<<<<<<< HEAD
 from apps.customers.models import CustomerProfile
 from django.conf import settings
-=======
 from apps.technicians.models import TechnicianProfile
 from apps.customers.models import CustomerProfile
-from apps.diagnostics.models import DiagnosticReport
->>>>>>> 711c585b969e405ba1d25a18bdf7bc53636a4dfc
 import uuid
 
 
@@ -28,10 +24,17 @@ class Ticket(models.Model):
     )
 
     SEVERITY = (
-        ("low", "Low"),
-        ("medium", "Medium"),
-        ("high", "High"),
-        ("severe", "Severe"),
+        (1, "Low"),
+        (2, "Medium"),
+        (3, "High"),
+        (4, "Severe"),
+    )
+
+    PRIORITY_LEVEL = (
+        (1, "Low"),
+        (2, "Medium"),
+        (3, "High"),
+        (4, "Urgent"),
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, editable=False)
@@ -53,7 +56,7 @@ class Ticket(models.Model):
     specialization = models.CharField(max_length=50, choices=SPECIALIZATION_CHOICES, default="engine")
     title = models.CharField(max_length=200, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    severity = models.CharField(max_length=20, choices=SEVERITY, default="medium")
+    severity = models.CharField(max_length=20, choices=SEVERITY, default=2)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="pending")
 
     # Performance Tracking
@@ -73,18 +76,15 @@ class Ticket(models.Model):
         blank=True,
         related_name="tickets_created"
     )
-<<<<<<< HEAD
-=======
-    diagnosticReport = models.ForeignKey(DiagnosticReport, on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets")
+    # diagnosticReport = models.ForeignKey(DiagnosticReport, on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets")
     # customer = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="tickets")
-    priority = models.CharField(max_length=20, choices=PRIOIRITY_LEVEL, default="medium")
+    priority = models.CharField(max_length=20, choices=PRIORITY_LEVEL, default=2)
     product_id = models.CharField(max_length=100)
     issue_description = models.TextField()
     customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="tickets")
-    technician = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_tickets")
+    # technician = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_technician")
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="open")
     created_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets_created_by")
->>>>>>> 711c585b969e405ba1d25a18bdf7bc53636a4dfc
     created_at = models.DateTimeField(auto_now_add=True)
     assigned_at = models.DateTimeField(null=True, blank=True)
     resolved_at = models.DateTimeField(null=True, blank=True)

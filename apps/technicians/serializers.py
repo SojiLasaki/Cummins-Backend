@@ -106,4 +106,3 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-    
