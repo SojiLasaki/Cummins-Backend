@@ -14,6 +14,7 @@ class Component(models.Model):
     quantity_available = models.IntegerField(default=1)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='component_images/', null=True, blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -38,6 +39,7 @@ class Part(models.Model):
     part_number = models.CharField(max_length=100, unique=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='part_images/', null=True, blank=True)
     quantity_available = models.IntegerField(default=0)
     reorder_threshold = models.IntegerField(default=5)
     category = models.CharField(max_length=50, choices=CATEGORY, default='other')
@@ -77,7 +79,7 @@ class Tool(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     quantity_available = models.IntegerField(default=1)
-    station = models.CharField(max_length=255, blank=True, null=True)
+    statin = models.ManyToManyField("users.Station", related_name="tools")
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

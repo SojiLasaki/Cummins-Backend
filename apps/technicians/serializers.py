@@ -12,11 +12,19 @@ class CertificationSerializer(serializers.ModelSerializer):
 
 class TechnicianProfileSerializer(serializers.ModelSerializer):
     # Read-only user fields
-    username_display = serializers.CharField(source="user.username", read_only=True)
-    email_display = serializers.EmailField(source="user.email", read_only=True)
-    first_name_display = serializers.CharField(source="user.first_name", read_only=True)
-    last_name_display = serializers.CharField(source="user.last_name", read_only=True)
+    id = serializers.CharField(source="profile.id", read_only=True)
+    username_display = serializers.CharField(source="profile.username", read_only=True)
+    phone_number = serializers.CharField(source="profile.phone_number", read_only=True)
+    email_display = serializers.EmailField(source="profile.email", read_only=True)
+    first_name_display = serializers.CharField(source="profile.first_name", read_only=True)
+    last_name_display = serializers.CharField(source="profile.last_name", read_only=True)
     role = serializers.CharField(source="user.role", read_only=True)
+    street_address = serializers.CharField(source="profile.street_address", read_only=True)
+    street_address_2 = serializers.CharField(source="profile.street_address_2", read_only=True)
+    city = serializers.CharField(source="profile.city", read_only=True)
+    state = serializers.CharField(source="profile.state", read_only=True)
+    postal_code = serializers.CharField(source="profile.postal_code", read_only=True)
+    country = serializers.CharField(source="profile.country", read_only=True)
     station_name = serializers.CharField(source="station.name", read_only=True)
     station_street_address = serializers.CharField(source="station.astreet_ddress", read_only=True)
     station_street_address_2 = serializers.CharField(source="station.street_address_2", read_only=True)
@@ -24,17 +32,20 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
     station_state = serializers.CharField(source="station.state", read_only=True)
     station_postal_code = serializers.CharField(source="station.postal_code", read_only=True)
     station_country = serializers.CharField(source="station.country", read_only=True)
+    notes = serializers.CharField(source="profile.notes", read_only=True)
     # Write fields
     username = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = TechnicianProfile
         fields = [
             "id",
             "username",
+            "password",
             "email",
             "first_name",
             "last_name",
@@ -61,6 +72,10 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             'station_state',
             'station_postal_code',
             'station_country',
+            'skill_score',
+            'total_jobs_completed',
+            'total_years_experience',
+            'date_joined',
             'notes',
         ]
 
@@ -70,24 +85,26 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
         email = validated_data.pop("email")
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
-        password = get_random_string(length=10)
+        password = validated_data.pop("password", None)  
         
         user = User.objects.create_user(
             username=username,
             email=email,
             first_name=first_name,
             last_name=last_name,
-            password=password,
+            # password=password,
             role=User.Roles.TECHNICIAN,
         )
+        user.set_password(password) 
+        user.save()
 
-        # Create AdminUserProfile directly
-        profile = TechnicianProfile.objects.create(
-            user=user,
-            **validated_data  # now only profile fields like notes, phone_number
+        profile = user.profile
+
+        technician = TechnicianProfile.objects.create(
+            profile=profile,
+            **validated_data
         )
-
-        return profile
+        return technician    
     
     def update(self, instance, validated_data):
         user = instance.user

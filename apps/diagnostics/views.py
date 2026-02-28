@@ -21,7 +21,7 @@ class DiagnosticReportViewSet(viewsets.ReadOnlyModelViewSet):
     Creation is handled by the orchestrator via ticket workflow.
     """
     queryset = DiagnosticReport.objects.all().select_related(
-        'assigned_technician__user', 'customer__user', 'component'
+        'assigned_technician__profile__user', 'customer', 'component'
     ).prefetch_related('parts')
     
     serializer_class = DiagnosticReportSerializer
@@ -34,8 +34,8 @@ class DiagnosticReportViewSet(viewsets.ReadOnlyModelViewSet):
         'status',
         'specialization',
         'expertise_requirement',
-        'assigned_technician__user__first_name',
-        'assigned_technician__user__last_name',
+        'assigned_technician__profile__user__first_name',
+        'assigned_technician__profile__user__last_name',
         'ticket__ticket_id'
     ]
     ordering_fields = ['created_at', 'resolved_at', 'severity']
@@ -90,7 +90,7 @@ class TechnicianReportViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        technician_profile = self.request.user.technician_profile
+        technician_profile = self.request.user.profile.technician_profile
         ticket = serializer.validated_data["ticket"]
 
         if ticket.assigned_technician != technician_profile:

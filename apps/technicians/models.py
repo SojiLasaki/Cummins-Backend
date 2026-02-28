@@ -40,7 +40,7 @@ class TechnicianProfile(models.Model):
     skill_score = models.IntegerField(default=1)  # 1-10 scale
     
     def __str__(self):
-        return f"{self.user.username} - {self.specialization}"
+        return f"{self.profile.user.username} - {self.specialization}"
     
 
 class Certification(models.Model):

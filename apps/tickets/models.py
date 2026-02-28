@@ -56,7 +56,7 @@ class Ticket(models.Model):
     specialization = models.CharField(max_length=50, choices=SPECIALIZATION_CHOICES, default="engine")
     title = models.CharField(max_length=200, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
-    severity = models.CharField(max_length=20, choices=SEVERITY, default=2)
+    severity = models.IntegerField(choices=SEVERITY, default=2)
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="pending")
 
     # Performance Tracking
@@ -67,24 +67,18 @@ class Ticket(models.Model):
     # AI Insights
     predicted_resolution_summary = models.TextField(null=True, blank=True)
     auto_assigned = models.BooleanField(default=False)
-
-    created_by = models.ForeignKey(
-        'users.Profile',
-        # settings.AUTH_USER_MODEL, 
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="tickets_created"
-    )
-    # diagnosticReport = models.ForeignKey(DiagnosticReport, on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets")
-    # customer = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="tickets")
-    priority = models.CharField(max_length=20, choices=PRIORITY_LEVEL, default=2)
-    product_id = models.CharField(max_length=100)
-    issue_description = models.TextField()
-    customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, null=True, blank=True, related_name="tickets")
-    # technician = models.ForeignKey(TechnicianProfile, on_delete=models.SET_NULL, null=True, blank=True, related_name="assigned_technician")
-    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="open")
-    created_by = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets_created_by")
+    created_by = models.CharField(max_length=150, null=True, blank=True)
+    # created_by = models.ForeignKey(
+    #     'users.Profile',
+    #     # settings.AUTH_USER_MODEL, 
+    #     on_delete=models.SET_NULL,
+    #     null=True,
+    #     blank=True,
+    #     related_name="tickets_created"
+    # )
+    priority = models.IntegerField(choices=PRIORITY_LEVEL, default=2)
+    parts = models.ManyToManyField("inventory.Part", blank=True, related_name="tickets")
+    issue_description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     assigned_at = models.DateTimeField(null=True, blank=True)
     resolved_at = models.DateTimeField(null=True, blank=True)

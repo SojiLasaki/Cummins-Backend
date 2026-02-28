@@ -9,7 +9,7 @@ class DiagnosticReportSerializer(serializers.ModelSerializer):
     def get_assigned_technician(self, obj):
         if not obj.assigned_technician:
             return None
-        return f"{obj.assigned_technician.user.first_name} {obj.assigned_technician.user.last_name}"
+        return f"{obj.assigned_technician.profile.user.first_name} {obj.assigned_technician.profile.user.last_name}"
 
     # Customer fields
     company_name = serializers.CharField(source='customer.company_name', read_only=True)
@@ -35,6 +35,7 @@ class DiagnosticReportSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             'assigned_technician',
+            'ticket_id',
             "diagnostics_id",
             "title",
             "severity",

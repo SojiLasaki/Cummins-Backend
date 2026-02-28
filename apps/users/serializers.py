@@ -1,8 +1,29 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Profile, AdminUserProfile, Station, Region
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
+
+
+class CustomTokenSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token["role"] = user.role
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data["role"] = self.user.role
+        data["username"] = self.user.username
+        return data
+
+
+class LoginView(TokenObtainPairView):
+    serializer_class = CustomTokenSerializer
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     # Include related User info
@@ -39,6 +60,7 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
     email_display = serializers.EmailField(source="user.email", read_only=True)
     first_name_display = serializers.CharField(source="user.first_name", read_only=True)
     last_name_display = serializers.CharField(source="user.last_name", read_only=True)
+    password = serializers.CharField(write_only=True, required=True)
     role = serializers.CharField(source="user.role", read_only=True)
 
     # Write fields
@@ -51,6 +73,7 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
         model = AdminUserProfile
         fields = [
             "id",
+            'profile',
             "username",
             "email",
             "first_name",
@@ -60,13 +83,6 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
             "first_name_display",
             "last_name_display",
             "role",
-            "phone_number",
-            "street_address",
-            "city",
-            "state",
-            "postal_code",
-            "country",
-            "notes",
         ]
 
     def create(self, validated_data):
@@ -75,13 +91,14 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
         email = validated_data.pop("email")
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
+        password = validated_data.pop("password")
 
         user = User.objects.create_user(
             username=username,
             email=email,
             first_name=first_name,
             last_name=last_name,
-            password=User.objects.make_random_password(),
+            password=password,
             role=User.Roles.ADMIN,
         )
 

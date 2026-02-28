@@ -12,7 +12,8 @@ class User(AbstractUser):
         CUSTOMER = "customer", "Customer"
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.CUSTOMER)
-    REQUIRED_FIELDS = ["email", "role"]
+    REQUIRED_FIELDS = ["email"]
+    USERNAME_FIELD = "username"
 
     class Meta:
         indexes = [models.Index(fields=["role"])]
@@ -89,6 +90,22 @@ class AdminUserProfile(models.Model):
     def __str__(self):
         return f"{self.profile.user.username} - {self.profile.user.role}"
 
+
+class OfficeStaffProfile(models.Model):    
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="office_staff_profile")
+    STATUS = {
+        ('Available', "Available"),
+        ('Busy', 'Busy'),
+        ('Unavailable', 'Unavailable')
+    }
+    status = models.CharField(max_length=50, default="Available")
+    class Meta:
+        verbose_name = "Staffs Profile"
+        verbose_name_plural = "Staffs Profiles"
+    def __str__(self):
+        return f"{self.profile.user.username} - {self.profile.user.role}"
+
+
 class Station(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     region = models.ForeignKey("Region", on_delete=models.SET_NULL, null=True, blank=True, related_name="stations")
@@ -114,4 +131,6 @@ class Region(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        if self.name != None:
+            return self.name
+        return "Unknon name"

@@ -39,7 +39,7 @@ class DiagnosticReport(models.Model):
         null=True
     )
     title = models.CharField(max_length=200, blank=True, null=True)
-    severity = models.CharField(max_length=20, choices=SEVERITY, default=2)
+    severity = models.IntegerField(choices=SEVERITY, default=2)
     status = models.CharField(max_length=20, choices=STATUS, default="pending")
     specialization = models.CharField(max_length=50, choices=POSITION_CHOICES, default="engine")
     expertise_requirement = models.CharField(max_length=50, choices=LEVEL, default="junior")
@@ -99,7 +99,7 @@ class TechnicianReport(models.Model):
         on_delete=models.CASCADE
     )
 
-    findings = models.TextField()
+    findings = models.TextField(null=True, blank=True)
     actions_taken = models.TextField()
     parts_used = models.ManyToManyField("inventory.Part", blank=True)
     report_id = models.CharField(max_length=190, unique=True, null=True, blank=True)
