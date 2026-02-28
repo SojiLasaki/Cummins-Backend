@@ -56,12 +56,12 @@ class Profile(models.Model):
         blank=True
     )
     preferences = models.JSONField(default=dict, blank=True, null=True)
-    street_address = models.CharField(max_length=255, blank=True)
-    street_address_2 = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=100, blank=True)
-    state = models.CharField(max_length=100, blank=True)
-    postal_code = models.CharField(max_length=20, blank=True)
-    country = models.CharField(max_length=100, blank=True)
+    street_address = models.CharField(max_length=255, null=True, blank=True)
+    street_address_2 = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    postal_code = models.CharField(max_length=20, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(null=True, blank=True)
@@ -77,13 +77,14 @@ class Profile(models.Model):
 
 
 class AdminUserProfile(models.Model):    
+    station = models.ForeignKey("Station", on_delete=models.SET_NULL, null=True, blank=True, related_name="admin_users")
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="admin_profile")
     STATUS = {
         ('Available', "Available"),
         ('Busy', 'Busy'),
         ('Unavailable', 'Unavailable')
     }
-    status = models.CharField(max_length=50, default="Available")
+    status = models.CharField(max_length=50, choices=STATUS, default="Available")
     class Meta:
         verbose_name = "Admin User Profile"
         verbose_name_plural = "Admin User Profiles"

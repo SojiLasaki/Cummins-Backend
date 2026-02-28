@@ -13,7 +13,7 @@ router.register(r"regions", RegionViewSet, basename="regions")
 urlpatterns = [
     path("auth/login/", LoginView.as_view(), name="login"),
     path("auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
 ]
 
 
