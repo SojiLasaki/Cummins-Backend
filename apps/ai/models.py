@@ -144,7 +144,7 @@ class McpAdapter(models.Model):
         (AUTH_NONE, "None"),
         (AUTH_BEARER, "Bearer"),
         (AUTH_API_KEY, "API Key"),
-        (AUTH_OAUTH2, "OAuth2 (FastMCP)"),
+        (AUTH_OAUTH2, "OAuth 2.0"),
         (AUTH_CUSTOM, "Custom"),
     )
 
@@ -194,3 +194,97 @@ class AgentPromptConfig(models.Model):
 
     def __str__(self):
         return f"AgentPromptConfig<{self.slug}>"
+
+
+class AgentActionProposal(models.Model):
+    ACTION_CREATE_TICKET = "create_ticket"
+    ACTION_ASSIGN_EMPLOYEE = "assign_employee"
+    ACTION_ORDER_PART = "order_part"
+    ACTION_TYPE_CHOICES = (
+        (ACTION_CREATE_TICKET, "Create Ticket"),
+        (ACTION_ASSIGN_EMPLOYEE, "Assign Employee"),
+        (ACTION_ORDER_PART, "Order Part"),
+    )
+
+    STATUS_PENDING = "pending"
+    STATUS_APPROVED = "approved"
+    STATUS_REJECTED = "rejected"
+    STATUS_EXECUTED = "executed"
+    STATUS_FAILED = "failed"
+    STATUS_CHOICES = (
+        (STATUS_PENDING, "Pending"),
+        (STATUS_APPROVED, "Approved"),
+        (STATUS_REJECTED, "Rejected"),
+        (STATUS_EXECUTED, "Executed"),
+        (STATUS_FAILED, "Failed"),
+    )
+
+    action_type = models.CharField(max_length=64, choices=ACTION_TYPE_CHOICES)
+    status = models.CharField(max_length=32, choices=STATUS_CHOICES, default=STATUS_PENDING)
+    payload = models.JSONField(default=dict, blank=True)
+    result = models.JSONField(default=dict, blank=True)
+    error = models.TextField(blank=True)
+    source_query = models.TextField(blank=True)
+    source_context = models.JSONField(default=dict, blank=True)
+    metadata = models.JSONField(default=dict, blank=True)
+    created_by = models.ForeignKey(
+        "users.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="created_agent_action_proposals",
+    )
+    approved_by = models.ForeignKey(
+        "users.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="approved_agent_action_proposals",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
+    executed_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["status", "action_type"]),
+            models.Index(fields=["created_at"]),
+        ]
+
+    def __str__(self):
+        return f"AgentActionProposal<{self.action_type}:{self.status}>"
+
+
+class AgentExecutionTrace(models.Model):
+    proposal = models.ForeignKey(
+        AgentActionProposal,
+        on_delete=models.CASCADE,
+        related_name="traces",
+    )
+    stage = models.CharField(max_length=64, default="execution")
+    adapter = models.ForeignKey(
+        McpAdapter,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="execution_traces",
+    )
+    tool_name = models.CharField(max_length=255, blank=True)
+    ok = models.BooleanField(default=False)
+    status_code = models.IntegerField(default=0)
+    duration_ms = models.IntegerField(default=0)
+    request_payload = models.JSONField(default=dict, blank=True)
+    response_payload = models.JSONField(default=dict, blank=True)
+    error = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["stage", "created_at"]),
+        ]
+
+    def __str__(self):
+        return f"AgentExecutionTrace<{self.tool_name}:{'ok' if self.ok else 'error'}>"

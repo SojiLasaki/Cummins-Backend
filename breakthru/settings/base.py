@@ -31,7 +31,12 @@ SECRET_KEY = "django-insecure-#)b1e^*a$(zc55^(fhaqqa%e9(xcy7zcrg(97hn+^f!o@bb%82
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "").strip()
+if allowed_hosts_env:
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(",") if host.strip()]
+else:
+    # Development-friendly default so local UI hosts do not break login with DisallowedHost.
+    ALLOWED_HOSTS = ["*"] if DEBUG else ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -130,15 +135,17 @@ CHANNEL_LAYERS = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
-    "http://localhost:8081",
-    "http://127.0.0.1:8081",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    # add other origins if needed
-]
+if DEBUG and os.getenv("CORS_ALLOW_ALL_ORIGINS", "true").lower() in {"1", "true", "yes"}:
+    CORS_ALLOW_ALL_ORIGINS = True
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:8081",
+        "http://127.0.0.1:8081",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
 
 
 AUTH_USER_MODEL = "users.User"

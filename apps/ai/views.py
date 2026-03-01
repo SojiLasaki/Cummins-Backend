@@ -2,18 +2,22 @@ import json
 import os
 import re
 from html import unescape
+from django.http import HttpResponse
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.utils import timezone
 
 from .models import (
+    AgentActionProposal,
     AgentPromptConfig,
+    AgentExecutionTrace,
     KnowledgeChunk,
     KnowledgeDocument,
     KnowledgeEntity,
@@ -22,7 +26,9 @@ from .models import (
     ModelEndpoint,
 )
 from .serializers import (
+    AgentActionProposalSerializer,
     AgentPromptConfigSerializer,
+    AgentExecutionTraceSerializer,
     KnowledgeChunkSerializer,
     KnowledgeDocumentIngestSerializer,
     KnowledgeDocumentSerializer,
@@ -32,7 +38,17 @@ from .serializers import (
     ModelEndpointSerializer,
 )
 from .services.langgraph_agent import run_langgraph_agent
-from .services.fastmcp_oauth import start_fastmcp_oauth
+from .services.agent_automation import (
+    approve_agent_action,
+    execute_agent_action,
+    plan_agent_actions,
+    reject_agent_action,
+)
+from .services.oauth_connector import (
+    complete_oauth_flow,
+    get_oauth_flow_status,
+    start_oauth_flow,
+)
 from .services.retrieval import rebuild_document_chunks, search_knowledge_chunks
 
 
@@ -175,10 +191,10 @@ def _build_default_model_endpoints():
     return [
         {
             "id": "builtin-langgraph",
-            "name": "LangGraph Backend",
+            "name": "Backend AI Orchestrator",
             "provider": "langgraph",
             "model_identifier": os.getenv("FELIX_LANGGRAPH_MODEL", "gpt-4o-mini"),
-            "label": "LangGraph (Backend) · GPT-4o Mini",
+            "label": "Backend AI Orchestrator · GPT-4o Mini",
             "active": True,
         },
         {
@@ -408,6 +424,74 @@ class McpAdapterViewSet(viewsets.ModelViewSet):
     serializer_class = McpAdapterSerializer
     permission_classes = [IsAuthenticated]
 
+    @action(detail=False, methods=["post"], url_path="seed_demo")
+    def seed_demo(self, request):
+        demo_rows = [
+            {
+                "name": "Supply Chain Connector",
+                "transport": McpAdapter.TRANSPORT_HTTP,
+                "base_url": "http://127.0.0.1:9101/mcp",
+                "auth_type": McpAdapter.AUTH_NONE,
+                "metadata": {
+                    "description": "External supply chain availability and order placement.",
+                    "domain": "supply_chain",
+                },
+            },
+            {
+                "name": "Ticket Operations Connector",
+                "transport": McpAdapter.TRANSPORT_HTTP,
+                "base_url": "http://127.0.0.1:9102/mcp",
+                "auth_type": McpAdapter.AUTH_NONE,
+                "metadata": {
+                    "description": "External ticket intake and synchronization.",
+                    "domain": "ticketing",
+                },
+            },
+            {
+                "name": "Workforce Connector",
+                "transport": McpAdapter.TRANSPORT_HTTP,
+                "base_url": "http://127.0.0.1:9103/mcp",
+                "auth_type": McpAdapter.AUTH_NONE,
+                "metadata": {
+                    "description": "Employee roster and availability orchestration.",
+                    "domain": "employee_management",
+                },
+            },
+        ]
+        created = 0
+        updated = 0
+        for row in demo_rows:
+            adapter, was_created = McpAdapter.objects.get_or_create(
+                name=row["name"],
+                defaults=row,
+            )
+            if was_created:
+                created += 1
+                continue
+            changed = False
+            for key in ("transport", "base_url", "auth_type", "metadata"):
+                value = row[key]
+                if getattr(adapter, key) != value:
+                    setattr(adapter, key, value)
+                    changed = True
+            if not adapter.is_enabled:
+                adapter.is_enabled = True
+                changed = True
+            if changed:
+                adapter.save()
+                updated += 1
+
+        serialized = McpAdapterSerializer(McpAdapter.objects.filter(name__in=[x["name"] for x in demo_rows]), many=True).data
+        return Response(
+            {
+                "ok": True,
+                "created": created,
+                "updated": updated,
+                "adapters": serialized,
+            },
+            status=status.HTTP_200_OK,
+        )
+
     @action(detail=True, methods=["post"], url_path="test_connection")
     def test_connection(self, request, pk=None):
         adapter = self.get_object()
@@ -496,23 +580,198 @@ class McpAdapterViewSet(viewsets.ModelViewSet):
             )
 
         config = adapter.auth_config if isinstance(adapter.auth_config, dict) else {}
-        result = start_fastmcp_oauth(
+        user_id = request.user.id if request.user and request.user.is_authenticated else None
+        redirect_uri = request.build_absolute_uri(f"/api/ai/mcp_adapters/{adapter.id}/oauth_callback/")
+        result = start_oauth_flow(
+            adapter_id=adapter.id,
             mcp_url=adapter.base_url,
-            client_id=str(config.get("client_id") or "").strip() or None,
-            client_secret=str(config.get("client_secret") or "").strip() or None,
-            scopes=config.get("scopes"),
-            callback_port=_safe_int(config.get("callback_port", 8765), default=8765, minimum=1024, maximum=65535),
+            auth_config=config,
+            redirect_uri=redirect_uri,
+            user_id=user_id,
         )
 
         response = {
             "ok": result.ok,
             "authorization_url": result.authorization_url,
+            "state": result.state,
+            "expires_in": result.expires_in,
             "error": result.error,
             "hint": result.hint,
         }
         if result.ok:
             return Response(response)
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=["get"], url_path="oauth_status")
+    def oauth_status(self, request, pk=None):
+        adapter = self.get_object()
+        if adapter.auth_type != McpAdapter.AUTH_OAUTH2:
+            return Response(
+                {"ok": False, "status": "error", "error": "Adapter auth_type must be oauth2."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        state_value = str(request.query_params.get("state") or "").strip()
+        if not state_value:
+            return Response(
+                {"ok": False, "status": "error", "error": "state is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user_id = request.user.id if request.user and request.user.is_authenticated else None
+        status_result = get_oauth_flow_status(
+            state=state_value,
+            adapter_id=adapter.id,
+            user_id=user_id,
+        )
+        response = {
+            "ok": status_result.ok,
+            "status": status_result.status,
+            "error": status_result.error,
+            "has_access_token": status_result.has_access_token,
+        }
+        if status_result.ok:
+            return Response(response)
+        if status_result.status == "expired":
+            return Response(response, status=status.HTTP_404_NOT_FOUND)
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path="oauth_callback",
+        permission_classes=[AllowAny],
+        authentication_classes=[],
+    )
+    def oauth_callback(self, request, pk=None):
+        adapter = self.get_object()
+        state_value = str(request.query_params.get("state") or "").strip()
+        code_value = str(request.query_params.get("code") or "").strip()
+        error_value = str(request.query_params.get("error") or "").strip()
+        error_description = str(request.query_params.get("error_description") or "").strip()
+
+        if not state_value:
+            return HttpResponse(
+                self._oauth_callback_html(
+                    ok=False,
+                    title="Authorization failed",
+                    message="Missing OAuth state. Restart the OAuth flow from Agent Studio.",
+                ),
+                status=400,
+                content_type="text/html; charset=utf-8",
+            )
+
+        result = complete_oauth_flow(
+            state=state_value,
+            code=code_value,
+            error=error_value,
+            error_description=error_description,
+        )
+
+        if not result.ok:
+            return HttpResponse(
+                self._oauth_callback_html(
+                    ok=False,
+                    title="Authorization failed",
+                    message=result.error or "OAuth callback could not complete.",
+                ),
+                status=400,
+                content_type="text/html; charset=utf-8",
+            )
+
+        if int(result.adapter_id or -1) != int(adapter.id):
+            return HttpResponse(
+                self._oauth_callback_html(
+                    ok=False,
+                    title="Authorization failed",
+                    message="OAuth session does not match this adapter.",
+                ),
+                status=400,
+                content_type="text/html; charset=utf-8",
+            )
+
+        config = dict(adapter.auth_config) if isinstance(adapter.auth_config, dict) else {}
+        config["access_token"] = result.access_token
+        if result.refresh_token:
+            config["refresh_token"] = result.refresh_token
+        if result.token_type:
+            config["token_type"] = result.token_type
+        if result.scope:
+            config["scope"] = result.scope
+        if isinstance(result.expires_in, int):
+            config["expires_in"] = result.expires_in
+            config["expires_at_epoch"] = int(timezone.now().timestamp()) + result.expires_in
+        if result.authorization_endpoint:
+            config["authorize_url"] = result.authorization_endpoint
+        if result.token_endpoint:
+            config["token_url"] = result.token_endpoint
+        config["oauth_last_authorized_at"] = timezone.now().isoformat()
+        adapter.auth_config = config
+        adapter.save(update_fields=["auth_config", "updated_at"])
+
+        return HttpResponse(
+            self._oauth_callback_html(
+                ok=True,
+                title="Authorization successful",
+                message="You can return to Agent Studio. This window will close automatically.",
+            ),
+            status=200,
+            content_type="text/html; charset=utf-8",
+        )
+
+    @staticmethod
+    def _oauth_callback_html(*, ok: bool, title: str, message: str) -> str:
+        badge = "#16a34a" if ok else "#dc2626"
+        return f"""<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <style>
+      body {{
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        background: #0b1020;
+        color: #e5e7eb;
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+      }}
+      .card {{
+        width: min(92vw, 560px);
+        background: #111827;
+        border: 1px solid #1f2937;
+        border-radius: 12px;
+        padding: 20px;
+      }}
+      .badge {{
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: {badge};
+        color: #fff;
+        margin-bottom: 12px;
+      }}
+      h1 {{ margin: 0 0 8px 0; font-size: 20px; }}
+      p {{ margin: 0; color: #cbd5e1; line-height: 1.5; }}
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <span class="badge">{'Success' if ok else 'Error'}</span>
+      <h1>{title}</h1>
+      <p>{message}</p>
+    </div>
+    <script>
+      if ({'true' if ok else 'false'}) {{
+        setTimeout(() => window.close(), 1200);
+      }}
+    </script>
+  </body>
+</html>"""
 
     @action(detail=True, methods=["post"], url_path="oauth_token")
     def oauth_token(self, request, pk=None):
@@ -651,6 +910,47 @@ class KnowledgeGraphViewSet(viewsets.ViewSet):
         )
 
 
+class AgentActionProposalViewSet(viewsets.ModelViewSet):
+    queryset = AgentActionProposal.objects.select_related("created_by", "approved_by").prefetch_related("traces")
+    serializer_class = AgentActionProposalSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = self.queryset
+        status_value = str(self.request.query_params.get("status") or "").strip().lower()
+        action_type = str(self.request.query_params.get("action_type") or "").strip().lower()
+        if status_value:
+            queryset = queryset.filter(status=status_value)
+        if action_type:
+            queryset = queryset.filter(action_type=action_type)
+        return queryset
+
+    @action(detail=True, methods=["post"], url_path="approve")
+    def approve(self, request, pk=None):
+        proposal = self.get_object()
+        proposal = approve_agent_action(proposal, actor=request.user)
+        return Response(self.get_serializer(proposal).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="reject")
+    def reject(self, request, pk=None):
+        proposal = self.get_object()
+        reason = str(request.data.get("reason") or "").strip()
+        proposal = reject_agent_action(proposal, actor=request.user, reason=reason)
+        return Response(self.get_serializer(proposal).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="execute")
+    def execute(self, request, pk=None):
+        proposal = self.get_object()
+        proposal = execute_agent_action(proposal, actor=request.user)
+        return Response(self.get_serializer(proposal).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"], url_path="trace")
+    def trace(self, request, pk=None):
+        proposal = self.get_object()
+        traces = AgentExecutionTrace.objects.filter(proposal=proposal).order_by("-created_at")
+        return Response(AgentExecutionTraceSerializer(traces, many=True).data, status=status.HTTP_200_OK)
+
+
 class AgentPromptCurrentAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -693,6 +993,24 @@ class AIChatAPIView(APIView):
         prompt_config = AgentPromptConfig.get_current()
         context_payload.setdefault("system_prompt", prompt_config.system_prompt)
         context_payload.setdefault("domain_guardrail_prompt", prompt_config.domain_guardrail_prompt)
+        selected_mcp_adapter_ids: list[str] = []
+        for candidate in (
+            payload.get("mcp_adapters"),
+            context_payload.get("mcp_adapters"),
+            context_payload.get("mcp_adapter"),
+        ):
+            if isinstance(candidate, list):
+                selected_mcp_adapter_ids.extend(str(item).strip() for item in candidate if str(item).strip())
+            elif isinstance(candidate, str) and candidate.strip():
+                selected_mcp_adapter_ids.append(candidate.strip())
+        deduped_adapter_ids: list[str] = []
+        seen_adapters = set()
+        for adapter_id in selected_mcp_adapter_ids:
+            if adapter_id in seen_adapters:
+                continue
+            seen_adapters.add(adapter_id)
+            deduped_adapter_ids.append(adapter_id)
+        context_payload["mcp_adapters"] = deduped_adapter_ids
         context = json.dumps(context_payload)
         provider = str(payload.get("provider") or "").strip().lower() or None
         model = str(payload.get("model") or "").strip() or None
@@ -706,6 +1024,35 @@ class AIChatAPIView(APIView):
                 model=model,
                 retrieval_limit=retrieval_limit,
             )
-            return Response(result, status=status.HTTP_200_OK)
+            planning_error = ""
+            planning_result = None
+            try:
+                planning_result = plan_agent_actions(
+                    query=query,
+                    context_payload=context_payload,
+                    selected_mcp_adapter_ids=deduped_adapter_ids,
+                    user=request.user,
+                )
+            except Exception as exc:
+                planning_error = str(exc)
+
+            proposals = []
+            telemetry = {
+                "adapters_selected": deduped_adapter_ids,
+                "reads": [],
+                "planning_error": planning_error,
+            }
+            if planning_result:
+                proposals = AgentActionProposalSerializer(planning_result.proposals, many=True).data
+                telemetry["reads"] = planning_result.mcp_reads
+
+            return Response(
+                {
+                    **result,
+                    "proposals": proposals,
+                    "telemetry": telemetry,
+                },
+                status=status.HTTP_200_OK,
+            )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)

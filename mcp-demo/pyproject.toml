@@ -1,0 +1,11 @@
+[project]
+name = "felix-mcp-demo"
+version = "0.1.0"
+description = "Demo FastMCP services for Fix it Felix"
+requires-python = ">=3.11"
+dependencies = [
+  "fastmcp>=2.12.0",
+]
+
+[tool.uv]
+package = false
