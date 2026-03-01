@@ -22,6 +22,13 @@ class AgentState(TypedDict, total=False):
     snippets: list[dict[str, Any]]
     blocked: bool
     guardrail_message: str
+    policy_mode: str
+    intent: str
+    context_refs: list[str]
+    enabled_connectors: list[str]
+    diagnostic_summary: str
+    learning_summary: str
+    agent_trace: list[dict[str, Any]]
     answer: str
 
 
@@ -38,6 +45,8 @@ MCP_TOKEN_PATTERN = re.compile(r"[A-Za-z0-9._:-]+")
 WHITESPACE_PATTERN = re.compile(r"\s+")
 DOMAIN_TOKEN_PATTERN = re.compile(r"[A-Za-z0-9_+-]+")
 FAULT_CODE_PATTERN = re.compile(r"\b(?:tk-\d+|spn\s*\d+|fmi\s*\d+|p\d{4})\b", re.IGNORECASE)
+ALLOWED_POLICY_MODES = {"manual", "semi_auto", "auto"}
+ALLOWED_INTENTS = {"qa", "triage", "ticket_ops", "parts_ops", "assignment_ops"}
 
 DOMAIN_STRONG_KEYWORDS = {
     "cummins",
@@ -106,6 +115,60 @@ def _parse_json_context(context: str) -> dict[str, Any]:
     except json.JSONDecodeError:
         return {}
     return payload if isinstance(payload, dict) else {}
+
+
+def _normalize_policy_mode(value: Any) -> str:
+    normalized = str(value or "").strip().lower()
+    return normalized if normalized in ALLOWED_POLICY_MODES else "manual"
+
+
+def _normalize_intent(value: Any) -> str:
+    normalized = str(value or "").strip().lower()
+    return normalized if normalized in ALLOWED_INTENTS else "qa"
+
+
+def _coerce_context_refs(payload: dict[str, Any] | None, state_refs: Any = None) -> list[str]:
+    refs: list[str] = []
+    candidates: list[Any] = []
+    if isinstance(state_refs, list):
+        candidates.extend(state_refs)
+    elif isinstance(state_refs, str):
+        candidates.append(state_refs)
+    if isinstance(payload, dict):
+        raw_refs = payload.get("context_refs")
+        if isinstance(raw_refs, list):
+            candidates.extend(raw_refs)
+        elif isinstance(raw_refs, str):
+            candidates.append(raw_refs)
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        text = str(candidate or "").strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        deduped.append(text[:280])
+    return deduped
+
+
+def _trace(
+    state: AgentState,
+    *,
+    agent: str,
+    status: str = "ok",
+    detail: str = "",
+    outputs: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
+    entries = list(state.get("agent_trace") or [])
+    entries.append(
+        {
+            "agent": agent,
+            "status": status,
+            "detail": _trim_text(detail, 240),
+            "outputs": outputs or {},
+        }
+    )
+    return entries
 
 
 def _extract_prompt_overrides(context: str) -> tuple[str | None, str | None]:
@@ -285,10 +348,22 @@ def _build_human_prompt(state: AgentState) -> str:
     context = _trim_text(context_source, MAX_CONTEXT_CHARS)
     snippets = state.get("snippets", [])
     retrieval_limit = max(int(state.get("retrieval_limit", 6)), 1)
+    context_refs = state.get("context_refs", [])
+    enabled_connectors = state.get("enabled_connectors", [])
 
     blocks = [f"Question:\n{query}"]
     if context:
         blocks.append(f"User context:\n{context}")
+    if context_refs:
+        blocks.append("Context references:\n" + "\n".join(f"- {ref}" for ref in context_refs[:8]))
+    if enabled_connectors:
+        blocks.append("Enabled connectors:\n" + "\n".join(f"- {name}" for name in enabled_connectors[:12]))
+    diagnostic_summary = _trim_text(state.get("diagnostic_summary", ""), 600)
+    if diagnostic_summary:
+        blocks.append(f"Diagnostic summary:\n{diagnostic_summary}")
+    learning_summary = _trim_text(state.get("learning_summary", ""), 600)
+    if learning_summary:
+        blocks.append(f"Learning summary:\n{learning_summary}")
 
     mcp_hint_block = _build_mcp_hints_block(raw_context)
     if mcp_hint_block:
@@ -330,26 +405,145 @@ def _resolve_model_config(provider: str | None, model: str | None):
 def _retrieve_node(state: AgentState) -> AgentState:
     query = state.get("query", "").strip()
     if not query:
-        return {"snippets": []}
+        return {"snippets": [], "agent_trace": _trace(state, agent="retrieve", status="skip", detail="No query provided.")}
     limit = max(int(state.get("retrieval_limit", 6)), 1)
-    return {"snippets": search_knowledge_chunks(query, limit=limit)}
+    snippets = search_knowledge_chunks(query, limit=limit)
+    return {
+        "snippets": snippets,
+        "agent_trace": _trace(
+            state,
+            agent="retrieve",
+            detail=f"Retrieved {len(snippets)} snippets.",
+            outputs={"snippet_count": len(snippets)},
+        ),
+    }
+
+
+def _intake_node(state: AgentState) -> AgentState:
+    payload = _parse_json_context(str(state.get("context", "") or ""))
+    policy_mode = _normalize_policy_mode(state.get("policy_mode") or payload.get("policy_mode"))
+    intent = _normalize_intent(state.get("intent") or payload.get("intent"))
+    context_refs = _coerce_context_refs(payload, state.get("context_refs"))
+
+    enabled_connectors: list[str] = []
+    for candidate in (
+        state.get("enabled_connectors"),
+        payload.get("enabled_connectors"),
+        payload.get("mcp_adapters"),
+        payload.get("mcp_adapter"),
+    ):
+        if isinstance(candidate, list):
+            enabled_connectors.extend(str(item).strip() for item in candidate if str(item).strip())
+        elif isinstance(candidate, str) and candidate.strip():
+            enabled_connectors.append(candidate.strip())
+    deduped_connectors: list[str] = []
+    seen_connectors: set[str] = set()
+    for connector in enabled_connectors:
+        if connector in seen_connectors:
+            continue
+        seen_connectors.add(connector)
+        deduped_connectors.append(connector)
+
+    return {
+        "intent": intent,
+        "policy_mode": policy_mode,
+        "context_refs": context_refs,
+        "enabled_connectors": deduped_connectors,
+        "agent_trace": _trace(
+            state,
+            agent="intake",
+            detail=f"Intent={intent}, policy_mode={policy_mode}, connectors={len(deduped_connectors)}.",
+            outputs={"intent": intent, "policy_mode": policy_mode, "context_refs": len(context_refs)},
+        ),
+    }
 
 
 def _guardrail_node(state: AgentState) -> AgentState:
     _, guardrail_override = _extract_prompt_overrides(str(state.get("context", "") or ""))
     guardrail_message = guardrail_override or DOMAIN_GUARDRAIL_MESSAGE
     if _is_domain_allowed(state):
-        return {"blocked": False, "guardrail_message": ""}
+        return {
+            "blocked": False,
+            "guardrail_message": "",
+            "agent_trace": _trace(state, agent="guardrail", detail="Domain request allowed."),
+        }
     return {
         "blocked": True,
         "guardrail_message": guardrail_message,
         "snippets": [],
+        "agent_trace": _trace(
+            state,
+            agent="guardrail",
+            status="blocked",
+            detail="Request blocked by domain guardrail.",
+        ),
+    }
+
+
+def _diagnostic_node(state: AgentState) -> AgentState:
+    if state.get("blocked"):
+        return {"agent_trace": _trace(state, agent="diagnostic", status="skip", detail="Guardrail blocked request.")}
+    query = str(state.get("query") or "")
+    tokens = list(_domain_tokens(query))
+    highlighted = ", ".join(tokens[:6]) if tokens else "general service request"
+    summary = (
+        f"Initial triage signals suggest focus on {highlighted}. "
+        f"Intent is '{state.get('intent', 'qa')}' with '{state.get('policy_mode', 'manual')}' policy mode."
+    )
+    return {
+        "diagnostic_summary": summary,
+        "agent_trace": _trace(state, agent="diagnostic", detail="Generated triage summary."),
+    }
+
+
+def _ticket_agent_node(state: AgentState) -> AgentState:
+    if state.get("blocked"):
+        return {"agent_trace": _trace(state, agent="ticket_agent", status="skip", detail="Guardrail blocked request.")}
+    intent = str(state.get("intent") or "qa")
+    if intent in {"ticket_ops", "triage", "qa"}:
+        return {"agent_trace": _trace(state, agent="ticket_agent", detail="Ticket planning path enabled.")}
+    return {"agent_trace": _trace(state, agent="ticket_agent", status="skip", detail="Ticket planning not requested by intent.")}
+
+
+def _assignment_agent_node(state: AgentState) -> AgentState:
+    if state.get("blocked"):
+        return {"agent_trace": _trace(state, agent="assignment_agent", status="skip", detail="Guardrail blocked request.")}
+    intent = str(state.get("intent") or "qa")
+    if intent in {"assignment_ops", "ticket_ops", "triage"}:
+        return {"agent_trace": _trace(state, agent="assignment_agent", detail="Assignment recommendation path enabled.")}
+    return {"agent_trace": _trace(state, agent="assignment_agent", status="skip", detail="Assignment recommendation not requested.")}
+
+
+def _supply_chain_agent_node(state: AgentState) -> AgentState:
+    if state.get("blocked"):
+        return {"agent_trace": _trace(state, agent="supply_chain_agent", status="skip", detail="Guardrail blocked request.")}
+    intent = str(state.get("intent") or "qa")
+    if intent in {"parts_ops", "ticket_ops", "triage"}:
+        return {"agent_trace": _trace(state, agent="supply_chain_agent", detail="Supply chain recommendation path enabled.")}
+    return {"agent_trace": _trace(state, agent="supply_chain_agent", status="skip", detail="Supply chain path not requested.")}
+
+
+def _learning_agent_node(state: AgentState) -> AgentState:
+    if state.get("blocked"):
+        return {"agent_trace": _trace(state, agent="learning_agent", status="skip", detail="Guardrail blocked request.")}
+    snippets = state.get("snippets", [])
+    learning_summary = (
+        "Capture this resolution pattern into learning memory after ticket completion."
+        if snippets
+        else "No retrieved snippets. Capture technician notes before adding to learning memory."
+    )
+    return {
+        "learning_summary": learning_summary,
+        "agent_trace": _trace(state, agent="learning_agent", detail="Prepared learning-loop recommendation."),
     }
 
 
 def _answer_node(state: AgentState) -> AgentState:
     if state.get("blocked"):
-        return {"answer": state.get("guardrail_message", DOMAIN_GUARDRAIL_MESSAGE)}
+        return {
+            "answer": state.get("guardrail_message", DOMAIN_GUARDRAIL_MESSAGE),
+            "agent_trace": _trace(state, agent="answer", status="blocked", detail="Returned guardrail response."),
+        }
 
     api_key = state.get("api_key")
     if not api_key:
@@ -374,7 +568,10 @@ def _answer_node(state: AgentState) -> AgentState:
     system_prompt = system_override or default_system_prompt
     human_prompt = _build_human_prompt(state)
     response = llm.invoke([SystemMessage(content=system_prompt), HumanMessage(content=human_prompt)])
-    return {"answer": response.content if isinstance(response.content, str) else str(response.content)}
+    return {
+        "answer": response.content if isinstance(response.content, str) else str(response.content),
+        "agent_trace": _trace(state, agent="answer", detail="Returned grounded response."),
+    }
 
 
 def run_langgraph_agent(
@@ -384,16 +581,32 @@ def run_langgraph_agent(
     provider: str | None = None,
     model: str | None = None,
     retrieval_limit: int = 6,
+    intent: str | None = None,
+    policy_mode: str | None = None,
+    context_refs: list[str] | None = None,
+    enabled_connectors: list[str] | None = None,
 ):
     config = _resolve_model_config(provider, model)
 
     graph_builder: StateGraph = StateGraph(AgentState)
     graph_builder.add_node("retrieve", _retrieve_node)
+    graph_builder.add_node("intake", _intake_node)
     graph_builder.add_node("guardrail", _guardrail_node)
+    graph_builder.add_node("diagnostic", _diagnostic_node)
+    graph_builder.add_node("ticket_agent", _ticket_agent_node)
+    graph_builder.add_node("assignment_agent", _assignment_agent_node)
+    graph_builder.add_node("supply_chain_agent", _supply_chain_agent_node)
+    graph_builder.add_node("learning_agent", _learning_agent_node)
     graph_builder.add_node("answer", _answer_node)
     graph_builder.add_edge(START, "retrieve")
-    graph_builder.add_edge("retrieve", "guardrail")
-    graph_builder.add_edge("guardrail", "answer")
+    graph_builder.add_edge("retrieve", "intake")
+    graph_builder.add_edge("intake", "guardrail")
+    graph_builder.add_edge("guardrail", "diagnostic")
+    graph_builder.add_edge("diagnostic", "ticket_agent")
+    graph_builder.add_edge("ticket_agent", "assignment_agent")
+    graph_builder.add_edge("assignment_agent", "supply_chain_agent")
+    graph_builder.add_edge("supply_chain_agent", "learning_agent")
+    graph_builder.add_edge("learning_agent", "answer")
     graph_builder.add_edge("answer", END)
     graph = graph_builder.compile()
 
@@ -405,6 +618,11 @@ def run_langgraph_agent(
         "base_url": config["base_url"],
         "api_key": config["api_key"],
         "retrieval_limit": retrieval_limit,
+        "policy_mode": _normalize_policy_mode(policy_mode),
+        "intent": _normalize_intent(intent),
+        "context_refs": _coerce_context_refs(_parse_json_context(context), context_refs),
+        "enabled_connectors": [str(item).strip() for item in (enabled_connectors or []) if str(item).strip()],
+        "agent_trace": [],
     }
     result = graph.invoke(state)
 
@@ -413,4 +631,5 @@ def run_langgraph_agent(
         "snippets": result.get("snippets", []),
         "provider": config["provider"],
         "model": config["model"],
+        "agent_trace": result.get("agent_trace", []),
     }
