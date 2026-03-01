@@ -1,0 +1,17 @@
+[project]
+name = "cummins-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "asgiref==3.11.1",
+    "django==6.0.2",
+    "fastmcp>=2.12.3",
+    "langchain>=0.3.0",
+    "langchain-openai>=0.2.0",
+    "langgraph>=0.2.0",
+    "psycopg2-binary==2.9.11",
+    "python-dotenv==1.2.1",
+    "sqlparse==0.5.5",
+]
