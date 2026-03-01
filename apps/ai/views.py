@@ -919,16 +919,46 @@ class AgentActionProposalViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
         status_value = str(self.request.query_params.get("status") or "").strip().lower()
         action_type = str(self.request.query_params.get("action_type") or "").strip().lower()
+        risk_level = str(self.request.query_params.get("risk_level") or "").strip().lower()
+        agent_name = str(self.request.query_params.get("agent_name") or "").strip().lower()
+        ticket_id = str(self.request.query_params.get("ticket_id") or "").strip()
         if status_value:
             queryset = queryset.filter(status=status_value)
         if action_type:
             queryset = queryset.filter(action_type=action_type)
+        if risk_level:
+            queryset = queryset.filter(metadata__risk_level=risk_level)
+        if agent_name:
+            queryset = queryset.filter(metadata__agent_name=agent_name)
+        if ticket_id:
+            candidate_ids: list[int] = []
+            for proposal in queryset:
+                payload = proposal.payload if isinstance(proposal.payload, dict) else {}
+                result = proposal.result if isinstance(proposal.result, dict) else {}
+                fields = [
+                    str(payload.get("ticket_id") or ""),
+                    str(payload.get("ticket_workflow_ref") or ""),
+                    str(result.get("ticket_id") or ""),
+                    str(result.get("local_ticket_id") or ""),
+                ]
+                if any(ticket_id.lower() in field.lower() for field in fields if field):
+                    candidate_ids.append(proposal.id)
+            queryset = queryset.filter(id__in=candidate_ids)
         return queryset
 
     @action(detail=True, methods=["post"], url_path="approve")
     def approve(self, request, pk=None):
         proposal = self.get_object()
-        proposal = approve_agent_action(proposal, actor=request.user)
+        execution_overrides = request.data.get("execution_overrides")
+        if not isinstance(execution_overrides, dict):
+            execution_overrides = None
+        idempotency_key = str(request.data.get("idempotency_key") or "").strip() or None
+        proposal = approve_agent_action(
+            proposal,
+            actor=request.user,
+            execution_overrides=execution_overrides,
+            idempotency_key=idempotency_key,
+        )
         return Response(self.get_serializer(proposal).data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"], url_path="reject")
@@ -941,7 +971,16 @@ class AgentActionProposalViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"], url_path="execute")
     def execute(self, request, pk=None):
         proposal = self.get_object()
-        proposal = execute_agent_action(proposal, actor=request.user)
+        execution_overrides = request.data.get("execution_overrides")
+        if not isinstance(execution_overrides, dict):
+            execution_overrides = None
+        idempotency_key = str(request.data.get("idempotency_key") or "").strip() or None
+        proposal = execute_agent_action(
+            proposal,
+            actor=request.user,
+            execution_overrides=execution_overrides,
+            idempotency_key=idempotency_key,
+        )
         return Response(self.get_serializer(proposal).data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["get"], url_path="trace")
@@ -993,10 +1032,36 @@ class AIChatAPIView(APIView):
         prompt_config = AgentPromptConfig.get_current()
         context_payload.setdefault("system_prompt", prompt_config.system_prompt)
         context_payload.setdefault("domain_guardrail_prompt", prompt_config.domain_guardrail_prompt)
+        policy_mode = str(
+            payload.get("policy_mode")
+            or context_payload.get("policy_mode")
+            or "manual"
+        ).strip().lower() or "manual"
+        if policy_mode not in {"manual", "semi_auto", "auto"}:
+            policy_mode = "manual"
+        intent = str(
+            payload.get("intent")
+            or context_payload.get("intent")
+            or "qa"
+        ).strip().lower() or "qa"
+        if intent not in {"qa", "triage", "ticket_ops", "parts_ops", "assignment_ops"}:
+            intent = "qa"
+        context_refs: list[str] = []
+        raw_context_refs = payload.get("context_refs", context_payload.get("context_refs"))
+        if isinstance(raw_context_refs, list):
+            context_refs = [str(item).strip() for item in raw_context_refs if str(item).strip()]
+        elif isinstance(raw_context_refs, str) and raw_context_refs.strip():
+            context_refs = [raw_context_refs.strip()]
+        context_payload["policy_mode"] = policy_mode
+        context_payload["intent"] = intent
+        context_payload["context_refs"] = context_refs
+
         selected_mcp_adapter_ids: list[str] = []
         for candidate in (
             payload.get("mcp_adapters"),
+            payload.get("enabled_connectors"),
             context_payload.get("mcp_adapters"),
+            context_payload.get("enabled_connectors"),
             context_payload.get("mcp_adapter"),
         ):
             if isinstance(candidate, list):
@@ -1011,6 +1076,7 @@ class AIChatAPIView(APIView):
             seen_adapters.add(adapter_id)
             deduped_adapter_ids.append(adapter_id)
         context_payload["mcp_adapters"] = deduped_adapter_ids
+        context_payload["enabled_connectors"] = deduped_adapter_ids
         context = json.dumps(context_payload)
         provider = str(payload.get("provider") or "").strip().lower() or None
         model = str(payload.get("model") or "").strip() or None
@@ -1023,6 +1089,10 @@ class AIChatAPIView(APIView):
                 provider=provider,
                 model=model,
                 retrieval_limit=retrieval_limit,
+                intent=intent,
+                policy_mode=policy_mode,
+                context_refs=context_refs,
+                enabled_connectors=deduped_adapter_ids,
             )
             planning_error = ""
             planning_result = None
@@ -1032,6 +1102,9 @@ class AIChatAPIView(APIView):
                     context_payload=context_payload,
                     selected_mcp_adapter_ids=deduped_adapter_ids,
                     user=request.user,
+                    policy_mode=policy_mode,
+                    intent=intent,
+                    context_refs=context_refs,
                 )
             except Exception as exc:
                 planning_error = str(exc)
@@ -1041,6 +1114,9 @@ class AIChatAPIView(APIView):
                 "adapters_selected": deduped_adapter_ids,
                 "reads": [],
                 "planning_error": planning_error,
+                "policy_mode": policy_mode,
+                "intent": intent,
+                "context_ref_count": len(context_refs),
             }
             if planning_result:
                 proposals = AgentActionProposalSerializer(planning_result.proposals, many=True).data
@@ -1051,6 +1127,7 @@ class AIChatAPIView(APIView):
                     **result,
                     "proposals": proposals,
                     "telemetry": telemetry,
+                    "agent_trace": result.get("agent_trace", []),
                 },
                 status=status.HTTP_200_OK,
             )

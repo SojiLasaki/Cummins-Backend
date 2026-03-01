@@ -21,6 +21,7 @@ PART_KEYWORDS = {
     "alternator": "Alternator",
     "hose": "Hose",
 }
+ALLOWED_POLICY_MODES = {"manual", "semi_auto", "auto"}
 
 
 def _normalized(text: str) -> str:
@@ -57,6 +58,80 @@ def _extract_part_name(text: str) -> str:
         if token in normalized:
             return part_name
     return "Fuel Injector"
+
+
+def _normalize_policy_mode(value: Any) -> str:
+    normalized = str(value or "").strip().lower()
+    return normalized if normalized in ALLOWED_POLICY_MODES else "manual"
+
+
+def _action_risk_level(action_type: str, priority: int) -> str:
+    if action_type == AgentActionProposal.ACTION_ORDER_PART:
+        return "high"
+    if action_type == AgentActionProposal.ACTION_ASSIGN_EMPLOYEE:
+        return "medium"
+    if action_type == AgentActionProposal.ACTION_CREATE_TICKET:
+        return "medium" if priority >= 3 else "low"
+    return "medium"
+
+
+def _requires_approval(
+    *,
+    policy_mode: str,
+    action_type: str,
+    risk_level: str,
+    context_payload: dict[str, Any],
+) -> bool:
+    policy_rules = context_payload.get("policy_rules") if isinstance(context_payload, dict) else None
+    if isinstance(policy_rules, dict):
+        by_action = policy_rules.get("actions")
+        if isinstance(by_action, dict):
+            override = by_action.get(action_type)
+            if isinstance(override, bool):
+                return override
+        by_risk = policy_rules.get("risk")
+        if isinstance(by_risk, dict):
+            override = by_risk.get(risk_level)
+            if isinstance(override, bool):
+                return override
+
+    if policy_mode == "manual":
+        return True
+    if policy_mode == "semi_auto":
+        return risk_level != "low"
+    if policy_mode == "auto":
+        return risk_level == "high"
+    return True
+
+
+def _proposal_metadata(
+    *,
+    action_type: str,
+    workflow_id: str,
+    query: str,
+    context_payload: dict[str, Any],
+    policy_mode: str,
+    intent: str,
+    reason: str,
+    priority: int = 2,
+) -> dict[str, Any]:
+    risk_level = _action_risk_level(action_type, priority)
+    requires_approval = _requires_approval(
+        policy_mode=policy_mode,
+        action_type=action_type,
+        risk_level=risk_level,
+        context_payload=context_payload,
+    )
+    return {
+        "reason": reason,
+        "agent_name": "langgraph_react_runtime",
+        "policy_mode": policy_mode,
+        "intent": intent,
+        "risk_level": risk_level,
+        "requires_approval": requires_approval,
+        "context_refs": context_payload.get("context_refs", []),
+        "idempotency_key": f"{workflow_id}:{action_type}:{_normalized(query)[:120]}",
+    }
 
 
 def _coerce_tool_result(result: dict[str, Any] | None) -> Any:
@@ -101,6 +176,9 @@ def plan_agent_actions(
     context_payload: dict[str, Any],
     selected_mcp_adapter_ids: list[str],
     user,
+    policy_mode: str = "manual",
+    intent: str = "qa",
+    context_refs: list[str] | None = None,
 ) -> PlanningResult:
     proposals: list[AgentActionProposal] = []
     mcp_reads: list[dict[str, Any]] = []
@@ -111,6 +189,10 @@ def plan_agent_actions(
     specialization = _derive_specialization(query)
     priority = _derive_priority(query)
     workflow_id = str(uuid.uuid4())
+    normalized_policy_mode = _normalize_policy_mode(policy_mode or context_payload.get("policy_mode"))
+    normalized_intent = str(intent or context_payload.get("intent") or "qa").strip().lower() or "qa"
+    if context_refs and "context_refs" not in context_payload:
+        context_payload["context_refs"] = context_refs
 
     clients = list_enabled_mcp_clients(selected_mcp_adapter_ids)
     supply_client = _pick_connector(clients, ("supply", "parts", "inventory"))
@@ -172,7 +254,16 @@ def plan_agent_actions(
             source_query=query,
             source_context=context_payload,
             created_by=user if getattr(user, "is_authenticated", False) else None,
-            metadata={"reason": "Detected ticket-worthy issue from user request."},
+            metadata=_proposal_metadata(
+                action_type=AgentActionProposal.ACTION_CREATE_TICKET,
+                workflow_id=workflow_id,
+                query=query,
+                context_payload=context_payload,
+                policy_mode=normalized_policy_mode,
+                intent=normalized_intent,
+                reason="Detected ticket-worthy issue from user request.",
+                priority=priority,
+            ),
         )
     )
 
@@ -192,7 +283,16 @@ def plan_agent_actions(
             source_query=query,
             source_context=context_payload,
             created_by=user if getattr(user, "is_authenticated", False) else None,
-            metadata={"reason": "Assignment required for faster dispatch."},
+            metadata=_proposal_metadata(
+                action_type=AgentActionProposal.ACTION_ASSIGN_EMPLOYEE,
+                workflow_id=workflow_id,
+                query=query,
+                context_payload=context_payload,
+                policy_mode=normalized_policy_mode,
+                intent=normalized_intent,
+                reason="Assignment required for faster dispatch.",
+                priority=priority,
+            ),
         )
     )
 
@@ -222,7 +322,16 @@ def plan_agent_actions(
                 source_query=query,
                 source_context=context_payload,
                 created_by=user if getattr(user, "is_authenticated", False) else None,
-                metadata={"reason": "Local inventory appears insufficient for requested repair."},
+                metadata=_proposal_metadata(
+                    action_type=AgentActionProposal.ACTION_ORDER_PART,
+                    workflow_id=workflow_id,
+                    query=query,
+                    context_payload=context_payload,
+                    policy_mode=normalized_policy_mode,
+                    intent=normalized_intent,
+                    reason="Local inventory appears insufficient for requested repair.",
+                    priority=priority,
+                ),
             )
         )
 
@@ -331,17 +440,93 @@ def _ensure_workflow_ticket(proposal: AgentActionProposal, actor) -> Ticket | No
         return None
 
     if create_proposal.status != AgentActionProposal.STATUS_EXECUTED:
-        execute_agent_action(create_proposal, actor=actor)
+        if create_proposal.status == AgentActionProposal.STATUS_PENDING:
+            create_proposal.status = AgentActionProposal.STATUS_APPROVED
+            create_proposal.approved_by = actor if getattr(actor, "is_authenticated", False) else create_proposal.approved_by
+            create_proposal.approved_at = timezone.now()
+            create_proposal.save(update_fields=["status", "approved_by", "approved_at", "updated_at"])
+        execute_agent_action(
+            create_proposal,
+            actor=actor,
+            execution_overrides={"trigger": "workflow_dependency"},
+        )
     return _resolve_workflow_ticket(proposal)
 
 
-def execute_agent_action(proposal: AgentActionProposal, *, actor) -> AgentActionProposal:
+def execute_agent_action(
+    proposal: AgentActionProposal,
+    *,
+    actor,
+    execution_overrides: dict[str, Any] | None = None,
+    idempotency_key: str | None = None,
+) -> AgentActionProposal:
     if proposal.status not in {
         AgentActionProposal.STATUS_PENDING,
         AgentActionProposal.STATUS_APPROVED,
         AgentActionProposal.STATUS_FAILED,
     }:
         return proposal
+
+    metadata = proposal.metadata if isinstance(proposal.metadata, dict) else {}
+    metadata_changed = False
+    if isinstance(execution_overrides, dict) and execution_overrides:
+        metadata["execution_overrides"] = execution_overrides
+        metadata_changed = True
+    if isinstance(idempotency_key, str) and idempotency_key.strip():
+        metadata["idempotency_key"] = idempotency_key.strip()
+        metadata_changed = True
+
+    requires_approval = bool(metadata.get("requires_approval", True))
+    if requires_approval and proposal.status != AgentActionProposal.STATUS_APPROVED:
+        proposal.error = "Approval required before execution."
+        if metadata_changed:
+            proposal.metadata = metadata
+            proposal.save(update_fields=["error", "metadata", "updated_at"])
+        else:
+            proposal.save(update_fields=["error", "updated_at"])
+        return proposal
+
+    idem_key = str(metadata.get("idempotency_key") or "").strip()
+    if idem_key:
+        existing = (
+            AgentActionProposal.objects.filter(
+                action_type=proposal.action_type,
+                status=AgentActionProposal.STATUS_EXECUTED,
+                metadata__idempotency_key=idem_key,
+            )
+            .exclude(id=proposal.id)
+            .order_by("-executed_at")
+            .first()
+        )
+        if existing:
+            proposal.status = AgentActionProposal.STATUS_EXECUTED
+            proposal.executed_at = timezone.now()
+            proposal.approved_by = actor if getattr(actor, "is_authenticated", False) else proposal.approved_by
+            if proposal.approved_at is None:
+                proposal.approved_at = timezone.now()
+            proposal.error = ""
+            proposal.result = {
+                "idempotent_reuse": True,
+                "reused_proposal_id": existing.id,
+                "reused_result": existing.result if isinstance(existing.result, dict) else {},
+            }
+            if metadata_changed:
+                proposal.metadata = metadata
+                proposal.save(
+                    update_fields=[
+                        "status",
+                        "result",
+                        "executed_at",
+                        "approved_by",
+                        "approved_at",
+                        "error",
+                        "metadata",
+                        "updated_at",
+                    ]
+                )
+            else:
+                proposal.save(update_fields=["status", "result", "executed_at", "approved_by", "approved_at", "error", "updated_at"])
+            return proposal
 
     payload = proposal.payload if isinstance(proposal.payload, dict) else {}
     adapter_id = payload.get("mcp_adapter_id")
@@ -491,7 +676,13 @@ def execute_agent_action(proposal: AgentActionProposal, *, actor) -> AgentAction
         if proposal.approved_at is None:
             proposal.approved_at = timezone.now()
         proposal.error = ""
-        proposal.save(update_fields=["status", "result", "executed_at", "approved_by", "approved_at", "error", "updated_at"])
+        if metadata_changed:
+            proposal.metadata = metadata
+            proposal.save(
+                update_fields=["status", "result", "executed_at", "approved_by", "approved_at", "error", "metadata", "updated_at"]
+            )
+        else:
+            proposal.save(update_fields=["status", "result", "executed_at", "approved_by", "approved_at", "error", "updated_at"])
         return proposal
 
     except Exception as exc:
@@ -502,12 +693,23 @@ def execute_agent_action(proposal: AgentActionProposal, *, actor) -> AgentAction
         return proposal
 
 
-def approve_agent_action(proposal: AgentActionProposal, *, actor) -> AgentActionProposal:
+def approve_agent_action(
+    proposal: AgentActionProposal,
+    *,
+    actor,
+    execution_overrides: dict[str, Any] | None = None,
+    idempotency_key: str | None = None,
+) -> AgentActionProposal:
     proposal.status = AgentActionProposal.STATUS_APPROVED
     proposal.approved_by = actor if getattr(actor, "is_authenticated", False) else proposal.approved_by
     proposal.approved_at = timezone.now()
     proposal.save(update_fields=["status", "approved_by", "approved_at", "updated_at"])
-    return execute_agent_action(proposal, actor=actor)
+    return execute_agent_action(
+        proposal,
+        actor=actor,
+        execution_overrides=execution_overrides,
+        idempotency_key=idempotency_key,
+    )
 
 
 def reject_agent_action(proposal: AgentActionProposal, *, actor, reason: str = "") -> AgentActionProposal:

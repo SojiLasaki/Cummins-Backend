@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from unittest.mock import patch
 
 from apps.ai.models import AgentActionProposal, AgentPromptConfig, KnowledgeChunk, KnowledgeDocument, McpAdapter
+from apps.tickets.models import Ticket
 
 
 class AIApiTests(TestCase):
@@ -175,6 +176,7 @@ class AIApiTests(TestCase):
             "snippets": [],
             "provider": "openai",
             "model": "gpt-4o-mini",
+            "agent_trace": [{"agent": "intake", "status": "ok", "detail": "test"}],
         }
 
         resp = self.client.post(
@@ -185,11 +187,18 @@ class AIApiTests(TestCase):
                 "model": "gpt-4o-mini",
                 "context": {"station_id": "INDY"},
                 "mcp_adapters": [],
+                "policy_mode": "semi_auto",
+                "intent": "ticket_ops",
+                "context_refs": ["ticket://draft"],
+                "enabled_connectors": [],
             },
             format="json",
         )
         self.assertEqual(resp.status_code, 200)
         self.assertIn("proposals", resp.data)
+        self.assertEqual(resp.data.get("telemetry", {}).get("policy_mode"), "semi_auto")
+        self.assertEqual(resp.data.get("telemetry", {}).get("intent"), "ticket_ops")
+        self.assertIn("agent_trace", resp.data)
         self.assertGreaterEqual(len(resp.data["proposals"]), 2)
         self.assertGreaterEqual(AgentActionProposal.objects.count(), 2)
 
@@ -253,3 +262,62 @@ class AIApiTests(TestCase):
         )
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data.get("status"), AgentActionProposal.STATUS_EXECUTED)
+
+    def test_execute_requires_approval_when_flagged(self):
+        proposal = AgentActionProposal.objects.create(
+            action_type=AgentActionProposal.ACTION_CREATE_TICKET,
+            status=AgentActionProposal.STATUS_PENDING,
+            payload={
+                "title": "Approval gate ticket",
+                "description": "Needs approval",
+                "specialization": "engine",
+                "priority": 2,
+            },
+            source_query="Create a ticket",
+            source_context={},
+            metadata={"requires_approval": True, "idempotency_key": "demo:approval"},
+            created_by=self.user,
+        )
+
+        resp = self.client.post(
+            f"/api/ai/agent_actions/{proposal.id}/execute/",
+            {},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data.get("status"), AgentActionProposal.STATUS_PENDING)
+        self.assertIn("Approval required", resp.data.get("error", ""))
+        self.assertEqual(Ticket.objects.count(), 0)
+
+    def test_execute_idempotency_reuses_prior_result(self):
+        idem_key = "wf-123:create_ticket"
+        first = AgentActionProposal.objects.create(
+            action_type=AgentActionProposal.ACTION_CREATE_TICKET,
+            status=AgentActionProposal.STATUS_EXECUTED,
+            payload={"title": "Existing ticket", "description": "Already created"},
+            result={"local_ticket_id": "TK-EXISTING"},
+            source_query="Create ticket",
+            source_context={},
+            metadata={"idempotency_key": idem_key, "requires_approval": False},
+            created_by=self.user,
+        )
+        second = AgentActionProposal.objects.create(
+            action_type=AgentActionProposal.ACTION_CREATE_TICKET,
+            status=AgentActionProposal.STATUS_APPROVED,
+            payload={"title": "Duplicate ticket", "description": "Duplicate"},
+            source_query="Create ticket",
+            source_context={},
+            metadata={"idempotency_key": idem_key, "requires_approval": True},
+            created_by=self.user,
+        )
+
+        resp = self.client.post(
+            f"/api/ai/agent_actions/{second.id}/execute/",
+            {},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data.get("status"), AgentActionProposal.STATUS_EXECUTED)
+        self.assertTrue(resp.data.get("result", {}).get("idempotent_reuse"))
+        self.assertEqual(resp.data.get("result", {}).get("reused_proposal_id"), first.id)
+        self.assertEqual(Ticket.objects.count(), 0)
