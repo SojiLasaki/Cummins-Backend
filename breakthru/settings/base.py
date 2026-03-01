@@ -9,10 +9,17 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_DIR = BASE_DIR.parent
+WORKSPACE_DIR = PROJECT_DIR.parent
+
+load_dotenv(PROJECT_DIR / ".env")
+load_dotenv(WORKSPACE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -55,6 +62,7 @@ INSTALLED_APPS = [
     'apps.schedules.apps.SchedulesConfig',
     # 'apps.regions.apps.RegionsConfig',
     'apps.playbooks.apps.PlaybooksConfig',
+    'apps.ai.apps.AiConfig',
 
     'rest_framework',
     'channels',
@@ -124,6 +132,11 @@ CHANNEL_LAYERS = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:8081",
+    "http://127.0.0.1:8081",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
     # add other origins if needed
 ]
 
