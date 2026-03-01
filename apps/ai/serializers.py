@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from .models import (
+    AgentActionProposal,
+    AgentExecutionTrace,
     AgentPromptConfig,
     KnowledgeChunk,
     KnowledgeDocument,
@@ -82,3 +84,30 @@ class AgentPromptConfigSerializer(serializers.ModelSerializer):
         model = AgentPromptConfig
         fields = ("system_prompt", "domain_guardrail_prompt", "updated_at")
         read_only_fields = ("updated_at",)
+
+
+class AgentExecutionTraceSerializer(serializers.ModelSerializer):
+    adapter_name = serializers.CharField(source="adapter.name", read_only=True)
+
+    class Meta:
+        model = AgentExecutionTrace
+        fields = "__all__"
+        read_only_fields = ("created_at",)
+
+
+class AgentActionProposalSerializer(serializers.ModelSerializer):
+    created_by_username = serializers.CharField(source="created_by.username", read_only=True)
+    approved_by_username = serializers.CharField(source="approved_by.username", read_only=True)
+    traces = AgentExecutionTraceSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = AgentActionProposal
+        fields = "__all__"
+        read_only_fields = (
+            "result",
+            "error",
+            "created_at",
+            "approved_at",
+            "executed_at",
+            "updated_at",
+        )

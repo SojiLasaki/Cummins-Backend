@@ -15,7 +15,9 @@ from rest_framework.views import APIView
 from django.utils import timezone
 
 from .models import (
+    AgentActionProposal,
     AgentPromptConfig,
+    AgentExecutionTrace,
     KnowledgeChunk,
     KnowledgeDocument,
     KnowledgeEntity,
@@ -24,7 +26,9 @@ from .models import (
     ModelEndpoint,
 )
 from .serializers import (
+    AgentActionProposalSerializer,
     AgentPromptConfigSerializer,
+    AgentExecutionTraceSerializer,
     KnowledgeChunkSerializer,
     KnowledgeDocumentIngestSerializer,
     KnowledgeDocumentSerializer,
@@ -34,6 +38,12 @@ from .serializers import (
     ModelEndpointSerializer,
 )
 from .services.langgraph_agent import run_langgraph_agent
+from .services.agent_automation import (
+    approve_agent_action,
+    execute_agent_action,
+    plan_agent_actions,
+    reject_agent_action,
+)
 from .services.oauth_connector import (
     complete_oauth_flow,
     get_oauth_flow_status,
@@ -413,6 +423,74 @@ class McpAdapterViewSet(viewsets.ModelViewSet):
     queryset = McpAdapter.objects.all()
     serializer_class = McpAdapterSerializer
     permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=["post"], url_path="seed_demo")
+    def seed_demo(self, request):
+        demo_rows = [
+            {
+                "name": "Supply Chain Connector",
+                "transport": McpAdapter.TRANSPORT_HTTP,
+                "base_url": "http://127.0.0.1:9101/mcp",
+                "auth_type": McpAdapter.AUTH_NONE,
+                "metadata": {
+                    "description": "External supply chain availability and order placement.",
+                    "domain": "supply_chain",
+                },
+            },
+            {
+                "name": "Ticket Operations Connector",
+                "transport": McpAdapter.TRANSPORT_HTTP,
+                "base_url": "http://127.0.0.1:9102/mcp",
+                "auth_type": McpAdapter.AUTH_NONE,
+                "metadata": {
+                    "description": "External ticket intake and synchronization.",
+                    "domain": "ticketing",
+                },
+            },
+            {
+                "name": "Workforce Connector",
+                "transport": McpAdapter.TRANSPORT_HTTP,
+                "base_url": "http://127.0.0.1:9103/mcp",
+                "auth_type": McpAdapter.AUTH_NONE,
+                "metadata": {
+                    "description": "Employee roster and availability orchestration.",
+                    "domain": "employee_management",
+                },
+            },
+        ]
+        created = 0
+        updated = 0
+        for row in demo_rows:
+            adapter, was_created = McpAdapter.objects.get_or_create(
+                name=row["name"],
+                defaults=row,
+            )
+            if was_created:
+                created += 1
+                continue
+            changed = False
+            for key in ("transport", "base_url", "auth_type", "metadata"):
+                value = row[key]
+                if getattr(adapter, key) != value:
+                    setattr(adapter, key, value)
+                    changed = True
+            if not adapter.is_enabled:
+                adapter.is_enabled = True
+                changed = True
+            if changed:
+                adapter.save()
+                updated += 1
+
+        serialized = McpAdapterSerializer(McpAdapter.objects.filter(name__in=[x["name"] for x in demo_rows]), many=True).data
+        return Response(
+            {
+                "ok": True,
+                "created": created,
+                "updated": updated,
+                "adapters": serialized,
+            },
+            status=status.HTTP_200_OK,
+        )
 
     @action(detail=True, methods=["post"], url_path="test_connection")
     def test_connection(self, request, pk=None):
@@ -832,6 +910,47 @@ class KnowledgeGraphViewSet(viewsets.ViewSet):
         )
 
 
+class AgentActionProposalViewSet(viewsets.ModelViewSet):
+    queryset = AgentActionProposal.objects.select_related("created_by", "approved_by").prefetch_related("traces")
+    serializer_class = AgentActionProposalSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = self.queryset
+        status_value = str(self.request.query_params.get("status") or "").strip().lower()
+        action_type = str(self.request.query_params.get("action_type") or "").strip().lower()
+        if status_value:
+            queryset = queryset.filter(status=status_value)
+        if action_type:
+            queryset = queryset.filter(action_type=action_type)
+        return queryset
+
+    @action(detail=True, methods=["post"], url_path="approve")
+    def approve(self, request, pk=None):
+        proposal = self.get_object()
+        proposal = approve_agent_action(proposal, actor=request.user)
+        return Response(self.get_serializer(proposal).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="reject")
+    def reject(self, request, pk=None):
+        proposal = self.get_object()
+        reason = str(request.data.get("reason") or "").strip()
+        proposal = reject_agent_action(proposal, actor=request.user, reason=reason)
+        return Response(self.get_serializer(proposal).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="execute")
+    def execute(self, request, pk=None):
+        proposal = self.get_object()
+        proposal = execute_agent_action(proposal, actor=request.user)
+        return Response(self.get_serializer(proposal).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"], url_path="trace")
+    def trace(self, request, pk=None):
+        proposal = self.get_object()
+        traces = AgentExecutionTrace.objects.filter(proposal=proposal).order_by("-created_at")
+        return Response(AgentExecutionTraceSerializer(traces, many=True).data, status=status.HTTP_200_OK)
+
+
 class AgentPromptCurrentAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -874,6 +993,24 @@ class AIChatAPIView(APIView):
         prompt_config = AgentPromptConfig.get_current()
         context_payload.setdefault("system_prompt", prompt_config.system_prompt)
         context_payload.setdefault("domain_guardrail_prompt", prompt_config.domain_guardrail_prompt)
+        selected_mcp_adapter_ids: list[str] = []
+        for candidate in (
+            payload.get("mcp_adapters"),
+            context_payload.get("mcp_adapters"),
+            context_payload.get("mcp_adapter"),
+        ):
+            if isinstance(candidate, list):
+                selected_mcp_adapter_ids.extend(str(item).strip() for item in candidate if str(item).strip())
+            elif isinstance(candidate, str) and candidate.strip():
+                selected_mcp_adapter_ids.append(candidate.strip())
+        deduped_adapter_ids: list[str] = []
+        seen_adapters = set()
+        for adapter_id in selected_mcp_adapter_ids:
+            if adapter_id in seen_adapters:
+                continue
+            seen_adapters.add(adapter_id)
+            deduped_adapter_ids.append(adapter_id)
+        context_payload["mcp_adapters"] = deduped_adapter_ids
         context = json.dumps(context_payload)
         provider = str(payload.get("provider") or "").strip().lower() or None
         model = str(payload.get("model") or "").strip() or None
@@ -887,6 +1024,35 @@ class AIChatAPIView(APIView):
                 model=model,
                 retrieval_limit=retrieval_limit,
             )
-            return Response(result, status=status.HTTP_200_OK)
+            planning_error = ""
+            planning_result = None
+            try:
+                planning_result = plan_agent_actions(
+                    query=query,
+                    context_payload=context_payload,
+                    selected_mcp_adapter_ids=deduped_adapter_ids,
+                    user=request.user,
+                )
+            except Exception as exc:
+                planning_error = str(exc)
+
+            proposals = []
+            telemetry = {
+                "adapters_selected": deduped_adapter_ids,
+                "reads": [],
+                "planning_error": planning_error,
+            }
+            if planning_result:
+                proposals = AgentActionProposalSerializer(planning_result.proposals, many=True).data
+                telemetry["reads"] = planning_result.mcp_reads
+
+            return Response(
+                {
+                    **result,
+                    "proposals": proposals,
+                    "telemetry": telemetry,
+                },
+                status=status.HTTP_200_OK,
+            )
         except ValueError as exc:
             return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)

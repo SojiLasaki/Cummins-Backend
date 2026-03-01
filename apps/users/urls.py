@@ -11,7 +11,10 @@ router.register(r"stations", StationViewSet, basename="stations")
 router.register(r"regions", RegionViewSet, basename="regions")
 
 urlpatterns = [
+    # Keep both variants so clients posting without trailing slash do not fail.
+    path("auth/login", LoginView.as_view(), name="login_no_slash"),
     path("auth/login/", LoginView.as_view(), name="login"),
+    path("auth/refresh", TokenRefreshView.as_view(), name="token_refresh_no_slash"),
     path("auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path('', include(router.urls)),
 ]
