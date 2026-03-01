@@ -103,3 +103,66 @@ class AIApiTests(TestCase):
         adapter.refresh_from_db()
         self.assertEqual(adapter.auth_config.get("access_token"), "access-123")
         self.assertEqual(adapter.auth_config.get("refresh_token"), "refresh-123")
+
+    def test_mcp_start_oauth_requires_client_id(self):
+        adapter = McpAdapter.objects.create(
+            name="oauth-start-mcp",
+            base_url="http://localhost:8931/mcp",
+            transport=McpAdapter.TRANSPORT_HTTP,
+            auth_type=McpAdapter.AUTH_OAUTH2,
+            auth_config={},
+        )
+
+        resp = self.client.post(
+            f"/api/ai/mcp_adapters/{adapter.id}/start_oauth/",
+            {},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 400)
+        self.assertFalse(resp.data.get("ok", True))
+        self.assertIn("client_id", str(resp.data.get("error") or ""))
+
+    def test_mcp_oauth_status_requires_state(self):
+        adapter = McpAdapter.objects.create(
+            name="oauth-status-mcp",
+            base_url="http://localhost:8931/mcp",
+            transport=McpAdapter.TRANSPORT_HTTP,
+            auth_type=McpAdapter.AUTH_OAUTH2,
+            auth_config={"client_id": "abc123"},
+        )
+
+        resp = self.client.get(f"/api/ai/mcp_adapters/{adapter.id}/oauth_status/")
+        self.assertEqual(resp.status_code, 400)
+        self.assertFalse(resp.data.get("ok", True))
+
+    def test_mcp_start_oauth_creates_pending_state(self):
+        adapter = McpAdapter.objects.create(
+            name="oauth-ready-mcp",
+            base_url="https://example.com/mcp",
+            transport=McpAdapter.TRANSPORT_HTTPS,
+            auth_type=McpAdapter.AUTH_OAUTH2,
+            auth_config={
+                "client_id": "client-123",
+                "authorize_url": "https://issuer.example.com/oauth/authorize",
+                "token_url": "https://issuer.example.com/oauth/token",
+                "scopes": "read write",
+            },
+        )
+
+        start_resp = self.client.post(
+            f"/api/ai/mcp_adapters/{adapter.id}/start_oauth/",
+            {},
+            format="json",
+        )
+        self.assertEqual(start_resp.status_code, 200)
+        self.assertTrue(start_resp.data.get("ok"))
+        state = start_resp.data.get("state")
+        self.assertTrue(state)
+        self.assertIn("authorization_url", start_resp.data)
+
+        status_resp = self.client.get(
+            f"/api/ai/mcp_adapters/{adapter.id}/oauth_status/",
+            {"state": state},
+        )
+        self.assertEqual(status_resp.status_code, 200)
+        self.assertEqual(status_resp.data.get("status"), "pending")

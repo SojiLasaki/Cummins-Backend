@@ -144,7 +144,7 @@ class McpAdapter(models.Model):
         (AUTH_NONE, "None"),
         (AUTH_BEARER, "Bearer"),
         (AUTH_API_KEY, "API Key"),
-        (AUTH_OAUTH2, "OAuth2 (FastMCP)"),
+        (AUTH_OAUTH2, "OAuth 2.0"),
         (AUTH_CUSTOM, "Custom"),
     )
 
