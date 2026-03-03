@@ -1,62 +1,38 @@
-from datetime import date
-from apps.technicians.models import TechnicianProfile
+from __future__ import annotations
 
-# apps/technicians/services/assignment_engine.py
-from datetime import date
 from apps.technicians.models import TechnicianProfile
 
 def calculate_experience_score(tech: TechnicianProfile, ticket) -> float:
     """
-    Calculate technician experience score based on weights:
-    0.35 Specialization, 0.30 Overall experience, 0.20 Station tenure, 0.15 Performance
+    Calculate a technician score using fields that actually exist on TechnicianProfile.
+
+    Higher is better. Returns 0 for technicians that should be disqualified.
     """
-    # --- Specialization Score ---
-    spec_jobs = 0
-    if ticket.specialization == "Engine":
-        spec_jobs = tech.engine_jobs
-    elif ticket.specialization == "Electrical":
-        spec_jobs = tech.electrical_jobs
+    severity = getattr(ticket, "severity", 2) or 2  # Ticket.severity is an int (1-4)
+    expertise = (getattr(tech, "expertise", "") or "").lower()
 
-    total_jobs = tech.total_jobs_completed or 1
-    spec_score = (spec_jobs / total_jobs) * 100
+    # Disqualify for high/severe incidents unless experienced enough.
+    if severity >= 3 and not (tech.total_years_experience >= 5 or expertise == "senior"):
+        return 0.0
 
-    # --- Overall Experience Score ---
-    overall_score = (tech.total_years_experience * 5) + (tech.total_jobs_completed * 0.1)
+    expertise_bonus = {"junior": 0.0, "mid": 5.0, "senior": 10.0}.get(expertise, 0.0)
+    certifications_bonus = float(tech.certifications.count()) * 1.0
 
-    # --- Station Tenure Score ---
-    station_years = 0
-    if tech.date_joined_station:
-        station_years = (date.today() - tech.date_joined_station).days / 365
-    station_score = station_years * 5
-
-    # --- Performance Score ---
-    performance_score = (tech.performance_rating / 5) * 100
-
-    # --- Weighted Sum ---
-    final_score = (
-        0.35 * spec_score +
-        0.30 * overall_score +
-        0.20 * station_score +
-        0.15 * performance_score
+    return (
+        (tech.performance_rating * 20.0)
+        + (tech.total_years_experience * 2.0)
+        + (tech.total_jobs_completed * 0.1)
+        + (tech.skill_score * 5.0)
+        + expertise_bonus
+        + certifications_bonus
     )
-
-    # --- Optional Load Balancing ---
-    active_jobs = tech.jobs.filter(date_completed__isnull=True).count()
-    final_score -= active_jobs * 5
-
-    # --- Severity Restriction ---
-    if ticket.severity.lower() in ['high', 'severe']:
-        if tech.total_years_experience < 5 or spec_jobs < 50:
-            final_score = 0  # disqualify
-
-    return final_score
 
 
 def assign_best_technician(ticket):
     # Step 1: Filter available technicians with correct specialization
     technicians = TechnicianProfile.objects.filter(
         specialization=ticket.specialization,
-        status='Available'
+        status="available",
     )
 
     if not technicians.exists():
