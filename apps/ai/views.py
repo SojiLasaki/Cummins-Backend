@@ -1010,12 +1010,28 @@ class AIChatAPIView(APIView):
 
     def post(self, request):
         payload = request.data if isinstance(request.data, dict) else {}
+        if not payload and getattr(request, "body", None):
+            try:
+                payload = json.loads(request.body.decode("utf-8"))
+                if not isinstance(payload, dict):
+                    payload = {}
+            except (json.JSONDecodeError, UnicodeDecodeError):
+                payload = {}
+        if not isinstance(payload, dict):
+            payload = dict(payload) if hasattr(payload, "keys") else {}
 
         query = str(payload.get("query") or "").strip()
         if not query:
             query = _extract_query_from_messages(payload.get("messages"))
         if not query:
-            return Response({"error": "A user query is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {
+                    "error": "A user query is required.",
+                    "detail": "Send JSON with 'query': 'your message' or 'messages': [{'role': 'user', 'content': '...'}].",
+                    "received_keys": list(payload.keys()) if payload else [],
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         raw_context = payload.get("context", "")
         if isinstance(raw_context, dict):
