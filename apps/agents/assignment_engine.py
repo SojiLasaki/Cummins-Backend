@@ -40,6 +40,11 @@ def assign_best_technician(ticket):
 
     # Step 2: Score each technician
     scored_techs = [(tech, calculate_experience_score(tech, ticket)) for tech in technicians]
+    # Drop disqualified technicians (score <= 0.0)
+    scored_techs = [(tech, score) for (tech, score) in scored_techs if score > 0.0]
+
+    if not scored_techs:
+        return None  # All available technicians were disqualified
 
     # Step 3: Sort descending
     scored_techs.sort(key=lambda x: x[1], reverse=True)
