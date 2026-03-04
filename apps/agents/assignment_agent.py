@@ -1,5 +1,5 @@
 from django.utils import timezone
-from apps.technicians.services.assignment_engine import assign_best_technician
+from apps.agents.assignment_engine import assign_best_technician
 from apps.logs.models import ActivityLog
 
 
@@ -35,7 +35,7 @@ class AssignmentAgent:
         ticket.save()
 
         # Step 3: Update technician status
-        technician.status = "Busy"
+        technician.status = "busy"
         technician.save()
 
         # Step 4: Log success

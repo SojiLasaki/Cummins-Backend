@@ -4,3 +4,7 @@ from django.apps import AppConfig
 class TicketsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.tickets"
+
+    def ready(self):
+        # Import signal handlers so ticket auto-assignment runs for all creation paths
+        from . import signals  # noqa: F401

@@ -14,9 +14,9 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
     # Frontend-friendly: profile_id matches ticket.assigned_technician_profile_id
     profile_id = serializers.UUIDField(source="profile.id", read_only=True)
     assigned_tickets_count = serializers.SerializerMethodField(read_only=True)
-    # Read-only user fields
+    # Read-only user/profile fields
     username_display = serializers.CharField(source="profile.user.username", read_only=True)
-    phone_number = serializers.CharField(source="profile.user.phone_number", read_only=True)
+    phone_number = serializers.CharField(source="profile.phone_number", read_only=True)
     email_display = serializers.EmailField(source="profile.user.email", read_only=True)
     first_name_display = serializers.CharField(source="profile.user.first_name", read_only=True)
     last_name_display = serializers.CharField(source="profile.user.last_name", read_only=True)
@@ -34,7 +34,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
     station_state = serializers.CharField(source="station.state", read_only=True)
     station_postal_code = serializers.CharField(source="station.postal_code", read_only=True)
     station_country = serializers.CharField(source="station.country", read_only=True)
-    notes = serializers.CharField(source="profile.user.notes", read_only=True)
+    notes = serializers.CharField(source="profile.notes", read_only=True)
     # Write fields
     username = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)

@@ -62,10 +62,6 @@ class TicketViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def perform_create(self, serializer):
-        ticket = serializer.save(created_at=timezone.now())
-        technician = assign_best_technician(ticket)
-        if technician:
-            ticket.assigned_technician = technician
-            ticket.auto_assigned = True
-            ticket.assigned_at = timezone.now()
-            ticket.save()
+        # Ticket post_save signal handles technician auto-assignment so it works
+        # for API, admin, and any other creation paths consistently.
+        serializer.save(created_at=timezone.now())
