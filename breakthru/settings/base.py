@@ -20,6 +20,7 @@ WORKSPACE_DIR = PROJECT_DIR.parent
 
 load_dotenv(PROJECT_DIR / ".env")
 load_dotenv(WORKSPACE_DIR / ".env")
+load_dotenv(PROJECT_DIR / "env" / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -62,8 +63,6 @@ INSTALLED_APPS = [
     'apps.schedules.apps.SchedulesConfig',
     # 'apps.regions.apps.RegionsConfig',
     'apps.playbooks.apps.PlaybooksConfig',
-    'apps.ai.apps.AiConfig',
-
     'rest_framework',
     'channels',
     'corsheaders',

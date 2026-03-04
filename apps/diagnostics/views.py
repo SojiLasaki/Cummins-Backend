@@ -9,6 +9,7 @@ from .models import DiagnosticReport, TechnicianReport
 from .serializers import TechnicianReportSerializer
 from .serializers import DiagnosticReportSerializer
 from apps.core.services.system_orchestrator import SystemOrchestrator
+from apps.core.services.workflow_pipeline import build_spec_outputs
 
 
 # ------------------------------
@@ -93,19 +94,8 @@ class FailureDetectedView(APIView):
         orchestrator = SystemOrchestrator()
         try:
             result = orchestrator.run_full_diagnostic_pipeline(request.data, user=request.user)
-            return Response(
-                {
-                    "report_id": result.report.id,
-                    "ticket_id": result.ticket.id,
-                    "external_ticket_id": result.ticket.ticket_id,
-                    "assigned_technician": result.ticket.assigned_technician.id if result.ticket.assigned_technician else None,
-                    "severity": result.report.severity,
-                    "report_status": result.report.status,
-                    "ticket_status": result.ticket.status,
-                    "orders_created": [o.id for o in result.orders],
-                },
-                status=status.HTTP_201_CREATED,
-            )
+            spec_output = build_spec_outputs(request.data, result)
+            return Response(spec_output, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

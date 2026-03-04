@@ -33,5 +33,4 @@ urlpatterns = [
     path("api/", include("apps.logs.urls")),
     path("api/", include("apps.manuals.urls")),
     path("api/", include("apps.staffs.urls")),
-    path("api/ai/", include("apps.ai.urls")),
 ]
