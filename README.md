@@ -27,7 +27,13 @@ The backend loads `.env` from either:
 1. `Cummins-Backend/.env`
 2. workspace root `.env` (parent folder containing both repos)
 
-Minimum recommended variables:
+Minimum for AI chat (free online model, no local server):
+
+```bash
+OPENROUTER_API_KEY=<your_key_from_https://openrouter.ai/keys>
+```
+
+Optional: use OpenAI instead:
 
 ```bash
 OPENAI_API_KEY=<your_openai_key>
@@ -36,12 +42,15 @@ OPENAI_API_KEY=<your_openai_key>
 Optional model/runtime overrides:
 
 ```bash
+FELIX_DEFAULT_PROVIDER=openrouter
+FELIX_OPENROUTER_MODEL=meta-llama/llama-3.2-3b-instruct:free
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 FELIX_LANGGRAPH_MODEL=gpt-4o-mini
 FELIX_OPENAI_MODEL=gpt-4.1-mini
 FELIX_GOOGLE_MODEL=gemini-3-flash-preview
 FELIX_ANTHROPIC_MODEL=claude-3-5-sonnet-latest
-FELIX_OLLAMA_MODEL=llama3.1:8b
+FELIX_OLLAMA_MODEL=llama3.2
 FELIX_VLLM_MODEL=Qwen/Qwen2.5-7B-Instruct
 FELIX_LLAMACPP_MODEL=local-model
 OLLAMA_BASE_URL=http://localhost:11434/v1

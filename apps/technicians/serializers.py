@@ -11,8 +11,10 @@ class CertificationSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'certification_id', 'institution', 'date_obtained', 'expiration_date', 'technician']
 
 class TechnicianProfileSerializer(serializers.ModelSerializer):
+    # Frontend-friendly: profile_id matches ticket.assigned_technician_profile_id
+    profile_id = serializers.UUIDField(source="profile.id", read_only=True)
+    assigned_tickets_count = serializers.SerializerMethodField(read_only=True)
     # Read-only user fields
-    id = serializers.CharField(source="profile.id", read_only=True)
     username_display = serializers.CharField(source="profile.user.username", read_only=True)
     phone_number = serializers.CharField(source="profile.user.phone_number", read_only=True)
     email_display = serializers.EmailField(source="profile.user.email", read_only=True)
@@ -44,6 +46,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
         model = TechnicianProfile
         fields = [
             "id",
+            "profile_id",
             "username",
             "password",
             "email",
@@ -76,8 +79,13 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             'total_jobs_completed',
             'total_years_experience',
             'date_joined',
+            'performance_rating',
             'notes',
+            'assigned_tickets_count',
         ]
+
+    def get_assigned_tickets_count(self, obj):
+        return getattr(obj, "_assigned_tickets_count", obj.assigned_tickets.count())
 
     def create(self, validated_data):
         # Pop user fields
@@ -107,7 +115,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
         return technician    
     
     def update(self, instance, validated_data):
-        user = instance.user
+        user = instance.profile.user
 
         # Update user fields if provided
         user.username = validated_data.pop("username", user.username)

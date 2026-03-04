@@ -123,7 +123,12 @@ DATABASES = {
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+    ),
+    "UNAUTHENTICATED_USER": None,
 }
 
 CHANNEL_LAYERS = {
@@ -145,7 +150,11 @@ else:
         "http://127.0.0.1:8081",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
     ]
+# Let frontend send Authorization header and cookies
+CORS_ALLOW_CREDENTIALS = True
 
 
 AUTH_USER_MODEL = "users.User"

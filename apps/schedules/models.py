@@ -17,4 +17,4 @@ class Schedule(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Schedule for {self.customer.user.username} with {self.technician.user.username} at {self.scheduled_time}"
+        return f"Schedule for {self.customer.user.username} with {self.technician.profile.user.username} at {self.scheduled_time}"

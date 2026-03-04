@@ -381,17 +381,30 @@ def _resolve_model_config(provider: str | None, model: str | None):
         queryset = queryset.filter(model_identifier=model)
     endpoint = queryset.order_by("-is_default", "name").first()
 
-    resolved_provider = provider or (endpoint.provider if endpoint else "openai")
-    resolved_model = model or (endpoint.model_identifier if endpoint else "gpt-4o-mini")
-    base_url = endpoint.base_url if endpoint and endpoint.base_url else None
+    # Default to free online model (OpenRouter) - no local server needed
+    default_provider = os.getenv("FELIX_DEFAULT_PROVIDER", "openrouter")
+    default_model = os.getenv("FELIX_OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free")
+    default_base_url = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+
+    resolved_provider = provider or (endpoint.provider if endpoint else default_provider)
+    resolved_model = model or (endpoint.model_identifier if endpoint else default_model)
+    if endpoint and endpoint.base_url:
+        base_url = endpoint.base_url
+    elif resolved_provider == "openrouter":
+        base_url = default_base_url
+    elif resolved_provider == "ollama":
+        base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    else:
+        base_url = None
 
     key = None
     if endpoint and endpoint.api_key_env:
         key = os.getenv(endpoint.api_key_env)
+    if not key and resolved_provider == "openrouter":
+        key = os.getenv("OPENROUTER_API_KEY")
     if not key:
         key = os.getenv("OPENAI_API_KEY")
-    if not key and base_url:
-        # OpenAI-compatible local endpoints (ollama/vllm/llama.cpp) often ignore API keys
+    if not key and base_url and resolved_provider in ("ollama", "vllm", "llamacpp"):
         key = "local-dev-key"
 
     return {
@@ -546,13 +559,21 @@ def _answer_node(state: AgentState) -> AgentState:
         }
 
     api_key = state.get("api_key")
-    if not api_key:
-        raise ValueError("OPENAI_API_KEY (or configured model endpoint key) is missing.")
+    model_name = state.get("model") or os.getenv("FELIX_OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free")
+    base_url = state.get("base_url") or os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+    if not api_key and base_url and "openrouter.ai" in base_url:
+        api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
+    if not api_key or api_key == "local-dev-key":
+        if base_url and "openrouter.ai" in base_url:
+            raise ValueError(
+                "OpenRouter (free online) requires an API key. Get one at https://openrouter.ai/keys and set OPENROUTER_API_KEY in your .env"
+            )
+        api_key = api_key or "local-dev-key"
 
     llm = ChatOpenAI(
         api_key=api_key,
-        model=state.get("model", "gpt-4o-mini"),
-        base_url=state.get("base_url") or None,
+        model=model_name,
+        base_url=base_url,
         temperature=0.2,
     )
 
