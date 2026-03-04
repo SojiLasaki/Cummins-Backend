@@ -60,13 +60,16 @@ class CreateTicketView(APIView):
 
         orchestrator = SystemOrchestrator()
         try:
-            report = orchestrator.run_full_diagnostic_pipeline(ticket_data)
+            result = orchestrator.run_full_diagnostic_pipeline(ticket_data, user=request.user)
 
             return Response({
-                "report_id": report.id,
-                "assigned_technician": report.assigned_technician.id if report.assigned_technician else None,
-                "severity": report.severity,
-                "status": report.status
+                "report_id": result.report.id,
+                "ticket_id": result.ticket.id,
+                "external_ticket_id": result.ticket.ticket_id,
+                "assigned_technician": result.ticket.assigned_technician.id if result.ticket.assigned_technician else None,
+                "severity": result.report.severity,
+                "status": result.report.status,
+                "orders_created": [o.id for o in result.orders],
             }, status=status.HTTP_201_CREATED)
 
         except Exception as e:
@@ -74,6 +77,37 @@ class CreateTicketView(APIView):
                 {"error": str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+
+# ------------------------------
+# 2b️⃣ Failure detected API (preferred workflow trigger)
+# ------------------------------
+class FailureDetectedView(APIView):
+    """
+    Trigger the full workflow:
+    Failure detected -> DiagnosticReport -> Ticket (+assignment) -> Order(s) if low stock.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        orchestrator = SystemOrchestrator()
+        try:
+            result = orchestrator.run_full_diagnostic_pipeline(request.data, user=request.user)
+            return Response(
+                {
+                    "report_id": result.report.id,
+                    "ticket_id": result.ticket.id,
+                    "external_ticket_id": result.ticket.ticket_id,
+                    "assigned_technician": result.ticket.assigned_technician.id if result.ticket.assigned_technician else None,
+                    "severity": result.report.severity,
+                    "report_status": result.report.status,
+                    "ticket_status": result.ticket.status,
+                    "orders_created": [o.id for o in result.orders],
+                },
+                status=status.HTTP_201_CREATED,
+            )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # ------------------------------
