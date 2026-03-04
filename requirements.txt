@@ -1,5 +1,12 @@
 asgiref==3.11.1
+channels==4.3.2
+django-cors-headers==4.9.0
 Django==6.0.2
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+langchain>=0.3.0
+langchain-openai>=0.2.0
+langgraph>=0.2.0
 psycopg2-binary==2.9.11
 python-dotenv==1.2.1
 sqlparse==0.5.5

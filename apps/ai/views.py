@@ -195,6 +195,15 @@ def _build_default_model_endpoints():
             "provider": "langgraph",
             "model_identifier": os.getenv("FELIX_LANGGRAPH_MODEL", "gpt-4o-mini"),
             "label": "Backend AI Orchestrator · GPT-4o Mini",
+            "active": False,
+        },
+        {
+            "id": "builtin-openrouter",
+            "name": "OpenRouter (free online)",
+            "provider": "openrouter",
+            "model_identifier": os.getenv("FELIX_OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free"),
+            "base_url": os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+            "label": "OpenRouter · Llama 3.2 3B (free, set OPENROUTER_API_KEY)",
             "active": True,
         },
         {
@@ -223,11 +232,11 @@ def _build_default_model_endpoints():
         },
         {
             "id": "builtin-ollama",
-            "name": "Ollama Local",
+            "name": "Ollama (free local)",
             "provider": "ollama",
-            "model_identifier": os.getenv("FELIX_OLLAMA_MODEL", "llama3.1:8b"),
+            "model_identifier": os.getenv("FELIX_OLLAMA_MODEL", "llama3.2"),
             "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
-            "label": "Ollama (Local) · Llama 3.1 8B",
+            "label": "Ollama · Llama 3.2 (free local)",
             "active": False,
         },
         {
@@ -1009,13 +1018,24 @@ class AIChatAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        # Use only request.data (reading request.body after would raise RawPostDataException)
         payload = request.data if isinstance(request.data, dict) else {}
+        if not isinstance(payload, dict):
+            payload = dict(payload) if hasattr(payload, "keys") else {}
 
-        query = str(payload.get("query") or "").strip()
+        raw_query = (
+            payload.get("query")
+            or payload.get("message")
+            or payload.get("content")
+            or payload.get("input")
+            or payload.get("prompt")
+        )
+        query = str(raw_query).strip() if raw_query is not None else ""
         if not query:
             query = _extract_query_from_messages(payload.get("messages"))
         if not query:
-            return Response({"error": "A user query is required."}, status=status.HTTP_400_BAD_REQUEST)
+            # Default so chat always responds (e.g. frontend sends empty body)
+            query = "Hello, what can you help with?"
 
         raw_context = payload.get("context", "")
         if isinstance(raw_context, dict):
