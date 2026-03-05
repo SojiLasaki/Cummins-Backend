@@ -2,11 +2,13 @@ from rest_framework import serializers
 from .models import Ticket
 from apps.diagnostics.serializers import DiagnosticReportSerializer
 from apps.inventory.serializers import PartSerializer
+from apps.schedules.serializers import ScheduleListSerializer
 
 
 class TicketSerializer(serializers.ModelSerializer):
     diagnostic_reports = DiagnosticReportSerializer(many=True, read_only=True)
     parts = PartSerializer(many=True, read_only=True)
+    schedules = ScheduleListSerializer(many=True, read_only=True)
     assigned_technician_profile_id = serializers.SerializerMethodField(read_only=True)
     assigned_technician_username = serializers.SerializerMethodField(read_only=True)
     assigned_technician_first_name = serializers.SerializerMethodField(read_only=True)
@@ -105,6 +107,7 @@ class TicketSerializer(serializers.ModelSerializer):
             "predicted_resolution_summary",
             "auto_assigned",
             "parts",
+            "schedules",
             "created_by",
             "created_at",
             "assigned_at",

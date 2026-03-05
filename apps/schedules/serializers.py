@@ -18,6 +18,9 @@ class ScheduleListSerializer(serializers.ModelSerializer):
     ticket_ticket_id = serializers.CharField(
         source="ticket.ticket_id", read_only=True, allow_null=True
     )
+    estimated_end_time = serializers.SerializerMethodField()
+    estimated_duration_minutes = serializers.SerializerMethodField()
+    is_active = serializers.SerializerMethodField()
 
     class Meta:
         model = Schedule
@@ -25,6 +28,10 @@ class ScheduleListSerializer(serializers.ModelSerializer):
             "id",
             "scheduled_time",
             "duration",
+            "ended_at",
+            "is_active",
+            "estimated_end_time",
+            "estimated_duration_minutes",
             "description",
             "technician_id",
             "technician_profile_id",
@@ -50,6 +57,19 @@ class ScheduleListSerializer(serializers.ModelSerializer):
             obj.customer, "company_name", ""
         )
 
+    def get_estimated_end_time(self, obj):
+        if not obj.scheduled_time or not obj.duration:
+            return None
+        return obj.scheduled_time + obj.duration
+
+    def get_estimated_duration_minutes(self, obj):
+        if not obj.duration:
+            return None
+        return int(obj.duration.total_seconds() // 60)
+
+    def get_is_active(self, obj):
+        return obj.ended_at is None
+
 
 class ScheduleSerializer(serializers.ModelSerializer):
     """Full schedule for create/update/retrieve; nested read-only summaries."""
@@ -70,6 +90,9 @@ class ScheduleSerializer(serializers.ModelSerializer):
     ticket_title = serializers.CharField(
         source="ticket.title", read_only=True, allow_null=True
     )
+    estimated_end_time = serializers.SerializerMethodField()
+    estimated_duration_minutes = serializers.SerializerMethodField()
+    is_active = serializers.SerializerMethodField()
 
     class Meta:
         model = Schedule
@@ -80,6 +103,10 @@ class ScheduleSerializer(serializers.ModelSerializer):
             "ticket",
             "scheduled_time",
             "duration",
+            "ended_at",
+            "is_active",
+            "estimated_end_time",
+            "estimated_duration_minutes",
             "description",
             "technician_id",
             "technician_profile_id",
@@ -106,3 +133,16 @@ class ScheduleSerializer(serializers.ModelSerializer):
         return getattr(obj.customer.user, "username", "") or getattr(
             obj.customer, "company_name", ""
         )
+
+    def get_estimated_end_time(self, obj):
+        if not obj.scheduled_time or not obj.duration:
+            return None
+        return obj.scheduled_time + obj.duration
+
+    def get_estimated_duration_minutes(self, obj):
+        if not obj.duration:
+            return None
+        return int(obj.duration.total_seconds() // 60)
+
+    def get_is_active(self, obj):
+        return obj.ended_at is None
