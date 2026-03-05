@@ -11,6 +11,8 @@ from apps.ai.models import AgentActionProposal, AgentExecutionTrace, McpAdapter
 from apps.ai.services.mcp_client import McpClient, list_enabled_mcp_clients
 from apps.inventory.models import Part
 from apps.technicians.models import TechnicianProfile
+from apps.tickets.checklists import ensure_ticket_checklist, generate_ticket_checklist
+from apps.tickets.id_generation import generate_ticket_id
 from apps.tickets.models import Ticket
 
 
@@ -168,6 +170,70 @@ def _pick_connector(clients: list[McpClient], keywords: tuple[str, ...]) -> McpC
 class PlanningResult:
     proposals: list[AgentActionProposal]
     mcp_reads: list[dict[str, Any]]
+    follow_up_question: str = ""
+    missing_fields: list[str] = None
+
+    def __post_init__(self):
+        if self.missing_fields is None:
+            self.missing_fields = []
+
+
+def _extract_missing_ticket_fields(query: str, context_payload: dict[str, Any]) -> list[str]:
+    normalized = _normalized(query)
+    missing: list[str] = []
+
+    has_symptom = len(normalized.split()) >= 6 and any(
+        token in normalized
+        for token in (
+            "fault",
+            "code",
+            "issue",
+            "warning",
+            "overheat",
+            "leak",
+            "noise",
+            "pressure",
+            "temperature",
+            "smoke",
+            "stall",
+            "vibration",
+            "misfire",
+            "injector",
+        )
+    )
+    if not has_symptom:
+        missing.append("symptom_details")
+
+    has_asset = bool(
+        re.search(r"\b(unit|truck|asset|vehicle|engine)\b", normalized)
+        or re.search(r"#?\d{3,}", normalized)
+        or str(context_payload.get("station_id") or context_payload.get("asset_id") or "").strip()
+    )
+    if not has_asset:
+        missing.append("asset_identifier")
+
+    return missing
+
+
+def _build_checklist_preview(query: str, specialization: str) -> list[str]:
+    try:
+        pseudo_ticket = Ticket(
+            title=f"{specialization.title()} service request",
+            description=query,
+            issue_description=query,
+            specialization=specialization,
+        )
+        generated = generate_ticket_checklist(pseudo_ticket, limit=4)
+        preview = []
+        for item in generated.get("template", [])[:5]:
+            if not isinstance(item, dict):
+                continue
+            title = str(item.get("title") or "").strip()
+            if title:
+                preview.append(title)
+        return preview
+    except Exception:
+        return []
 
 
 def plan_agent_actions(
@@ -184,7 +250,7 @@ def plan_agent_actions(
     mcp_reads: list[dict[str, Any]] = []
 
     if not _looks_like_ticket_request(query):
-        return PlanningResult(proposals=proposals, mcp_reads=mcp_reads)
+        return PlanningResult(proposals=proposals, mcp_reads=mcp_reads, follow_up_question="", missing_fields=[])
 
     specialization = _derive_specialization(query)
     priority = _derive_priority(query)
@@ -193,6 +259,24 @@ def plan_agent_actions(
     normalized_intent = str(intent or context_payload.get("intent") or "qa").strip().lower() or "qa"
     if context_refs and "context_refs" not in context_payload:
         context_payload["context_refs"] = context_refs
+    missing_fields = _extract_missing_ticket_fields(query, context_payload)
+    if missing_fields:
+        questions = []
+        if "symptom_details" in missing_fields:
+            questions.append("the specific symptom or fault code")
+        if "asset_identifier" in missing_fields:
+            questions.append("the unit/asset identifier or location")
+        joined = " and ".join(questions)
+        follow_up = (
+            f"I can prepare the ticket, but I need {joined} first. "
+            "Reply with those details and I will draft it for confirmation."
+        )
+        return PlanningResult(
+            proposals=proposals,
+            mcp_reads=mcp_reads,
+            follow_up_question=follow_up,
+            missing_fields=missing_fields,
+        )
 
     clients = list_enabled_mcp_clients(selected_mcp_adapter_ids)
     supply_client = _pick_connector(clients, ("supply", "parts", "inventory"))
@@ -242,8 +326,11 @@ def plan_agent_actions(
         "description": ticket_description,
         "specialization": specialization,
         "priority": priority,
+        "severity": min(max(priority, 1), 4),
         "station_hint": str(context_payload.get("station_id") or context_payload.get("location") or ""),
         "mcp_adapter_id": ticketing_client.adapter.id if ticketing_client else None,
+        "missing_fields": [],
+        "checklist_preview": _build_checklist_preview(query, specialization),
         "context": read_context,
     }
     proposals.append(
@@ -363,11 +450,6 @@ def _log_trace(
         response_payload=response_payload or {},
         error=error,
     )
-
-
-def _ensure_ticket_id() -> str:
-    prefix = timezone.now().strftime("%m%d")
-    return f"TK-{prefix}-{timezone.now().strftime('%H%M%S')}"
 
 
 def _find_best_local_technician(specialization: str) -> TechnicianProfile | None:
@@ -541,7 +623,7 @@ def execute_agent_action(
             severity = min(max(priority, 1), 4)
 
             ticket = Ticket.objects.create(
-                ticket_id=_ensure_ticket_id(),
+                ticket_id=generate_ticket_id(),
                 title=title,
                 description=description,
                 specialization=specialization,
@@ -551,6 +633,7 @@ def execute_agent_action(
                 created_by=getattr(actor, "username", "agent"),
                 estimated_resolution_time_minutes=90,
             )
+            ensure_ticket_checklist(ticket)
 
             external_result: dict[str, Any] = {}
             if adapter:
