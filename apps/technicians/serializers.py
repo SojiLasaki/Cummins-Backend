@@ -36,6 +36,10 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
     station_postal_code = serializers.CharField(source="station.postal_code", read_only=True)
     station_country = serializers.CharField(source="station.country", read_only=True)
     notes = serializers.CharField(source="profile.notes", read_only=True)
+    # Technician hourly pay (stored on TechnicianProfile.hourly_rate)
+    hourly_rate = serializers.DecimalField(max_digits=10, decimal_places=2, required=False, allow_null=True)
+    # Backwards/Frontend-friendly alias
+    pay_per_hour = serializers.DecimalField(source="hourly_rate", max_digits=10, decimal_places=2, required=False, allow_null=True)
     # Write fields
     username = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
@@ -84,6 +88,8 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             'notes',
             'assigned_tickets_count',
             'experience_number',
+            'hourly_rate',
+            'pay_per_hour',
         ]
 
     def get_assigned_tickets_count(self, obj):
