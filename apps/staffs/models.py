@@ -17,4 +17,4 @@ class StaffProfile(models.Model):
         verbose_name_plural = "Staff Profiles"
 
     def __str__(self):
-        return f"{self.user.username} - {self.user.role}"
+        return f"{self.profile.user.username} - {self.profile.user.role}"
