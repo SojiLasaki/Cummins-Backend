@@ -5,7 +5,6 @@ from .models import Order
 from .serializers import OrderSerializer
 from .permissions import CanApproveOrder
 from apps.inventory.models import Part
-from apps.notifications.models import Notification
 from apps.core.utils import is_connected
 
 
@@ -27,13 +26,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             order.synced = False
             order.save()
             
-        # Notify office/admin that new order is waiting approval
-        Notification.objects.create(
-            recipient=self.request.user,
-            title="Order Created",
-            message=f"Order #{order.id} created and awaiting approval.",
-            type="order_created"
-        )
+        # Notifications are handled centrally in apps.orders.signals
 
     def perform_update(self, serializer):
 
@@ -66,15 +59,6 @@ class OrderViewSet(viewsets.ModelViewSet):
                     inventory_deducted=True
                 )
 
-                # Notify requester
-                if order.requested_by:
-                    Notification.objects.create(
-                        recipient=order.requested_by,
-                        title="Order Approved",
-                        message=f"Your order #{order.id} has been approved.",
-                        type="order_approved"
-                    )
-
                 return
 
             # REJECTION LOGIC
@@ -85,14 +69,6 @@ class OrderViewSet(viewsets.ModelViewSet):
                     status="rejected",
                     approved_by=user
                 )
-
-                if order.requested_by:
-                    Notification.objects.create(
-                        recipient=order.requested_by,
-                        title="Order Rejected",
-                        message=f"Your order #{order.id} has been rejected.",
-                        type="order_rejected"
-                    )
 
                 return
 

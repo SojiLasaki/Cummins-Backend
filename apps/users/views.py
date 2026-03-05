@@ -16,6 +16,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
+    def get_queryset(self):
+        qs = super().get_queryset().select_related("user")
+        username = self.request.query_params.get("username")
+        if username:
+            qs = qs.filter(user__username__iexact=username)
+        return qs
+
 class AdminUserProfileViewSet(viewsets.ModelViewSet):
     queryset = AdminUserProfile.objects.all()
     serializer_class = AdminUserProfileSerializer

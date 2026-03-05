@@ -4,7 +4,11 @@ from django.utils import timezone
 
 from apps.agents.assignment_engine import assign_best_technician
 from apps.logs.models import ActivityLog
-from apps.schedules.models import Schedule, end_other_active_schedules_for_technician
+from apps.schedules.models import (
+    Schedule,
+    end_other_active_schedules_for_technician,
+    normalize_schedule_start,
+)
 
 
 class AssignmentAgent:
@@ -90,6 +94,7 @@ class AssignmentAgent:
 
         duration = timedelta(minutes=minutes)
         scheduled_time = ticket.assigned_at or timezone.now()
+        scheduled_time = normalize_schedule_start(technician, scheduled_time, duration)
 
         Schedule.objects.create(
             customer=ticket.customer,

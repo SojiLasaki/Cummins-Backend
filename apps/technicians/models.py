@@ -26,6 +26,7 @@ class TechnicianProfile(models.Model):
     specialization = models.CharField(max_length=50, choices=POSITION_CHOICES)
     expertise = models.CharField(max_length=10, choices=LEVEL)
     status = models.CharField(max_length=20, choices=STATUS, default='available')
+    hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True, blank=True)
     station = models.ForeignKey(
         Station,
         on_delete=models.SET_NULL,
