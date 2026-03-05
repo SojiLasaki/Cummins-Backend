@@ -1,7 +1,11 @@
 from datetime import datetime
 from django.utils import timezone
 from rest_framework import viewsets, filters
-from .models import Schedule, end_other_active_schedules_for_technician
+from .models import (
+    Schedule,
+    end_other_active_schedules_for_technician,
+    normalize_schedule_start,
+)
 from .serializers import ScheduleSerializer, ScheduleListSerializer
 
 
@@ -80,6 +84,12 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # One active schedule per technician: end any other active schedule before creating
         technician = serializer.validated_data.get("technician")
-        if technician:
+        duration = serializer.validated_data.get("duration")
+        scheduled_time = serializer.validated_data.get("scheduled_time")
+
+        if technician and duration:
             end_other_active_schedules_for_technician(technician)
-        serializer.save()
+            scheduled_time = normalize_schedule_start(technician, scheduled_time, duration)
+            serializer.save(scheduled_time=scheduled_time)
+        else:
+            serializer.save()
