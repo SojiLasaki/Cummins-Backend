@@ -1141,6 +1141,9 @@ class AIChatAPIView(APIView):
             if planning_result:
                 proposals = AgentActionProposalSerializer(planning_result.proposals, many=True).data
                 telemetry["reads"] = planning_result.mcp_reads
+                telemetry["missing_fields"] = planning_result.missing_fields
+                if planning_result.follow_up_question and not proposals:
+                    result["answer"] = planning_result.follow_up_question
 
             return Response(
                 {

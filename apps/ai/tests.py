@@ -225,6 +225,37 @@ class AIApiTests(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.data.get("status"), AgentActionProposal.STATUS_EXECUTED)
         self.assertIn("local_ticket_id", resp.data.get("result", {}))
+        created_ticket = Ticket.objects.get(ticket_id=resp.data["result"]["local_ticket_id"])
+        self.assertIsInstance(created_ticket.checklist_template, list)
+        self.assertGreater(len(created_ticket.checklist_template), 0)
+
+    @patch("apps.ai.views.run_langgraph_agent")
+    def test_chat_ticket_request_without_required_details_returns_follow_up(self, mocked_agent):
+        mocked_agent.return_value = {
+            "answer": "Generic response",
+            "snippets": [],
+            "provider": "openai",
+            "model": "gpt-4o-mini",
+            "agent_trace": [],
+        }
+
+        resp = self.client.post(
+            "/api/ai/chat/",
+            {
+                "query": "Create a ticket",
+                "provider": "openai",
+                "model": "gpt-4o-mini",
+                "context": {},
+                "policy_mode": "manual",
+                "intent": "ticket_ops",
+            },
+            format="json",
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data.get("proposals"), [])
+        self.assertIn("need", resp.data.get("answer", "").lower())
+        self.assertIn("missing_fields", resp.data.get("telemetry", {}))
 
     def test_approve_assignment_executes_ticket_dependency(self):
         workflow_id = "wf-demo-001"

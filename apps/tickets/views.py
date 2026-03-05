@@ -2,12 +2,15 @@ from django.db.models import Q
 from rest_framework import viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import status
 from .models import Ticket
 from .serializers import TicketSerializer
 from apps.agents.assignment_engine import assign_best_technician
 from apps.schedules.models import Schedule
 from apps.schedules.serializers import ScheduleListSerializer
 from django.utils import timezone
+from .checklists import ensure_ticket_checklist, regenerate_ticket_checklist
+from .id_generation import generate_ticket_id
 
 
 class TicketViewSet(viewsets.ModelViewSet):
@@ -92,4 +95,66 @@ class TicketViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Ticket post_save signal handles technician auto-assignment so it works
         # for API, admin, and any other creation paths consistently.
-        serializer.save(created_at=timezone.now())
+        validated = getattr(serializer, "validated_data", {})
+        save_kwargs = {"created_at": timezone.now()}
+        if not str(validated.get("ticket_id") or "").strip():
+            save_kwargs["ticket_id"] = generate_ticket_id()
+        if not str(validated.get("created_by") or "").strip():
+            username = str(getattr(self.request.user, "username", "") or "").strip()
+            if username:
+                save_kwargs["created_by"] = username
+        ticket = serializer.save(**save_kwargs)
+        ensure_ticket_checklist(ticket)
+
+    @action(detail=True, methods=["post"], url_path="regenerate_checklist")
+    def regenerate_checklist(self, request, pk=None):
+        ticket = self.get_object()
+        regenerate_ticket_checklist(ticket)
+        return Response(TicketSerializer(ticket).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["patch"], url_path="checklist_progress")
+    def checklist_progress(self, request, pk=None):
+        ticket = self.get_object()
+        payload = request.data if isinstance(request.data, dict) else {}
+        incoming = payload.get("progress", payload)
+        if not isinstance(incoming, list):
+            return Response({"error": "progress must be a list."}, status=status.HTTP_400_BAD_REQUEST)
+
+        template = ticket.checklist_template if isinstance(ticket.checklist_template, list) else []
+        valid_ids = {str(item.get("id") or "").strip() for item in template if isinstance(item, dict)}
+        valid_ids.discard("")
+
+        normalized = []
+        for row in incoming:
+            if not isinstance(row, dict):
+                continue
+            item_id = str(row.get("item_id") or "").strip()
+            if not item_id or item_id not in valid_ids:
+                return Response(
+                    {"error": f"Invalid checklist item_id: {item_id or '<empty>'}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            normalized.append(
+                {
+                    "item_id": item_id,
+                    "done": bool(row.get("done", False)),
+                    "note": str(row.get("note") or ""),
+                    "flagged": bool(row.get("flagged", False)),
+                    "time_minutes": _safe_time_minutes(row.get("time_minutes")),
+                    "photos": row.get("photos") if isinstance(row.get("photos"), list) else [],
+                    "updated_by": getattr(request.user, "username", "unknown"),
+                    "updated_at": timezone.now().isoformat(),
+                }
+            )
+
+        ticket.checklist_progress = normalized
+        ticket.save(update_fields=["checklist_progress"])
+        return Response(TicketSerializer(ticket).data, status=status.HTTP_200_OK)
+
+
+def _safe_time_minutes(value):
+    try:
+        minutes = int(float(value))
+    except (TypeError, ValueError):
+        return 0
+    return max(minutes, 0)

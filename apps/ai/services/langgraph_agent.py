@@ -558,9 +558,21 @@ def _answer_node(state: AgentState) -> AgentState:
             "agent_trace": _trace(state, agent="answer", status="blocked", detail="Returned guardrail response."),
         }
 
+    provider = str(state.get("provider") or "openrouter").strip().lower()
     api_key = state.get("api_key")
     model_name = state.get("model") or os.getenv("FELIX_OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free")
-    base_url = state.get("base_url") or os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+    base_url = state.get("base_url")
+    if not base_url:
+        if provider == "openrouter":
+            base_url = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+        elif provider == "ollama":
+            base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+        elif provider == "vllm":
+            base_url = os.getenv("VLLM_BASE_URL", "http://localhost:8001/v1")
+        elif provider == "llamacpp":
+            base_url = os.getenv("LLAMACPP_BASE_URL", "http://localhost:8088/v1")
+        else:
+            base_url = None
     if not api_key and base_url and "openrouter.ai" in base_url:
         api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
     if not api_key or api_key == "local-dev-key":
