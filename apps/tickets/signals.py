@@ -8,13 +8,13 @@ from apps.agents.assignment_agent import AssignmentAgent
 
 
 @receiver(post_save, sender=Ticket)
-def auto_assign_technician_on_create(sender, instance: Ticket, created: bool, **kwargs):
+def auto_assign_technician_on_save(sender, instance: Ticket, created: bool, **kwargs):
     """
     Auto-assign a technician whenever a Ticket is saved without one
-    (API, admin, or scripts), by running the AssignmentAgent so logs
-    and technician status updates are handled in one place.
+    (API, Django admin, or scripts). Runs synchronously so it works reliably
+    from the admin save.
     """
-    if instance.assigned_technician:
+    if instance.assigned_technician_id:
         return
 
     agent = AssignmentAgent()

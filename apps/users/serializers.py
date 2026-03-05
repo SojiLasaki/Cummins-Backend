@@ -7,17 +7,105 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 User = get_user_model()
 
 
+def _format_location(city, state):
+    """Format location as 'City, State' (skips empty parts)."""
+    parts = [p for p in (city or "", state or "") if p]
+    return ", ".join(parts) if parts else ""
+
+
+def _user_profile_payload(user):
+    """Build frontend-ready user + profile dict for JWT login response for all roles."""
+    profile = getattr(user, "profile", None)
+    payload = {
+        "id": user.pk,
+        "username": user.username,
+        "email": user.email or "",
+        "first_name": user.first_name or "",
+        "last_name": user.last_name or "",
+        "role": user.role,
+    }
+    if profile:
+        payload["profile_id"] = str(profile.id)
+        payload["phone_number"] = profile.phone_number or ""
+        payload["street_address"] = profile.street_address or ""
+        payload["street_address_2"] = profile.street_address_2 or ""
+        payload["city"] = profile.city or ""
+        payload["state"] = profile.state or ""
+        payload["postal_code"] = profile.postal_code or ""
+        payload["country"] = profile.country or ""
+        payload["notes"] = profile.notes or ""
+    else:
+        payload["profile_id"] = None
+        payload["phone_number"] = ""
+        payload["street_address"] = ""
+        payload["street_address_2"] = ""
+        payload["city"] = ""
+        payload["state"] = ""
+        payload["postal_code"] = ""
+        payload["country"] = ""
+        payload["notes"] = ""
+
+    # Station and location: same keys for all roles; meaning depends on role
+    payload["station"] = None
+    payload["station_name"] = ""
+    payload["station_city"] = ""
+    payload["station_state"] = ""
+    payload["location"] = ""
+    payload["specialization"] = ""
+    payload["expertise"] = ""
+
+    if not profile:
+        return payload
+
+    # Technician: station from TechnicianProfile; location = station city, state
+    if user.role == "technician":
+        from apps.technicians.models import TechnicianProfile
+        tech = TechnicianProfile.objects.filter(profile=profile).select_related("station").first()
+        if tech:
+            payload["specialization"] = tech.specialization or ""
+            payload["expertise"] = tech.expertise or ""
+            if tech.station:
+                payload["station"] = str(tech.station.id)
+                payload["station_name"] = tech.station.name or ""
+                payload["station_city"] = tech.station.city or ""
+                payload["station_state"] = tech.station.state or ""
+                payload["location"] = _format_location(tech.station.city, tech.station.state)
+        if not payload["location"]:
+            payload["location"] = _format_location(payload["city"], payload["state"])
+        return payload
+
+    # Admin: station from AdminUserProfile; location = station city, state
+    if user.role == "admin":
+        admin = AdminUserProfile.objects.filter(profile=profile).select_related("station").first()
+        if admin and admin.station:
+            payload["station"] = str(admin.station.id)
+            payload["station_name"] = admin.station.name or ""
+            payload["station_city"] = admin.station.city or ""
+            payload["station_state"] = admin.station.state or ""
+            payload["location"] = _format_location(admin.station.city, admin.station.state)
+        if not payload["location"]:
+            payload["location"] = _format_location(payload["city"], payload["state"])
+        return payload
+
+    # Customer (and any other role): location = profile city, state
+    payload["location"] = _format_location(payload["city"], payload["state"])
+    return payload
+
+
 class CustomTokenSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
         token["role"] = user.role
+        token["username"] = user.username
         return token
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        data["role"] = self.user.role
-        data["username"] = self.user.username
+        user = self.user
+        data["user"] = _user_profile_payload(user)
+        data["role"] = user.role
+        data["username"] = user.username
         return data
 
 

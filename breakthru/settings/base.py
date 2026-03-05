@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -122,13 +123,22 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "apps.users.authentication.OptionalJWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
     ),
     "UNAUTHENTICATED_USER": None,
+}
+
+# JWT: longer TTL so users aren’t logged out quickly (default was 5 min access)
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),   # 1 day
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),    # 7 days
 }
 
 CHANNEL_LAYERS = {
