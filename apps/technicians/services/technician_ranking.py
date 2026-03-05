@@ -110,6 +110,52 @@ def get_severity_experience_bulk(technicians):
     return {r["assigned_technician_id"]: float(r["points"] or 0.0) for r in rows}
 
 
+def _experience_components(technician: TechnicianProfile) -> tuple[float, int, float]:
+    """
+    Core components for an 'experience number':
+    - years_working: technician.total_years_experience
+    - completed_count: # of completed/closed tickets
+    - severity_points: sum of severities for completed/closed tickets
+    """
+    from django.db.models import Count, Sum
+
+    years = getattr(technician, "total_years_experience", 0.0) or 0.0
+    qs = Ticket.objects.filter(
+        assigned_technician=technician,
+        status__in=("completed", "closed"),
+    )
+    agg = qs.aggregate(
+        completed=Count("id"),
+        severity_points=Sum("severity"),
+    )
+    completed = int(agg.get("completed") or 0)
+    severity_points = float(agg.get("severity_points") or 0.0)
+    return years, completed, severity_points
+
+
+def experience_number(technician: TechnicianProfile) -> int:
+    """
+    Unified experience number (0–100) combining:
+    - years working
+    - total completed tickets
+    - severity of completed tickets
+    """
+    years, completed, severity_points = _experience_components(technician)
+
+    # Normalize components into 0–1
+    years_norm = min(1.0, years / 15.0)              # 15+ years caps out
+    completed_norm = min(1.0, completed / 100.0)     # 100+ jobs caps out
+    severity_norm = min(1.0, severity_points / 40.0) # ~10 high-severity jobs caps out
+
+    # Blend into a single score
+    score = (
+        0.4 * years_norm +
+        0.3 * completed_norm +
+        0.3 * severity_norm
+    )
+    return int(round(score * 100))
+
+
 def severity_experience_score(points: float, ticket_severity: int) -> float:
     """
     Map severity_points into 0–1.

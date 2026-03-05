@@ -53,11 +53,39 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], url_path="schedules")
     def schedules(self, request, pk=None):
-        """List schedules for this ticket. GET /api/tickets/{id}/schedules/"""
+        """List schedules for this ticket. GET /api/tickets/{id}/schedules/
+
+        If no schedules exist yet but the ticket is already assigned,
+        lazily create one using the same logic as the assignment agent
+        so the frontend always sees at least one schedule for active tickets.
+        """
         ticket = self.get_object()
-        schedules = Schedule.objects.filter(ticket=ticket).select_related(
-            "customer", "customer__user", "technician", "technician__profile", "technician__profile__user", "ticket"
-        ).order_by("scheduled_time")
+        qs = Schedule.objects.filter(ticket=ticket).select_related(
+            "customer",
+            "customer__user",
+            "technician",
+            "technician__profile",
+            "technician__profile__user",
+            "ticket",
+        )
+
+        # Lazy backfill: if ticket is already assigned but has no schedule yet,
+        # create one using the same helper the assignment agent uses.
+        if not qs.exists() and ticket.assigned_technician and ticket.customer:
+            from apps.agents.assignment_agent import AssignmentAgent
+
+            agent = AssignmentAgent()
+            agent._ensure_schedule_for_assignment(ticket, ticket.assigned_technician)
+            qs = Schedule.objects.filter(ticket=ticket).select_related(
+                "customer",
+                "customer__user",
+                "technician",
+                "technician__profile",
+                "technician__profile__user",
+                "ticket",
+            )
+
+        schedules = qs.order_by("scheduled_time")
         serializer = ScheduleListSerializer(schedules, many=True)
         return Response(serializer.data)
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.utils import timezone
 from rest_framework import viewsets, filters
-from .models import Schedule
+from .models import Schedule, end_other_active_schedules_for_technician
 from .serializers import ScheduleSerializer, ScheduleListSerializer
 
 
@@ -41,14 +41,20 @@ class ScheduleViewSet(viewsets.ModelViewSet):
             "technician__profile__user",
             "ticket",
         )
-        # Filter by technician (pk or profile_id from query)
+        # Filter by technician: pk (int) or profile_id (UUID)
         technician = self.request.query_params.get("technician")
         if technician:
             from django.db.models import Q
-            # Support both technician pk (int) and profile_id (UUID)
-            qs = qs.filter(
-                Q(technician__profile__id=technician) | Q(technician__pk=technician)
-            )
+            # "16" is technician pk (int); UUID string is profile_id
+            if technician.isdigit():
+                qs = qs.filter(technician__pk=int(technician))
+            else:
+                try:
+                    from uuid import UUID
+                    UUID(technician)
+                    qs = qs.filter(technician__profile__id=technician)
+                except (ValueError, TypeError):
+                    pass
         customer = self.request.query_params.get("customer")
         if customer:
             qs = qs.filter(customer_id=customer)
@@ -70,3 +76,10 @@ class ScheduleViewSet(viewsets.ModelViewSet):
             except (ValueError, TypeError):
                 pass
         return qs
+
+    def perform_create(self, serializer):
+        # One active schedule per technician: end any other active schedule before creating
+        technician = serializer.validated_data.get("technician")
+        if technician:
+            end_other_active_schedules_for_technician(technician)
+        serializer.save()

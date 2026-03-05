@@ -14,6 +14,7 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
     # Frontend-friendly: profile_id matches ticket.assigned_technician_profile_id
     profile_id = serializers.UUIDField(source="profile.id", read_only=True)
     assigned_tickets_count = serializers.SerializerMethodField(read_only=True)
+    experience_number = serializers.SerializerMethodField(read_only=True)
     # Read-only user/profile fields
     username_display = serializers.CharField(source="profile.user.username", read_only=True)
     phone_number = serializers.CharField(source="profile.phone_number", read_only=True)
@@ -82,10 +83,16 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             'performance_rating',
             'notes',
             'assigned_tickets_count',
+            'experience_number',
         ]
 
     def get_assigned_tickets_count(self, obj):
         return getattr(obj, "_assigned_tickets_count", obj.assigned_tickets.count())
+
+    def get_experience_number(self, obj):
+        from apps.technicians.services.technician_ranking import experience_number
+
+        return experience_number(obj)
 
     def create(self, validated_data):
         # Pop user fields

@@ -45,7 +45,7 @@ def _user_profile_payload(user):
         payload["country"] = ""
         payload["notes"] = ""
 
-    # Station and location: same keys for all roles; meaning depends on role
+    # Station, location, and technician metrics: same keys for all roles; meaning depends on role
     payload["station"] = None
     payload["station_name"] = ""
     payload["station_city"] = ""
@@ -53,23 +53,43 @@ def _user_profile_payload(user):
     payload["location"] = ""
     payload["specialization"] = ""
     payload["expertise"] = ""
+    payload["experience_number"] = 0
+    payload["certifications"] = []
 
     if not profile:
         return payload
 
-    # Technician: station from TechnicianProfile; location = station city, state
+    # Technician: station from TechnicianProfile; location = station state, city
     if user.role == "technician":
         from apps.technicians.models import TechnicianProfile
+        from apps.technicians.models import Certification
+        from apps.technicians.services.technician_ranking import experience_number
         tech = TechnicianProfile.objects.filter(profile=profile).select_related("station").first()
         if tech:
             payload["specialization"] = tech.specialization or ""
             payload["expertise"] = tech.expertise or ""
+            payload["experience_number"] = experience_number(tech)
+            # Certifications for this technician
+            certs = Certification.objects.filter(technician=tech).order_by("date_obtained")
+            payload["certifications"] = [
+                {
+                    "id": str(c.id),
+                    "name": c.name,
+                    "certification_id": c.certification_id,
+                    "institution": c.institution,
+                    "date_obtained": c.date_obtained.isoformat() if c.date_obtained else None,
+                    "expiration_date": c.expiration_date.isoformat() if c.expiration_date else None,
+                }
+                for c in certs
+            ]
             if tech.station:
                 payload["station"] = str(tech.station.id)
                 payload["station_name"] = tech.station.name or ""
                 payload["station_city"] = tech.station.city or ""
                 payload["station_state"] = tech.station.state or ""
-                payload["location"] = _format_location(tech.station.city, tech.station.state)
+                # Location for technicians: state and city of their station
+                parts = [p for p in (tech.station.state or "", tech.station.city or "") if p]
+                payload["location"] = ", ".join(parts) if parts else ""
         if not payload["location"]:
             payload["location"] = _format_location(payload["city"], payload["state"])
         return payload
