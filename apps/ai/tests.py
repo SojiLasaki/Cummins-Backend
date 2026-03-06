@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from unittest.mock import patch
 
 from apps.ai.models import AgentActionProposal, AgentPromptConfig, KnowledgeChunk, KnowledgeDocument, McpAdapter
+from apps.diagnostics.models import DiagnosticReport
 from apps.tickets.models import Ticket
 
 
@@ -202,6 +203,45 @@ class AIApiTests(TestCase):
         self.assertGreaterEqual(len(resp.data["proposals"]), 2)
         self.assertGreaterEqual(AgentActionProposal.objects.count(), 2)
 
+    @patch("apps.ai.views.run_langgraph_agent")
+    def test_chat_with_diagnostic_report_context_includes_structured_payload(self, mocked_agent):
+        mocked_agent.return_value = {
+            "answer": "Planned actions.",
+            "snippets": [],
+            "provider": "openai",
+            "model": "gpt-4o-mini",
+            "agent_trace": [],
+        }
+        report = DiagnosticReport.objects.create(
+            diagnostics_id="DIA-TEST-001",
+            title="Fuel leak at injector rail",
+            description="Fuel leak around injector rail hose coupling",
+            specialization="engine",
+            severity=3,
+            status="pending",
+        )
+
+        resp = self.client.post(
+            "/api/ai/chat/",
+            {
+                "query": "Create ticket from this diagnostic report",
+                "provider": "openai",
+                "model": "gpt-4o-mini",
+                "context": {"diagnostic_report_id": str(report.id)},
+                "mcp_adapters": [],
+                "policy_mode": "manual",
+                "intent": "ticket_ops",
+            },
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        proposals = resp.data.get("proposals") or []
+        create_ticket = next((item for item in proposals if item.get("action_type") == "create_ticket"), None)
+        self.assertIsNotNone(create_ticket)
+        payload = create_ticket.get("payload", {})
+        self.assertEqual(str(payload.get("diagnostic_report_id") or ""), str(report.id))
+        self.assertIsInstance(payload.get("diagnostic_payload"), dict)
+
     def test_approve_agent_action_executes_create_ticket(self):
         proposal = AgentActionProposal.objects.create(
             action_type=AgentActionProposal.ACTION_CREATE_TICKET,
@@ -228,6 +268,49 @@ class AIApiTests(TestCase):
         created_ticket = Ticket.objects.get(ticket_id=resp.data["result"]["local_ticket_id"])
         self.assertIsInstance(created_ticket.checklist_template, list)
         self.assertGreater(len(created_ticket.checklist_template), 0)
+
+    def test_approve_create_ticket_links_diagnostic_report(self):
+        report = DiagnosticReport.objects.create(
+            diagnostics_id="DIA-TEST-002",
+            title="Coolant leak under load",
+            description="Coolant leak near manifold hose under load",
+            specialization="engine",
+            severity=3,
+            status="pending",
+        )
+        proposal = AgentActionProposal.objects.create(
+            action_type=AgentActionProposal.ACTION_CREATE_TICKET,
+            status=AgentActionProposal.STATUS_PENDING,
+            payload={
+                "title": "Coolant leak ticket",
+                "description": "Create from diagnostic",
+                "specialization": "engine",
+                "priority": 3,
+                "diagnostic_report_id": str(report.id),
+                "diagnostic_payload": {
+                    "diagnostic_report_id": str(report.id),
+                    "specialization": "engine",
+                    "component_name": "X15 Engine",
+                    "issue": "Coolant leak under load",
+                    "part_names": ["Hose"],
+                },
+            },
+            source_query="Create ticket from diagnostic",
+            source_context={"diagnostic_report_id": str(report.id)},
+            created_by=self.user,
+        )
+
+        resp = self.client.post(
+            f"/api/ai/agent_actions/{proposal.id}/approve/",
+            {},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.data.get("status"), AgentActionProposal.STATUS_EXECUTED)
+        ticket = Ticket.objects.get(ticket_id=resp.data["result"]["local_ticket_id"])
+        report.refresh_from_db()
+        self.assertEqual(str(report.ticket_id_id), str(ticket.id))
+        self.assertEqual(str(resp.data.get("result", {}).get("diagnostic_report_id") or ""), str(report.id))
 
     @patch("apps.ai.views.run_langgraph_agent")
     def test_chat_ticket_request_without_required_details_returns_follow_up(self, mocked_agent):

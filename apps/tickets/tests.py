@@ -2,7 +2,9 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import APIClient
 
-from apps.tickets.models import Ticket
+from apps.tickets.checklists import generate_ticket_checklist
+from apps.tickets.models import Ticket, TicketResolutionPattern
+from apps.tickets.patterns import upsert_pattern_from_completed_ticket
 
 
 class TicketChecklistApiTests(TestCase):
@@ -122,3 +124,108 @@ class TicketChecklistApiTests(TestCase):
         matched = [item for item in progress if item.get("item_id") == step_id]
         self.assertTrue(matched)
         self.assertTrue(matched[0].get("done"))
+
+    def test_completed_ticket_persists_resolution_pattern(self):
+        ticket = Ticket.objects.create(
+            ticket_id="TK-TEST-010",
+            title="X15 fuel leak near pump",
+            description="Leak observed around fuel pump hose clamp under load",
+            issue_description="Fuel leak near pump hose clamp",
+            specialization="engine",
+            status="completed",
+            created_by=self.user.username,
+            checklist_template=[
+                {"id": "s1", "category": "repair", "title": "Inspect fuel pump seals", "instructions": "Inspect seals", "required": True},
+                {"id": "s2", "category": "repair", "title": "Replace damaged fuel hose", "instructions": "Replace hose", "required": True},
+            ],
+            checklist_progress=[
+                {"item_id": "s1", "done": True},
+                {"item_id": "s2", "done": True},
+            ],
+        )
+
+        pattern = upsert_pattern_from_completed_ticket(ticket)
+        self.assertIsNotNone(pattern)
+        self.assertEqual(TicketResolutionPattern.objects.count(), 1)
+        saved = TicketResolutionPattern.objects.first()
+        self.assertEqual(saved.success_count, 1)
+        self.assertGreaterEqual(len(saved.checklist_template), 2)
+
+    def test_generate_checklist_uses_learned_pattern_for_similar_issue(self):
+        learned = Ticket.objects.create(
+            ticket_id="TK-TEST-011",
+            title="X15 fuel leak near injector rail",
+            description="Fuel leak around injector feed hose",
+            issue_description="Fuel leak near injector rail",
+            specialization="engine",
+            status="completed",
+            created_by=self.user.username,
+            checklist_template=[
+                {"id": "l1", "category": "repair", "title": "Inspect injector feed hose for cracks", "instructions": "Inspect hose", "required": True},
+                {"id": "l2", "category": "repair", "title": "Replace injector hose clamp", "instructions": "Replace clamp", "required": True},
+            ],
+            checklist_progress=[
+                {"item_id": "l1", "done": True},
+                {"item_id": "l2", "done": True},
+            ],
+        )
+        upsert_pattern_from_completed_ticket(learned)
+
+        candidate = Ticket(
+            ticket_id="TK-TEST-012",
+            title="Injector fuel leak",
+            description="Truck has fuel leak from injector hose connection",
+            issue_description="Fuel leak from injector hose",
+            specialization="engine",
+            created_by=self.user.username,
+        )
+
+        generated = generate_ticket_checklist(
+            candidate,
+            diagnostic_payload={
+                "specialization": "engine",
+                "component_name": "X15 Engine",
+                "issue": "Fuel leak at injector hose",
+                "part_names": ["Fuel Injector", "Hose"],
+            },
+        )
+        titles = [str(item.get("title") or "").lower() for item in generated.get("template", []) if isinstance(item, dict)]
+        self.assertTrue(any("injector feed hose" in title for title in titles))
+        provenance = generated.get("meta", {}).get("provenance", {})
+        self.assertGreater(int(provenance.get("learned_steps") or 0), 0)
+
+    def test_generate_checklist_does_not_use_unrelated_pattern(self):
+        learned = Ticket.objects.create(
+            ticket_id="TK-TEST-013",
+            title="X15 fuel leak near injector rail",
+            description="Fuel leak around injector feed hose",
+            issue_description="Fuel leak near injector rail",
+            specialization="engine",
+            status="completed",
+            created_by=self.user.username,
+            checklist_template=[
+                {"id": "u1", "category": "repair", "title": "Inspect injector feed hose for cracks", "instructions": "Inspect hose", "required": True},
+            ],
+            checklist_progress=[{"item_id": "u1", "done": True}],
+        )
+        upsert_pattern_from_completed_ticket(learned)
+
+        unrelated = Ticket(
+            ticket_id="TK-TEST-014",
+            title="Battery charging fault",
+            description="Alternator output drops intermittently",
+            issue_description="Electrical charging issue",
+            specialization="electrical",
+            created_by=self.user.username,
+        )
+        generated = generate_ticket_checklist(
+            unrelated,
+            diagnostic_payload={
+                "specialization": "electrical",
+                "component_name": "Alternator",
+                "issue": "Battery charging fault",
+                "part_names": ["Alternator"],
+            },
+        )
+        provenance = generated.get("meta", {}).get("provenance", {})
+        self.assertEqual(int(provenance.get("learned_steps") or 0), 0)
