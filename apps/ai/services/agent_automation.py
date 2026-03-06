@@ -62,7 +62,12 @@ def _extract_ticket_reference(text: str, context_payload: dict[str, Any]) -> str
 
     normalized = text.strip()
 
-    # Match TK-xxx pattern
+    # Match full TK-XXXXXXXXXX-XXXX pattern (e.g., TK-0306173432-8812)
+    tk_full_match = re.search(r"TK-\d+-\d+", normalized, re.IGNORECASE)
+    if tk_full_match:
+        return tk_full_match.group(0).upper()
+
+    # Match shorter TK-xxx pattern (e.g., TK-001)
     tk_match = re.search(r"TK-\d+", normalized, re.IGNORECASE)
     if tk_match:
         return tk_match.group(0).upper()
