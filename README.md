@@ -2,6 +2,24 @@
 
 Django + DRF backend for Breakthru/Fix it Felix, including LangGraph orchestration, agent action approvals, and MCP connector integration.
 
+## Quick Start
+
+For automated setup of the complete stack (backend + frontend + MCP services), use the setup script from the parent directory:
+
+```bash
+# From parent directory containing both repos
+./setup.sh
+
+# Start all services
+make start
+
+# Open http://127.0.0.1:8080
+```
+
+See `breakthru-dashboard/README.md` for comprehensive documentation.
+
+---
+
 ## Requirements
 
 1. `git`
