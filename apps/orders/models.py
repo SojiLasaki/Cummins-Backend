@@ -19,6 +19,7 @@ class Order(models.Model):
     quantity = models.IntegerField()
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="pending")
     synced = models.BooleanField(default=False)  
+    supplier = models.CharField(max_length=100, blank=True, null=True)
     requested_by_agent = models.BooleanField(default=False)
     # agent = models.ForeignKey("agents.AgentProfile", verbose_name=("Agent"), null=True, blank=True, on_delete=models.SET_NULL)
     requested_by = models.ForeignKey("users.User", verbose_name=("Requested By"), null=True, blank=True, on_delete=models.SET_NULL, related_name="orders_requested_by")

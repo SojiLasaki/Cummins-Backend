@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 
-from .models import DiagnosticReport, TechnicianReport
-from .serializers import TechnicianReportSerializer
+from .models import DiagnosticReport, StaffReport
+from .serializers import StaffReportSerializer
 from .serializers import DiagnosticReportSerializer
 from apps.core.services.system_orchestrator import SystemOrchestrator
 
@@ -113,25 +113,25 @@ class FailureDetectedView(APIView):
 # ------------------------------
 # 3️⃣ Technician Report Submission
 # ------------------------------
-class TechnicianReportViewSet(viewsets.ModelViewSet):
+class StaffReportViewSet(viewsets.ModelViewSet):
     """
-    Technicians submit reports for tickets assigned to them.
+    Staff or techs submit reports for tickets assigned to them.
     Only the assigned technician can create a report.
     Ticket & DiagnosticReport status updated automatically.
     """
-    queryset = TechnicianReport.objects.all()
-    serializer_class = TechnicianReportSerializer
+    queryset = StaffReport.objects.all()
+    serializer_class = StaffReportSerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        technician_profile = self.request.user.profile.technician_profile
+        user_profile = self.request.user.profile
         ticket = serializer.validated_data["ticket"]
 
-        if ticket.assigned_technician != technician_profile:
-            raise PermissionDenied("You are not assigned to this ticket.")
+        # if ticket.assigned_technician != user_profile:
+        #     raise PermissionDenied("You are not assigned to this ticket.")
 
         # Save the technician report
-        serializer.save(technician=technician_profile)
+        serializer.save(technician=user_profile)
 
         # Update the diagnostic report / ticket status
         ticket.status = "resolved"

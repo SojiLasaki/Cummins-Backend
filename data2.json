@@ -1,0 +1,3382 @@
+[
+    {
+      "model": "tickets.ticket",
+      "pk": "784103a0-f0d6-48f3-ba22-9cd084fa39dc",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0001",
+        "customer": "0247172c-ce1f-49e6-b969-74daad7c3bad",
+        "assigned_technician": 26,
+        "specialization": "engine",
+        "title": "Intermittent turbo boost loss on highway route",
+        "description": "Boost pressure drops under sustained load above 55 mph, with reduced pulling power on grade climbs. Station intake routed through Indianapolis Service Station.",
+        "severity": 3,
+        "status": "closed",
+        "customer_satisfaction_rating": 3.8,
+        "estimated_resolution_time_minutes": 140,
+        "predicted_commute_time_minutes": 35,
+        "actual_resolution_time_minutes": 125,
+        "predicted_resolution_summary": "Likely engine service case involving x15 efficiency series (2024). Recommended first actions: confirm fault code FC-TURBO-221, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "tanya.wells",
+        "priority": 3,
+        "issue_description": "Boost pressure drops under sustained load above 55 mph, with reduced pulling power on grade climbs.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-TURBO-221",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Efficiency Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-TURBO-221",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Efficiency Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-10T14:00:00Z",
+        "assigned_at": "2026-02-10T16:00:00Z",
+        "resolved_at": "2026-02-10T21:20:00Z",
+        "closed_at": "2026-02-11T09:20:00Z",
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 1,
+      "fields": {
+        "ticket": "784103a0-f0d6-48f3-ba22-9cd084fa39dc",
+        "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 2,
+      "fields": {
+        "ticket": "784103a0-f0d6-48f3-ba22-9cd084fa39dc",
+        "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "5a0f275f-01e8-48f0-9402-3736462a745f",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0001",
+        "ticket_id": "784103a0-f0d6-48f3-ba22-9cd084fa39dc",
+        "title": "Diagnostic - Intermittent turbo boost loss on highway route",
+        "severity": 3,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "0247172c-ce1f-49e6-b969-74daad7c3bad",
+        "assigned_technician": 26,
+        "fault_code": "FC-TURBO-221",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x15 efficiency series (2024). Recommended first actions: confirm fault code FC-TURBO-221, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Turbocharger vane sticking due to soot buildup",
+        "description": "Initial diagnostic triage for intermittent turbo boost loss on highway route. Inspection focused on x15 efficiency series (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit; verify repair against fault code FC-TURBO-221; complete final operational validation before release.",
+        "confidence_score": 0.71,
+        "identified_at": "2026-02-10T14:30:00Z",
+        "created_at": "2026-02-10T14:35:00Z",
+        "resolved_at": "2026-02-10T21:20:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 55,
+        "performed_by": "aaron.mitchell"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 1,
+      "fields": {
+        "diagnosticreport": "5a0f275f-01e8-48f0-9402-3736462a745f",
+        "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 2,
+      "fields": {
+        "diagnosticreport": "5a0f275f-01e8-48f0-9402-3736462a745f",
+        "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "beb00308-b4b1-450a-b8c1-81a2507971ed",
+      "fields": {
+        "created_by": "e28813b3-f0d6-43c4-b302-04cfee3183c0",
+        "diagnostics_id": "INDY-SR-2026-0001",
+        "ticket_id": "784103a0-f0d6-48f3-ba22-9cd084fa39dc",
+        "title": "Staff Intake - Intermittent turbo boost loss on highway route",
+        "severity": 3,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "0247172c-ce1f-49e6-b969-74daad7c3bad",
+        "fault_code": "FC-TURBO-221",
+        "component": null,
+        "probable_cause": "Turbocharger vane sticking due to soot buildup",
+        "description": "Front-office and service intake notes captured for intermittent turbo boost loss on highway route.",
+        "created_at": "2026-02-10T14:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 20,
+        "performed_by": "tanya.wells"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 1,
+      "fields": {
+        "staffreport": "beb00308-b4b1-450a-b8c1-81a2507971ed",
+        "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 2,
+      "fields": {
+        "staffreport": "beb00308-b4b1-450a-b8c1-81a2507971ed",
+        "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "a18fcae9-40ba-401b-be21-4fe171b515a2",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0002",
+        "customer": "231ad18b-9d6d-407d-950f-42ed02bc1b93",
+        "assigned_technician": 28,
+        "specialization": "engine",
+        "title": "Fuel injector imbalance causing rough idle",
+        "description": "Engine idles unevenly after warm-up and shows higher fuel correction values on cylinder balance test. Station intake routed through Indianapolis Service Station.",
+        "severity": 2,
+        "status": "completed",
+        "customer_satisfaction_rating": 4.0,
+        "estimated_resolution_time_minutes": 165,
+        "predicted_commute_time_minutes": 45,
+        "actual_resolution_time_minutes": 162,
+        "predicted_resolution_summary": "Likely engine service case involving x15 performance series (2024). Recommended first actions: confirm fault code FC-FUEL-118, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "umar.ali",
+        "priority": 2,
+        "issue_description": "Engine idles unevenly after warm-up and shows higher fuel correction values on cylinder balance test.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-FUEL-118",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Performance Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-FUEL-118",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Performance Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-11T15:00:00Z",
+        "assigned_at": "2026-02-11T17:00:00Z",
+        "resolved_at": "2026-02-11T23:23:00Z",
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 3,
+      "fields": {
+        "ticket": "a18fcae9-40ba-401b-be21-4fe171b515a2",
+        "part": "47375f66-2836-4862-81cb-244bc1cd425f"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 4,
+      "fields": {
+        "ticket": "a18fcae9-40ba-401b-be21-4fe171b515a2",
+        "part": "c6f283b9-bb11-4c97-b525-e4add1e20421"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 5,
+      "fields": {
+        "ticket": "a18fcae9-40ba-401b-be21-4fe171b515a2",
+        "part": "ba52cec8-130c-4202-a2e4-693468ad7aa0"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "75394dd1-3cd3-461b-8a08-f4b8f1fa2165",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0002",
+        "ticket_id": "a18fcae9-40ba-401b-be21-4fe171b515a2",
+        "title": "Diagnostic - Fuel injector imbalance causing rough idle",
+        "severity": 2,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "231ad18b-9d6d-407d-950f-42ed02bc1b93",
+        "assigned_technician": 28,
+        "fault_code": "FC-FUEL-118",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x15 performance series (2024). Recommended first actions: confirm fault code FC-FUEL-118, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "One or more injectors are over-fueling due to wear",
+        "description": "Initial diagnostic triage for fuel injector imbalance causing rough idle. Inspection focused on x15 performance series (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit, oil filter service kit; verify repair against fault code FC-FUEL-118; complete final operational validation before release.",
+        "confidence_score": 0.75,
+        "identified_at": "2026-02-11T15:30:00Z",
+        "created_at": "2026-02-11T15:35:00Z",
+        "resolved_at": "2026-02-11T23:23:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 73,
+        "performed_by": "caleb.turner"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 3,
+      "fields": {
+        "diagnosticreport": "75394dd1-3cd3-461b-8a08-f4b8f1fa2165",
+        "part": "47375f66-2836-4862-81cb-244bc1cd425f"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 4,
+      "fields": {
+        "diagnosticreport": "75394dd1-3cd3-461b-8a08-f4b8f1fa2165",
+        "part": "c6f283b9-bb11-4c97-b525-e4add1e20421"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 5,
+      "fields": {
+        "diagnosticreport": "75394dd1-3cd3-461b-8a08-f4b8f1fa2165",
+        "part": "ba52cec8-130c-4202-a2e4-693468ad7aa0"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "a08dfbbc-c43e-4a90-98b5-5cb2cec54d5f",
+      "fields": {
+        "created_by": "a4ac3862-aea2-43aa-a5cd-c193c7c4a0c5",
+        "diagnostics_id": "INDY-SR-2026-0002",
+        "ticket_id": "a18fcae9-40ba-401b-be21-4fe171b515a2",
+        "title": "Staff Intake - Fuel injector imbalance causing rough idle",
+        "severity": 2,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "231ad18b-9d6d-407d-950f-42ed02bc1b93",
+        "fault_code": "FC-FUEL-118",
+        "component": null,
+        "probable_cause": "One or more injectors are over-fueling due to wear",
+        "description": "Front-office and service intake notes captured for fuel injector imbalance causing rough idle.",
+        "created_at": "2026-02-11T15:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 30,
+        "performed_by": "umar.ali"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 3,
+      "fields": {
+        "staffreport": "a08dfbbc-c43e-4a90-98b5-5cb2cec54d5f",
+        "part": "47375f66-2836-4862-81cb-244bc1cd425f"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 4,
+      "fields": {
+        "staffreport": "a08dfbbc-c43e-4a90-98b5-5cb2cec54d5f",
+        "part": "c6f283b9-bb11-4c97-b525-e4add1e20421"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "9155ece0-25a7-418a-bbf6-b3cc525a6460",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0003",
+        "customer": "1a19adfd-dc6a-4ce9-a585-d970f1911b05",
+        "assigned_technician": 30,
+        "specialization": "engine",
+        "title": "Oil pressure warning during cold start",
+        "description": "Low oil pressure warning appears for 10–15 seconds after startup in the morning. Station intake routed through Indianapolis Service Station.",
+        "severity": 3,
+        "status": "awaiting_parts",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 190,
+        "predicted_commute_time_minutes": 55,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely engine service case involving x15 productivity series (2024). Recommended first actions: confirm fault code FC-LUBE-304, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "victoria.king",
+        "priority": 3,
+        "issue_description": "Low oil pressure warning appears for 10–15 seconds after startup in the morning.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-LUBE-304",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Productivity Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-LUBE-304",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Productivity Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 4
+        },
+        "created_at": "2026-02-12T16:00:00Z",
+        "assigned_at": "2026-02-12T18:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 6,
+      "fields": {
+        "ticket": "9155ece0-25a7-418a-bbf6-b3cc525a6460",
+        "part": "2e8a5695-dc55-4c3c-9a98-cdf2ec8532c1"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 7,
+      "fields": {
+        "ticket": "9155ece0-25a7-418a-bbf6-b3cc525a6460",
+        "part": "e8111cdc-d196-438a-8e75-e2dc9430b839"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "f208c503-9684-4fff-abb6-3e1203cd5957",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0003",
+        "ticket_id": "9155ece0-25a7-418a-bbf6-b3cc525a6460",
+        "title": "Diagnostic - Oil pressure warning during cold start",
+        "severity": 3,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "1a19adfd-dc6a-4ce9-a585-d970f1911b05",
+        "assigned_technician": 30,
+        "fault_code": "FC-LUBE-304",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x15 productivity series (2024). Recommended first actions: confirm fault code FC-LUBE-304, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Restricted oil filter or delayed oil gallery fill",
+        "description": "Initial diagnostic triage for oil pressure warning during cold start. Inspection focused on x15 productivity series (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit; verify repair against fault code FC-LUBE-304; complete final operational validation before release.",
+        "confidence_score": 0.79,
+        "identified_at": "2026-02-12T16:30:00Z",
+        "created_at": "2026-02-12T16:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": true,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 91,
+        "performed_by": "evan.bennett"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 6,
+      "fields": {
+        "diagnosticreport": "f208c503-9684-4fff-abb6-3e1203cd5957",
+        "part": "2e8a5695-dc55-4c3c-9a98-cdf2ec8532c1"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 7,
+      "fields": {
+        "diagnosticreport": "f208c503-9684-4fff-abb6-3e1203cd5957",
+        "part": "e8111cdc-d196-438a-8e75-e2dc9430b839"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "57e465a8-42b9-476f-8087-f4a34c3b651d",
+      "fields": {
+        "created_by": "016728c2-fc2f-44ba-9a2d-d789cd698ecb",
+        "diagnostics_id": "INDY-SR-2026-0003",
+        "ticket_id": "9155ece0-25a7-418a-bbf6-b3cc525a6460",
+        "title": "Staff Intake - Oil pressure warning during cold start",
+        "severity": 3,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "1a19adfd-dc6a-4ce9-a585-d970f1911b05",
+        "fault_code": "FC-LUBE-304",
+        "component": null,
+        "probable_cause": "Restricted oil filter or delayed oil gallery fill",
+        "description": "Front-office and service intake notes captured for oil pressure warning during cold start.",
+        "created_at": "2026-02-12T16:10:00Z",
+        "requires_follow_up": true,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 40,
+        "performed_by": "victoria.king"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 5,
+      "fields": {
+        "staffreport": "57e465a8-42b9-476f-8087-f4a34c3b651d",
+        "part": "2e8a5695-dc55-4c3c-9a98-cdf2ec8532c1"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 6,
+      "fields": {
+        "staffreport": "57e465a8-42b9-476f-8087-f4a34c3b651d",
+        "part": "e8111cdc-d196-438a-8e75-e2dc9430b839"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "f0ccc850-ad59-4416-85ea-256b6ffe1147",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0004",
+        "customer": "5cda48d9-e5d4-4717-8cf2-9d090912da17",
+        "assigned_technician": 32,
+        "specialization": "engine",
+        "title": "Repeated derate under heavy haul conditions",
+        "description": "Vehicle enters derate mode during steep climbs with a fully loaded trailer. Station intake routed through Indianapolis Service Station.",
+        "severity": 4,
+        "status": "in_progress",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 215,
+        "predicted_commute_time_minutes": 65,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely engine service case involving x12 (2024). Recommended first actions: confirm fault code FC-ENG-517, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "will.harper",
+        "priority": 4,
+        "issue_description": "Vehicle enters derate mode during steep climbs with a fully loaded trailer.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-ENG-517",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-ENG-517",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 3
+        },
+        "created_at": "2026-02-13T17:00:00Z",
+        "assigned_at": "2026-02-13T19:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 8,
+      "fields": {
+        "ticket": "f0ccc850-ad59-4416-85ea-256b6ffe1147",
+        "part": "6b1faf7d-dccc-44ad-bf7d-e39f2a5b8c4f"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 9,
+      "fields": {
+        "ticket": "f0ccc850-ad59-4416-85ea-256b6ffe1147",
+        "part": "dda9e50f-dd3b-478a-a022-0262eaa2f204"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 10,
+      "fields": {
+        "ticket": "f0ccc850-ad59-4416-85ea-256b6ffe1147",
+        "part": "059dd27d-1254-4899-8f48-685720564c18"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "8ee1a785-9438-47a1-b899-b0bcfde95504",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0004",
+        "ticket_id": "f0ccc850-ad59-4416-85ea-256b6ffe1147",
+        "title": "Diagnostic - Repeated derate under heavy haul conditions",
+        "severity": 4,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "senior",
+        "customer": "5cda48d9-e5d4-4717-8cf2-9d090912da17",
+        "assigned_technician": 32,
+        "fault_code": "FC-ENG-517",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x12 (2024). Recommended first actions: confirm fault code FC-ENG-517, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Airflow and fueling mismatch causing protection logic to trigger",
+        "description": "Initial diagnostic triage for repeated derate under heavy haul conditions. Inspection focused on x12 (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit, oil filter service kit; verify repair against fault code FC-ENG-517; complete final operational validation before release.",
+        "confidence_score": 0.83,
+        "identified_at": "2026-02-13T17:30:00Z",
+        "created_at": "2026-02-13T17:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": false,
+        "repeat_issue": true,
+        "diagnostic_duration_minutes": 109,
+        "performed_by": "gabriel.ward"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 8,
+      "fields": {
+        "diagnosticreport": "8ee1a785-9438-47a1-b899-b0bcfde95504",
+        "part": "6b1faf7d-dccc-44ad-bf7d-e39f2a5b8c4f"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 9,
+      "fields": {
+        "diagnosticreport": "8ee1a785-9438-47a1-b899-b0bcfde95504",
+        "part": "dda9e50f-dd3b-478a-a022-0262eaa2f204"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 10,
+      "fields": {
+        "diagnosticreport": "8ee1a785-9438-47a1-b899-b0bcfde95504",
+        "part": "059dd27d-1254-4899-8f48-685720564c18"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "7231a673-e799-42c5-b9eb-913084bc7269",
+      "fields": {
+        "created_by": "6f2dc884-115b-4419-93ce-a793db536498",
+        "diagnostics_id": "INDY-SR-2026-0004",
+        "ticket_id": "f0ccc850-ad59-4416-85ea-256b6ffe1147",
+        "title": "Staff Intake - Repeated derate under heavy haul conditions",
+        "severity": 4,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "5cda48d9-e5d4-4717-8cf2-9d090912da17",
+        "fault_code": "FC-ENG-517",
+        "component": null,
+        "probable_cause": "Airflow and fueling mismatch causing protection logic to trigger",
+        "description": "Front-office and service intake notes captured for repeated derate under heavy haul conditions.",
+        "created_at": "2026-02-13T17:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": true,
+        "diagnostic_duration_minutes": 50,
+        "performed_by": "will.harper"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 7,
+      "fields": {
+        "staffreport": "7231a673-e799-42c5-b9eb-913084bc7269",
+        "part": "6b1faf7d-dccc-44ad-bf7d-e39f2a5b8c4f"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 8,
+      "fields": {
+        "staffreport": "7231a673-e799-42c5-b9eb-913084bc7269",
+        "part": "dda9e50f-dd3b-478a-a022-0262eaa2f204"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "e371deb0-8a4a-4a42-b40b-aac82a998b3a",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0005",
+        "customer": "3d88bb35-1ab3-4c5a-a534-f9eba07642d7",
+        "assigned_technician": 34,
+        "specialization": "engine",
+        "title": "Excess exhaust smoke after injector service",
+        "description": "Black smoke reported after recent injector replacement and calibration event. Station intake routed through Indianapolis Service Station.",
+        "severity": 2,
+        "status": "assigned",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 240,
+        "predicted_commute_time_minutes": 35,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely engine service case involving x12 for heavy-duty truck (2024). Recommended first actions: confirm fault code FC-EMS-145, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "xavier.scott",
+        "priority": 2,
+        "issue_description": "Black smoke reported after recent injector replacement and calibration event.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-EMS-145",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 for Heavy-duty Truck (2024)",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-EMS-145",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 for Heavy-duty Truck (2024)",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 2
+        },
+        "created_at": "2026-02-14T18:00:00Z",
+        "assigned_at": "2026-02-14T20:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 11,
+      "fields": {
+        "ticket": "e371deb0-8a4a-4a42-b40b-aac82a998b3a",
+        "part": "829845de-23c4-4dd1-adfb-75305df2120e"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 12,
+      "fields": {
+        "ticket": "e371deb0-8a4a-4a42-b40b-aac82a998b3a",
+        "part": "32ac47dd-6abd-4b9f-9555-552515662314"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "603da20a-7c14-43d6-88d4-90b507aa960c",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0005",
+        "ticket_id": "e371deb0-8a4a-4a42-b40b-aac82a998b3a",
+        "title": "Diagnostic - Excess exhaust smoke after injector service",
+        "severity": 2,
+        "status": "pending",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "3d88bb35-1ab3-4c5a-a534-f9eba07642d7",
+        "assigned_technician": 34,
+        "fault_code": "FC-EMS-145",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x12 for heavy-duty truck (2024). Recommended first actions: confirm fault code FC-EMS-145, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Injector trim data not aligned with installed kit",
+        "description": "Initial diagnostic triage for excess exhaust smoke after injector service. Inspection focused on x12 for heavy-duty truck (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit; verify repair against fault code FC-EMS-145; complete final operational validation before release.",
+        "confidence_score": 0.87,
+        "identified_at": "2026-02-14T18:30:00Z",
+        "created_at": "2026-02-14T18:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 127,
+        "performed_by": "isaac.foster"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 11,
+      "fields": {
+        "diagnosticreport": "603da20a-7c14-43d6-88d4-90b507aa960c",
+        "part": "829845de-23c4-4dd1-adfb-75305df2120e"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 12,
+      "fields": {
+        "diagnosticreport": "603da20a-7c14-43d6-88d4-90b507aa960c",
+        "part": "32ac47dd-6abd-4b9f-9555-552515662314"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "a075fcd7-206f-4344-8caf-555f394263de",
+      "fields": {
+        "created_by": "9e32b79f-6075-423c-a6e6-6623dc425e13",
+        "diagnostics_id": "INDY-SR-2026-0005",
+        "ticket_id": "e371deb0-8a4a-4a42-b40b-aac82a998b3a",
+        "title": "Staff Intake - Excess exhaust smoke after injector service",
+        "severity": 2,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "3d88bb35-1ab3-4c5a-a534-f9eba07642d7",
+        "fault_code": "FC-EMS-145",
+        "component": null,
+        "probable_cause": "Injector trim data not aligned with installed kit",
+        "description": "Front-office and service intake notes captured for excess exhaust smoke after injector service.",
+        "created_at": "2026-02-14T18:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 20,
+        "performed_by": "xavier.scott"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 9,
+      "fields": {
+        "staffreport": "a075fcd7-206f-4344-8caf-555f394263de",
+        "part": "829845de-23c4-4dd1-adfb-75305df2120e"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 10,
+      "fields": {
+        "staffreport": "a075fcd7-206f-4344-8caf-555f394263de",
+        "part": "32ac47dd-6abd-4b9f-9555-552515662314"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "a93f9aac-e34e-4ee3-9089-b5cd11bfa6f5",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0006",
+        "customer": "24705f78-3485-4100-bf26-ead1171cde9f",
+        "assigned_technician": 36,
+        "specialization": "engine",
+        "title": "Coolant temperature trending high in stop-and-go traffic",
+        "description": "Cooling performance degrades during urban operation and fan engagement is delayed. Station intake routed through Indianapolis Service Station.",
+        "severity": 3,
+        "status": "pending",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 265,
+        "predicted_commute_time_minutes": 45,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely engine service case involving x12 for motorhome and rv (2024). Recommended first actions: confirm fault code FC-COOL-412, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "yasmin.hall",
+        "priority": 3,
+        "issue_description": "Cooling performance degrades during urban operation and fan engagement is delayed.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-COOL-412",
+            "done": false
+          },
+          {
+            "task": "Inspect component: X12 for Motorhome and RV (2024)",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-COOL-412",
+            "done": false
+          },
+          {
+            "task": "Inspect component: X12 for Motorhome and RV (2024)",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 1
+        },
+        "created_at": "2026-02-15T14:00:00Z",
+        "assigned_at": null,
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 13,
+      "fields": {
+        "ticket": "a93f9aac-e34e-4ee3-9089-b5cd11bfa6f5",
+        "part": "65b5d867-c7c2-42bd-85d8-b8654be7ba90"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 14,
+      "fields": {
+        "ticket": "a93f9aac-e34e-4ee3-9089-b5cd11bfa6f5",
+        "part": "79fab406-3a08-470f-be9b-c05217e278cb"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 15,
+      "fields": {
+        "ticket": "a93f9aac-e34e-4ee3-9089-b5cd11bfa6f5",
+        "part": "40aa03d1-9700-4f0d-80aa-d5d47b565058"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "369ac9bb-9b55-4e02-94e5-918101237509",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0006",
+        "ticket_id": "a93f9aac-e34e-4ee3-9089-b5cd11bfa6f5",
+        "title": "Diagnostic - Coolant temperature trending high in stop-and-go traffic",
+        "severity": 3,
+        "status": "pending",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "24705f78-3485-4100-bf26-ead1171cde9f",
+        "assigned_technician": 36,
+        "fault_code": "FC-COOL-412",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x12 for motorhome and rv (2024). Recommended first actions: confirm fault code FC-COOL-412, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Thermal load exceeds expected airflow or coolant circulation response",
+        "description": "Initial diagnostic triage for coolant temperature trending high in stop-and-go traffic. Inspection focused on x12 for motorhome and rv (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit, oil filter service kit; verify repair against fault code FC-COOL-412; complete final operational validation before release.",
+        "confidence_score": 0.91,
+        "identified_at": "2026-02-15T14:30:00Z",
+        "created_at": "2026-02-15T14:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 55,
+        "performed_by": "kevin.ramirez"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 13,
+      "fields": {
+        "diagnosticreport": "369ac9bb-9b55-4e02-94e5-918101237509",
+        "part": "65b5d867-c7c2-42bd-85d8-b8654be7ba90"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 14,
+      "fields": {
+        "diagnosticreport": "369ac9bb-9b55-4e02-94e5-918101237509",
+        "part": "79fab406-3a08-470f-be9b-c05217e278cb"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 15,
+      "fields": {
+        "diagnosticreport": "369ac9bb-9b55-4e02-94e5-918101237509",
+        "part": "40aa03d1-9700-4f0d-80aa-d5d47b565058"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "2998e9fd-cf76-4139-9b19-fd7559dd69e5",
+      "fields": {
+        "created_by": "0ed2d52d-0c7c-415d-b194-bcd9a3f309d2",
+        "diagnostics_id": "INDY-SR-2026-0006",
+        "ticket_id": "a93f9aac-e34e-4ee3-9089-b5cd11bfa6f5",
+        "title": "Staff Intake - Coolant temperature trending high in stop-and-go traffic",
+        "severity": 3,
+        "status": "pending",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "24705f78-3485-4100-bf26-ead1171cde9f",
+        "fault_code": "FC-COOL-412",
+        "component": null,
+        "probable_cause": "Thermal load exceeds expected airflow or coolant circulation response",
+        "description": "Front-office and service intake notes captured for coolant temperature trending high in stop-and-go traffic.",
+        "created_at": "2026-02-15T14:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 30,
+        "performed_by": "yasmin.hall"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 11,
+      "fields": {
+        "staffreport": "2998e9fd-cf76-4139-9b19-fd7559dd69e5",
+        "part": "65b5d867-c7c2-42bd-85d8-b8654be7ba90"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 12,
+      "fields": {
+        "staffreport": "2998e9fd-cf76-4139-9b19-fd7559dd69e5",
+        "part": "79fab406-3a08-470f-be9b-c05217e278cb"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "ba66f040-7956-4686-8a0f-0f095c78d1cb",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0007",
+        "customer": "dd07b9e1-6813-4553-8953-2e6c33e83121",
+        "assigned_technician": 38,
+        "specialization": "engine",
+        "title": "Engine no-start after overnight park",
+        "description": "Vehicle cranks normally but does not start after sitting overnight. Station intake routed through Indianapolis Service Station.",
+        "severity": 4,
+        "status": "closed",
+        "customer_satisfaction_rating": 4.0,
+        "estimated_resolution_time_minutes": 140,
+        "predicted_commute_time_minutes": 55,
+        "actual_resolution_time_minutes": 137,
+        "predicted_resolution_summary": "Likely engine service case involving x15 efficiency series (2024). Recommended first actions: confirm fault code FC-START-090, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "zachary.ross",
+        "priority": 4,
+        "issue_description": "Vehicle cranks normally but does not start after sitting overnight.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-START-090",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Efficiency Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-START-090",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Efficiency Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-16T15:00:00Z",
+        "assigned_at": "2026-02-16T17:00:00Z",
+        "resolved_at": "2026-02-17T00:38:00Z",
+        "closed_at": "2026-02-17T12:38:00Z",
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 16,
+      "fields": {
+        "ticket": "ba66f040-7956-4686-8a0f-0f095c78d1cb",
+        "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 17,
+      "fields": {
+        "ticket": "ba66f040-7956-4686-8a0f-0f095c78d1cb",
+        "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "25464711-5520-4578-a3f8-67e03427a023",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0007",
+        "ticket_id": "ba66f040-7956-4686-8a0f-0f095c78d1cb",
+        "title": "Diagnostic - Engine no-start after overnight park",
+        "severity": 4,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "dd07b9e1-6813-4553-8953-2e6c33e83121",
+        "assigned_technician": 38,
+        "fault_code": "FC-START-090",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x15 efficiency series (2024). Recommended first actions: confirm fault code FC-START-090, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Fuel delivery pressure drops off due to injector leak-back or rail pressure loss",
+        "description": "Initial diagnostic triage for engine no-start after overnight park. Inspection focused on x15 efficiency series (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit; verify repair against fault code FC-START-090; complete final operational validation before release.",
+        "confidence_score": 0.71,
+        "identified_at": "2026-02-16T15:30:00Z",
+        "created_at": "2026-02-16T15:35:00Z",
+        "resolved_at": "2026-02-17T00:38:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 73,
+        "performed_by": "mason.hughes"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 16,
+      "fields": {
+        "diagnosticreport": "25464711-5520-4578-a3f8-67e03427a023",
+        "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 17,
+      "fields": {
+        "diagnosticreport": "25464711-5520-4578-a3f8-67e03427a023",
+        "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "da22ba1e-5a62-4942-93f0-2f699fe3f83e",
+      "fields": {
+        "created_by": "c038cca0-fde0-4008-bc9a-bfcf18eb5b7f",
+        "diagnostics_id": "INDY-SR-2026-0007",
+        "ticket_id": "ba66f040-7956-4686-8a0f-0f095c78d1cb",
+        "title": "Staff Intake - Engine no-start after overnight park",
+        "severity": 4,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "dd07b9e1-6813-4553-8953-2e6c33e83121",
+        "fault_code": "FC-START-090",
+        "component": null,
+        "probable_cause": "Fuel delivery pressure drops off due to injector leak-back or rail pressure loss",
+        "description": "Front-office and service intake notes captured for engine no-start after overnight park.",
+        "created_at": "2026-02-16T15:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 40,
+        "performed_by": "zachary.ross"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 13,
+      "fields": {
+        "staffreport": "da22ba1e-5a62-4942-93f0-2f699fe3f83e",
+        "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 14,
+      "fields": {
+        "staffreport": "da22ba1e-5a62-4942-93f0-2f699fe3f83e",
+        "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "8abcc75f-4270-43c1-8a04-cd11aef8bf6c",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0008",
+        "customer": "9ede28af-e7a3-4c71-b7eb-213814c3fda4",
+        "assigned_technician": 40,
+        "specialization": "engine",
+        "title": "Reduced fuel economy on regional delivery route",
+        "description": "Fleet manager reports a 9 percent fuel economy drop over the last two weeks. Station intake routed through Indianapolis Service Station.",
+        "severity": 2,
+        "status": "completed",
+        "customer_satisfaction_rating": 4.3,
+        "estimated_resolution_time_minutes": 165,
+        "predicted_commute_time_minutes": 65,
+        "actual_resolution_time_minutes": 174,
+        "predicted_resolution_summary": "Likely engine service case involving x15 performance series (2024). Recommended first actions: confirm fault code FC-EFF-207, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "amber.cooper",
+        "priority": 2,
+        "issue_description": "Fleet manager reports a 9 percent fuel economy drop over the last two weeks.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-EFF-207",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Performance Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-EFF-207",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Performance Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-17T16:00:00Z",
+        "assigned_at": "2026-02-17T18:00:00Z",
+        "resolved_at": "2026-02-18T02:41:00Z",
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 18,
+      "fields": {
+        "ticket": "8abcc75f-4270-43c1-8a04-cd11aef8bf6c",
+        "part": "47375f66-2836-4862-81cb-244bc1cd425f"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 19,
+      "fields": {
+        "ticket": "8abcc75f-4270-43c1-8a04-cd11aef8bf6c",
+        "part": "c6f283b9-bb11-4c97-b525-e4add1e20421"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 20,
+      "fields": {
+        "ticket": "8abcc75f-4270-43c1-8a04-cd11aef8bf6c",
+        "part": "ba52cec8-130c-4202-a2e4-693468ad7aa0"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "8bbbe5d2-165e-49a9-a0c4-7072a356ec3b",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0008",
+        "ticket_id": "8abcc75f-4270-43c1-8a04-cd11aef8bf6c",
+        "title": "Diagnostic - Reduced fuel economy on regional delivery route",
+        "severity": 2,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "9ede28af-e7a3-4c71-b7eb-213814c3fda4",
+        "assigned_technician": 40,
+        "fault_code": "FC-EFF-207",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x15 performance series (2024). Recommended first actions: confirm fault code FC-EFF-207, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Fueling efficiency degraded by injector spray pattern drift",
+        "description": "Initial diagnostic triage for reduced fuel economy on regional delivery route. Inspection focused on x15 performance series (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit, oil filter service kit; verify repair against fault code FC-EFF-207; complete final operational validation before release.",
+        "confidence_score": 0.75,
+        "identified_at": "2026-02-17T16:30:00Z",
+        "created_at": "2026-02-17T16:35:00Z",
+        "resolved_at": "2026-02-18T02:41:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 91,
+        "performed_by": "owen.reed"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 18,
+      "fields": {
+        "diagnosticreport": "8bbbe5d2-165e-49a9-a0c4-7072a356ec3b",
+        "part": "47375f66-2836-4862-81cb-244bc1cd425f"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 19,
+      "fields": {
+        "diagnosticreport": "8bbbe5d2-165e-49a9-a0c4-7072a356ec3b",
+        "part": "c6f283b9-bb11-4c97-b525-e4add1e20421"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 20,
+      "fields": {
+        "diagnosticreport": "8bbbe5d2-165e-49a9-a0c4-7072a356ec3b",
+        "part": "ba52cec8-130c-4202-a2e4-693468ad7aa0"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "13f7461f-7687-4868-8127-6895c28ff851",
+      "fields": {
+        "created_by": "afdf587d-704d-4f4e-8d88-ceebe0b7955f",
+        "diagnostics_id": "INDY-SR-2026-0008",
+        "ticket_id": "8abcc75f-4270-43c1-8a04-cd11aef8bf6c",
+        "title": "Staff Intake - Reduced fuel economy on regional delivery route",
+        "severity": 2,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "9ede28af-e7a3-4c71-b7eb-213814c3fda4",
+        "fault_code": "FC-EFF-207",
+        "component": null,
+        "probable_cause": "Fueling efficiency degraded by injector spray pattern drift",
+        "description": "Front-office and service intake notes captured for reduced fuel economy on regional delivery route.",
+        "created_at": "2026-02-17T16:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 50,
+        "performed_by": "amber.cooper"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 15,
+      "fields": {
+        "staffreport": "13f7461f-7687-4868-8127-6895c28ff851",
+        "part": "47375f66-2836-4862-81cb-244bc1cd425f"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 16,
+      "fields": {
+        "staffreport": "13f7461f-7687-4868-8127-6895c28ff851",
+        "part": "c6f283b9-bb11-4c97-b525-e4add1e20421"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "0d7f2fea-6fd7-4d5c-8a69-3ad378428718",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0009",
+        "customer": "e0abc353-ba81-4e6f-b486-7e5dc17246e7",
+        "assigned_technician": 42,
+        "specialization": "engine",
+        "title": "Surging during PTO operation",
+        "description": "Engine rpm oscillates while operating PTO-driven auxiliary equipment. Station intake routed through Indianapolis Service Station.",
+        "severity": 3,
+        "status": "awaiting_approval",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 190,
+        "predicted_commute_time_minutes": 35,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely engine service case involving x15 productivity series (2024). Recommended first actions: confirm fault code FC-PTO-336, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "blake.edwards",
+        "priority": 3,
+        "issue_description": "Engine rpm oscillates while operating PTO-driven auxiliary equipment.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-PTO-336",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Productivity Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-PTO-336",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X15 Productivity Series (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 4
+        },
+        "created_at": "2026-02-18T17:00:00Z",
+        "assigned_at": "2026-02-18T19:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 21,
+      "fields": {
+        "ticket": "0d7f2fea-6fd7-4d5c-8a69-3ad378428718",
+        "part": "2e8a5695-dc55-4c3c-9a98-cdf2ec8532c1"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 22,
+      "fields": {
+        "ticket": "0d7f2fea-6fd7-4d5c-8a69-3ad378428718",
+        "part": "e8111cdc-d196-438a-8e75-e2dc9430b839"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "9835f1e7-aa47-4369-bcbb-c4a329f97312",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0009",
+        "ticket_id": "0d7f2fea-6fd7-4d5c-8a69-3ad378428718",
+        "title": "Diagnostic - Surging during PTO operation",
+        "severity": 3,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "e0abc353-ba81-4e6f-b486-7e5dc17246e7",
+        "assigned_technician": 42,
+        "fault_code": "FC-PTO-336",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x15 productivity series (2024). Recommended first actions: confirm fault code FC-PTO-336, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Control instability from inconsistent fuel delivery under variable load",
+        "description": "Initial diagnostic triage for surging during pto operation. Inspection focused on x15 productivity series (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit; verify repair against fault code FC-PTO-336; complete final operational validation before release.",
+        "confidence_score": 0.79,
+        "identified_at": "2026-02-18T17:30:00Z",
+        "created_at": "2026-02-18T17:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": true,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 109,
+        "performed_by": "quentin.long"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 21,
+      "fields": {
+        "diagnosticreport": "9835f1e7-aa47-4369-bcbb-c4a329f97312",
+        "part": "2e8a5695-dc55-4c3c-9a98-cdf2ec8532c1"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 22,
+      "fields": {
+        "diagnosticreport": "9835f1e7-aa47-4369-bcbb-c4a329f97312",
+        "part": "e8111cdc-d196-438a-8e75-e2dc9430b839"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "6ce17908-f005-49f7-a46a-2e61c16182c1",
+      "fields": {
+        "created_by": "14a4f2b0-9b2d-4367-b8f9-30be0a20c440",
+        "diagnostics_id": "INDY-SR-2026-0009",
+        "ticket_id": "0d7f2fea-6fd7-4d5c-8a69-3ad378428718",
+        "title": "Staff Intake - Surging during PTO operation",
+        "severity": 3,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "e0abc353-ba81-4e6f-b486-7e5dc17246e7",
+        "fault_code": "FC-PTO-336",
+        "component": null,
+        "probable_cause": "Control instability from inconsistent fuel delivery under variable load",
+        "description": "Front-office and service intake notes captured for surging during pto operation.",
+        "created_at": "2026-02-18T17:10:00Z",
+        "requires_follow_up": true,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 20,
+        "performed_by": "blake.edwards"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 17,
+      "fields": {
+        "staffreport": "6ce17908-f005-49f7-a46a-2e61c16182c1",
+        "part": "2e8a5695-dc55-4c3c-9a98-cdf2ec8532c1"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 18,
+      "fields": {
+        "staffreport": "6ce17908-f005-49f7-a46a-2e61c16182c1",
+        "part": "e8111cdc-d196-438a-8e75-e2dc9430b839"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "4d654caa-a686-424b-ba20-b8f6a1907a4f",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0010",
+        "customer": "04251fb1-1b34-423b-853f-c5a6c5f12664",
+        "assigned_technician": 44,
+        "specialization": "engine",
+        "title": "Oil seepage observed around service housing",
+        "description": "Light oil residue noted around filter service area during routine inspection. Station intake routed through Indianapolis Service Station.",
+        "severity": 1,
+        "status": "in_progress",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 215,
+        "predicted_commute_time_minutes": 45,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely engine service case involving x12 (2024). Recommended first actions: confirm fault code FC-LUBE-155, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "chloe.morris",
+        "priority": 1,
+        "issue_description": "Light oil residue noted around filter service area during routine inspection.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-LUBE-155",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-LUBE-155",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 3
+        },
+        "created_at": "2026-02-19T18:00:00Z",
+        "assigned_at": "2026-02-19T20:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 23,
+      "fields": {
+        "ticket": "4d654caa-a686-424b-ba20-b8f6a1907a4f",
+        "part": "6b1faf7d-dccc-44ad-bf7d-e39f2a5b8c4f"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 24,
+      "fields": {
+        "ticket": "4d654caa-a686-424b-ba20-b8f6a1907a4f",
+        "part": "dda9e50f-dd3b-478a-a022-0262eaa2f204"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 25,
+      "fields": {
+        "ticket": "4d654caa-a686-424b-ba20-b8f6a1907a4f",
+        "part": "059dd27d-1254-4899-8f48-685720564c18"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "47e66e52-405c-48ec-b03a-060edabc1e19",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0010",
+        "ticket_id": "4d654caa-a686-424b-ba20-b8f6a1907a4f",
+        "title": "Diagnostic - Oil seepage observed around service housing",
+        "severity": 1,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "senior",
+        "customer": "04251fb1-1b34-423b-853f-c5a6c5f12664",
+        "assigned_technician": 44,
+        "fault_code": "FC-LUBE-155",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x12 (2024). Recommended first actions: confirm fault code FC-LUBE-155, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Filter housing seal degradation or improper service torque",
+        "description": "Initial diagnostic triage for oil seepage observed around service housing. Inspection focused on x12 (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit, oil filter service kit; verify repair against fault code FC-LUBE-155; complete final operational validation before release.",
+        "confidence_score": 0.83,
+        "identified_at": "2026-02-19T18:30:00Z",
+        "created_at": "2026-02-19T18:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 127,
+        "performed_by": "sophia.bryant"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 23,
+      "fields": {
+        "diagnosticreport": "47e66e52-405c-48ec-b03a-060edabc1e19",
+        "part": "6b1faf7d-dccc-44ad-bf7d-e39f2a5b8c4f"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 24,
+      "fields": {
+        "diagnosticreport": "47e66e52-405c-48ec-b03a-060edabc1e19",
+        "part": "dda9e50f-dd3b-478a-a022-0262eaa2f204"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 25,
+      "fields": {
+        "diagnosticreport": "47e66e52-405c-48ec-b03a-060edabc1e19",
+        "part": "059dd27d-1254-4899-8f48-685720564c18"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "d4ecded6-74be-451b-9d8f-66c82b6376cf",
+      "fields": {
+        "created_by": "6f327e83-b254-45a5-84d1-23dece64b70e",
+        "diagnostics_id": "INDY-SR-2026-0010",
+        "ticket_id": "4d654caa-a686-424b-ba20-b8f6a1907a4f",
+        "title": "Staff Intake - Oil seepage observed around service housing",
+        "severity": 1,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "04251fb1-1b34-423b-853f-c5a6c5f12664",
+        "fault_code": "FC-LUBE-155",
+        "component": null,
+        "probable_cause": "Filter housing seal degradation or improper service torque",
+        "description": "Front-office and service intake notes captured for oil seepage observed around service housing.",
+        "created_at": "2026-02-19T18:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 30,
+        "performed_by": "chloe.morris"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 19,
+      "fields": {
+        "staffreport": "d4ecded6-74be-451b-9d8f-66c82b6376cf",
+        "part": "6b1faf7d-dccc-44ad-bf7d-e39f2a5b8c4f"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 20,
+      "fields": {
+        "staffreport": "d4ecded6-74be-451b-9d8f-66c82b6376cf",
+        "part": "dda9e50f-dd3b-478a-a022-0262eaa2f204"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "b4639725-9ce5-4be5-9afd-3a60d8649fd3",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0011",
+        "customer": "1b05900a-da52-4202-8866-ae4be93a0be7",
+        "assigned_technician": 26,
+        "specialization": "engine",
+        "title": "Loss of acceleration after highway merge",
+        "description": "Driver reports sluggish throttle response and delayed power delivery after long pulls. Station intake routed through Indianapolis Service Station.",
+        "severity": 3,
+        "status": "closed",
+        "customer_satisfaction_rating": 3.8,
+        "estimated_resolution_time_minutes": 240,
+        "predicted_commute_time_minutes": 55,
+        "actual_resolution_time_minutes": 225,
+        "predicted_resolution_summary": "Likely engine service case involving x12 for heavy-duty truck (2024). Recommended first actions: confirm fault code FC-AIR-261, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "tanya.wells",
+        "priority": 3,
+        "issue_description": "Driver reports sluggish throttle response and delayed power delivery after long pulls.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-AIR-261",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 for Heavy-duty Truck (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-AIR-261",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 for Heavy-duty Truck (2024)",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-20T14:00:00Z",
+        "assigned_at": "2026-02-20T16:00:00Z",
+        "resolved_at": "2026-02-20T23:50:00Z",
+        "closed_at": "2026-02-21T11:50:00Z",
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 26,
+      "fields": {
+        "ticket": "b4639725-9ce5-4be5-9afd-3a60d8649fd3",
+        "part": "829845de-23c4-4dd1-adfb-75305df2120e"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 27,
+      "fields": {
+        "ticket": "b4639725-9ce5-4be5-9afd-3a60d8649fd3",
+        "part": "32ac47dd-6abd-4b9f-9555-552515662314"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "3e5a4cb0-26b5-4be3-bf84-e3b992f8b1b1",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0011",
+        "ticket_id": "b4639725-9ce5-4be5-9afd-3a60d8649fd3",
+        "title": "Diagnostic - Loss of acceleration after highway merge",
+        "severity": 3,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "junior",
+        "customer": "1b05900a-da52-4202-8866-ae4be93a0be7",
+        "assigned_technician": 26,
+        "fault_code": "FC-AIR-261",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x12 for heavy-duty truck (2024). Recommended first actions: confirm fault code FC-AIR-261, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Turbocharger response lag due to vane control contamination",
+        "description": "Initial diagnostic triage for loss of acceleration after highway merge. Inspection focused on x12 for heavy-duty truck (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit; verify repair against fault code FC-AIR-261; complete final operational validation before release.",
+        "confidence_score": 0.87,
+        "identified_at": "2026-02-20T14:30:00Z",
+        "created_at": "2026-02-20T14:35:00Z",
+        "resolved_at": "2026-02-20T23:50:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": true,
+        "diagnostic_duration_minutes": 55,
+        "performed_by": "aaron.mitchell"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 26,
+      "fields": {
+        "diagnosticreport": "3e5a4cb0-26b5-4be3-bf84-e3b992f8b1b1",
+        "part": "829845de-23c4-4dd1-adfb-75305df2120e"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 27,
+      "fields": {
+        "diagnosticreport": "3e5a4cb0-26b5-4be3-bf84-e3b992f8b1b1",
+        "part": "32ac47dd-6abd-4b9f-9555-552515662314"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "a9f388c5-1bbd-4fbe-a296-abd689a48541",
+      "fields": {
+        "created_by": "e28813b3-f0d6-43c4-b302-04cfee3183c0",
+        "diagnostics_id": "INDY-SR-2026-0011",
+        "ticket_id": "b4639725-9ce5-4be5-9afd-3a60d8649fd3",
+        "title": "Staff Intake - Loss of acceleration after highway merge",
+        "severity": 3,
+        "status": "resolved",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "1b05900a-da52-4202-8866-ae4be93a0be7",
+        "fault_code": "FC-AIR-261",
+        "component": null,
+        "probable_cause": "Turbocharger response lag due to vane control contamination",
+        "description": "Front-office and service intake notes captured for loss of acceleration after highway merge.",
+        "created_at": "2026-02-20T14:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": true,
+        "diagnostic_duration_minutes": 40,
+        "performed_by": "tanya.wells"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 21,
+      "fields": {
+        "staffreport": "a9f388c5-1bbd-4fbe-a296-abd689a48541",
+        "part": "829845de-23c4-4dd1-adfb-75305df2120e"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 22,
+      "fields": {
+        "staffreport": "a9f388c5-1bbd-4fbe-a296-abd689a48541",
+        "part": "32ac47dd-6abd-4b9f-9555-552515662314"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "9c8b13b8-cf2f-41dd-987f-7b52626f2684",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0012",
+        "customer": "21c0342c-7e10-487b-81d6-5a24971ab32a",
+        "assigned_technician": 28,
+        "specialization": "engine",
+        "title": "Engine protection shutdown after warning sequence",
+        "description": "Unit recorded multiple warnings before auto shutdown at a customer job site. Station intake routed through Indianapolis Service Station.",
+        "severity": 4,
+        "status": "assigned",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 265,
+        "predicted_commute_time_minutes": 65,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely engine service case involving x12 for motorhome and rv (2024). Recommended first actions: confirm fault code FC-PROT-601, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "umar.ali",
+        "priority": 4,
+        "issue_description": "Unit recorded multiple warnings before auto shutdown at a customer job site.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-PROT-601",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 for Motorhome and RV (2024)",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-PROT-601",
+            "done": true
+          },
+          {
+            "task": "Inspect component: X12 for Motorhome and RV (2024)",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 2
+        },
+        "created_at": "2026-02-21T15:00:00Z",
+        "assigned_at": "2026-02-21T17:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 28,
+      "fields": {
+        "ticket": "9c8b13b8-cf2f-41dd-987f-7b52626f2684",
+        "part": "65b5d867-c7c2-42bd-85d8-b8654be7ba90"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 29,
+      "fields": {
+        "ticket": "9c8b13b8-cf2f-41dd-987f-7b52626f2684",
+        "part": "79fab406-3a08-470f-be9b-c05217e278cb"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 30,
+      "fields": {
+        "ticket": "9c8b13b8-cf2f-41dd-987f-7b52626f2684",
+        "part": "40aa03d1-9700-4f0d-80aa-d5d47b565058"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "a21c21bf-5f22-45de-ad5a-5d24d6d30c96",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0012",
+        "ticket_id": "9c8b13b8-cf2f-41dd-987f-7b52626f2684",
+        "title": "Diagnostic - Engine protection shutdown after warning sequence",
+        "severity": 4,
+        "status": "pending",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "21c0342c-7e10-487b-81d6-5a24971ab32a",
+        "assigned_technician": 28,
+        "fault_code": "FC-PROT-601",
+        "component": null,
+        "ai_summary": "Likely engine service case involving x12 for motorhome and rv (2024). Recommended first actions: confirm fault code FC-PROT-601, inspect turbocharger assembly, fuel injector kit, and validate system response under load.",
+        "probable_cause": "Critical lubrication or fueling issue caused protective shutdown",
+        "description": "Initial diagnostic triage for engine protection shutdown after warning sequence. Inspection focused on x12 for motorhome and rv (2024) and associated service parts.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit, oil filter service kit; verify repair against fault code FC-PROT-601; complete final operational validation before release.",
+        "confidence_score": 0.91,
+        "identified_at": "2026-02-21T15:30:00Z",
+        "created_at": "2026-02-21T15:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 73,
+        "performed_by": "caleb.turner"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 28,
+      "fields": {
+        "diagnosticreport": "a21c21bf-5f22-45de-ad5a-5d24d6d30c96",
+        "part": "65b5d867-c7c2-42bd-85d8-b8654be7ba90"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 29,
+      "fields": {
+        "diagnosticreport": "a21c21bf-5f22-45de-ad5a-5d24d6d30c96",
+        "part": "79fab406-3a08-470f-be9b-c05217e278cb"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 30,
+      "fields": {
+        "diagnosticreport": "a21c21bf-5f22-45de-ad5a-5d24d6d30c96",
+        "part": "40aa03d1-9700-4f0d-80aa-d5d47b565058"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport",
+      "pk": "6ea686a9-9240-4d7e-901a-517eb7bccdec",
+      "fields": {
+        "created_by": "a4ac3862-aea2-43aa-a5cd-c193c7c4a0c5",
+        "diagnostics_id": "INDY-SR-2026-0012",
+        "ticket_id": "9c8b13b8-cf2f-41dd-987f-7b52626f2684",
+        "title": "Staff Intake - Engine protection shutdown after warning sequence",
+        "severity": 4,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "mid",
+        "customer": "21c0342c-7e10-487b-81d6-5a24971ab32a",
+        "fault_code": "FC-PROT-601",
+        "component": null,
+        "probable_cause": "Critical lubrication or fueling issue caused protective shutdown",
+        "description": "Front-office and service intake notes captured for engine protection shutdown after warning sequence.",
+        "created_at": "2026-02-21T15:10:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 50,
+        "performed_by": "umar.ali"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 23,
+      "fields": {
+        "staffreport": "6ea686a9-9240-4d7e-901a-517eb7bccdec",
+        "part": "65b5d867-c7c2-42bd-85d8-b8654be7ba90"
+      }
+    },
+    {
+      "model": "diagnostics.staffreport_parts",
+      "pk": 24,
+      "fields": {
+        "staffreport": "6ea686a9-9240-4d7e-901a-517eb7bccdec",
+        "part": "79fab406-3a08-470f-be9b-c05217e278cb"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "fcdb499e-7ec4-454c-a263-ca93d466bcd3",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0013",
+        "customer": "bb67f912-1bee-4331-bb44-29a49316e45e",
+        "assigned_technician": 33,
+        "specialization": "electrical",
+        "title": "Battery pack state-of-charge mismatch alert",
+        "description": "Battery system reports uneven module balance during startup diagnostics. Station intake routed through Indianapolis Service Station.",
+        "severity": 3,
+        "status": "completed",
+        "customer_satisfaction_rating": 4.3,
+        "estimated_resolution_time_minutes": 140,
+        "predicted_commute_time_minutes": 35,
+        "actual_resolution_time_minutes": 149,
+        "predicted_resolution_summary": "Likely electrical service case involving battery systems. Recommended first actions: confirm fault code FC-BATT-411, inspect lithium battery module 48v, battery management controller, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "victoria.king",
+        "priority": 3,
+        "issue_description": "Battery system reports uneven module balance during startup diagnostics.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-BATT-411",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Battery systems",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-BATT-411",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Battery systems",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "electrical_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-22T16:00:00Z",
+        "assigned_at": "2026-02-22T18:00:00Z",
+        "resolved_at": "2026-02-22T23:56:00Z",
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 31,
+      "fields": {
+        "ticket": "fcdb499e-7ec4-454c-a263-ca93d466bcd3",
+        "part": "b1111111-1111-4111-8111-111111111111"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 32,
+      "fields": {
+        "ticket": "fcdb499e-7ec4-454c-a263-ca93d466bcd3",
+        "part": "b1111111-1111-4111-8111-222222222222"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "acfda311-bb10-4821-a2a2-d1998611f6ab",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0013",
+        "ticket_id": "fcdb499e-7ec4-454c-a263-ca93d466bcd3",
+        "title": "Diagnostic - Battery pack state-of-charge mismatch alert",
+        "severity": 3,
+        "status": "resolved",
+        "specialization": "electrical",
+        "expertise_requirement": "mid",
+        "customer": "bb67f912-1bee-4331-bb44-29a49316e45e",
+        "assigned_technician": 33,
+        "fault_code": "FC-BATT-411",
+        "component": null,
+        "ai_summary": "Likely electrical service case involving battery systems. Recommended first actions: confirm fault code FC-BATT-411, inspect lithium battery module 48v, battery management controller, and validate system response under load.",
+        "probable_cause": "Module voltage drift or balancing controller inconsistency",
+        "description": "Initial diagnostic triage for battery pack state-of-charge mismatch alert. Inspection focused on battery systems and associated service parts.",
+        "recommended_actions": "Inspect and test lithium battery module 48v, battery management controller; verify repair against fault code FC-BATT-411; complete final operational validation before release.",
+        "confidence_score": 0.71,
+        "identified_at": "2026-02-22T16:30:00Z",
+        "created_at": "2026-02-22T16:35:00Z",
+        "resolved_at": "2026-02-22T23:56:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 91,
+        "performed_by": "hannah.simmons"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 31,
+      "fields": {
+        "diagnosticreport": "acfda311-bb10-4821-a2a2-d1998611f6ab",
+        "part": "b1111111-1111-4111-8111-111111111111"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 32,
+      "fields": {
+        "diagnosticreport": "acfda311-bb10-4821-a2a2-d1998611f6ab",
+        "part": "b1111111-1111-4111-8111-222222222222"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "917b141d-3bc9-4897-85af-3b6b30eff36f",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0014",
+        "customer": "715e1569-d54d-414b-9478-1c903ffec0fe",
+        "assigned_technician": 35,
+        "specialization": "electrical",
+        "title": "High voltage isolation fault on startup",
+        "description": "Vehicle blocks drive enable because insulation resistance test fails intermittently. Station intake routed through Indianapolis Service Station.",
+        "severity": 4,
+        "status": "closed",
+        "customer_satisfaction_rating": 4.5,
+        "estimated_resolution_time_minutes": 165,
+        "predicted_commute_time_minutes": 45,
+        "actual_resolution_time_minutes": 186,
+        "predicted_resolution_summary": "Likely electrical service case involving fuel cells. Recommended first actions: confirm fault code FC-HV-204, inspect hydrogen fuel cell stack 90kw, fuel cell air compressor, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "will.harper",
+        "priority": 4,
+        "issue_description": "Vehicle blocks drive enable because insulation resistance test fails intermittently.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-HV-204",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Fuel cells",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-HV-204",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Fuel cells",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "electrical_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-23T17:00:00Z",
+        "assigned_at": "2026-02-23T19:00:00Z",
+        "resolved_at": "2026-02-24T01:59:00Z",
+        "closed_at": "2026-02-24T13:59:00Z",
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 33,
+      "fields": {
+        "ticket": "917b141d-3bc9-4897-85af-3b6b30eff36f",
+        "part": "c2222222-2222-4222-8222-111111111111"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 34,
+      "fields": {
+        "ticket": "917b141d-3bc9-4897-85af-3b6b30eff36f",
+        "part": "c2222222-2222-4222-8222-222222222222"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 35,
+      "fields": {
+        "ticket": "917b141d-3bc9-4897-85af-3b6b30eff36f",
+        "part": "c2222222-2222-4222-8222-333333333333"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "72bfa60b-299e-407f-88ba-c525f4465f93",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0014",
+        "ticket_id": "917b141d-3bc9-4897-85af-3b6b30eff36f",
+        "title": "Diagnostic - High voltage isolation fault on startup",
+        "severity": 4,
+        "status": "resolved",
+        "specialization": "electrical",
+        "expertise_requirement": "senior",
+        "customer": "715e1569-d54d-414b-9478-1c903ffec0fe",
+        "assigned_technician": 35,
+        "fault_code": "FC-HV-204",
+        "component": null,
+        "ai_summary": "Likely electrical service case involving fuel cells. Recommended first actions: confirm fault code FC-HV-204, inspect hydrogen fuel cell stack 90kw, fuel cell air compressor, and validate system response under load.",
+        "probable_cause": "Insulation degradation or moisture intrusion in HV path",
+        "description": "Initial diagnostic triage for high voltage isolation fault on startup. Inspection focused on fuel cells and associated service parts.",
+        "recommended_actions": "Inspect and test hydrogen fuel cell stack 90kw, fuel cell air compressor, fuel cell humidifier unit; verify repair against fault code FC-HV-204; complete final operational validation before release.",
+        "confidence_score": 0.75,
+        "identified_at": "2026-02-23T17:30:00Z",
+        "created_at": "2026-02-23T17:35:00Z",
+        "resolved_at": "2026-02-24T01:59:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 109,
+        "performed_by": "jade.morgan"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 33,
+      "fields": {
+        "diagnosticreport": "72bfa60b-299e-407f-88ba-c525f4465f93",
+        "part": "c2222222-2222-4222-8222-111111111111"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 34,
+      "fields": {
+        "diagnosticreport": "72bfa60b-299e-407f-88ba-c525f4465f93",
+        "part": "c2222222-2222-4222-8222-222222222222"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 35,
+      "fields": {
+        "diagnosticreport": "72bfa60b-299e-407f-88ba-c525f4465f93",
+        "part": "c2222222-2222-4222-8222-333333333333"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "59f02ddb-3737-4757-ac69-62ff542276d0",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0015",
+        "customer": "1359e3ed-2724-4340-9a82-1a4ceeea633f",
+        "assigned_technician": 37,
+        "specialization": "electrical",
+        "title": "Fuel cell power output drops under load",
+        "description": "Hydrogen power module output falls below target during peak demand windows. Station intake routed through Indianapolis Service Station.",
+        "severity": 4,
+        "status": "awaiting_parts",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 190,
+        "predicted_commute_time_minutes": 55,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely electrical service case involving epowertrain systems. Recommended first actions: confirm fault code FC-FCELL-330, inspect electric drive axle assembly, traction motor 3-phase, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "xavier.scott",
+        "priority": 4,
+        "issue_description": "Hydrogen power module output falls below target during peak demand windows.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-FCELL-330",
+            "done": true
+          },
+          {
+            "task": "Inspect component: ePowertrain systems",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-FCELL-330",
+            "done": true
+          },
+          {
+            "task": "Inspect component: ePowertrain systems",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "electrical_field_service_v1",
+          "completed_steps": 4
+        },
+        "created_at": "2026-02-24T18:00:00Z",
+        "assigned_at": "2026-02-24T20:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 36,
+      "fields": {
+        "ticket": "59f02ddb-3737-4757-ac69-62ff542276d0",
+        "part": "d3333333-3333-4333-8333-111111111111"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 37,
+      "fields": {
+        "ticket": "59f02ddb-3737-4757-ac69-62ff542276d0",
+        "part": "d3333333-3333-4333-8333-222222222222"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "8d0f1465-e1a6-4359-b924-2e5b36a7d99b",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0015",
+        "ticket_id": "59f02ddb-3737-4757-ac69-62ff542276d0",
+        "title": "Diagnostic - Fuel cell power output drops under load",
+        "severity": 4,
+        "status": "in_progress",
+        "specialization": "electrical",
+        "expertise_requirement": "mid",
+        "customer": "1359e3ed-2724-4340-9a82-1a4ceeea633f",
+        "assigned_technician": 37,
+        "fault_code": "FC-FCELL-330",
+        "component": null,
+        "ai_summary": "Likely electrical service case involving epowertrain systems. Recommended first actions: confirm fault code FC-FCELL-330, inspect electric drive axle assembly, traction motor 3-phase, and validate system response under load.",
+        "probable_cause": "Airflow or humidification support equipment not meeting demand",
+        "description": "Initial diagnostic triage for fuel cell power output drops under load. Inspection focused on epowertrain systems and associated service parts.",
+        "recommended_actions": "Inspect and test electric drive axle assembly, traction motor 3-phase; verify repair against fault code FC-FCELL-330; complete final operational validation before release.",
+        "confidence_score": 0.79,
+        "identified_at": "2026-02-24T18:30:00Z",
+        "created_at": "2026-02-24T18:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": true,
+        "repeat_issue": true,
+        "diagnostic_duration_minutes": 127,
+        "performed_by": "lila.parker"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 36,
+      "fields": {
+        "diagnosticreport": "8d0f1465-e1a6-4359-b924-2e5b36a7d99b",
+        "part": "d3333333-3333-4333-8333-111111111111"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 37,
+      "fields": {
+        "diagnosticreport": "8d0f1465-e1a6-4359-b924-2e5b36a7d99b",
+        "part": "d3333333-3333-4333-8333-222222222222"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "a6fb819b-b204-4b94-af4c-95e2b683b9ad",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0016",
+        "customer": "1fffb538-de12-43c8-8f04-5d63efc9a5b8",
+        "assigned_technician": 39,
+        "specialization": "electrical",
+        "title": "Inverter thermal warning in urban duty cycle",
+        "description": "Inverter temperature rises rapidly during repeated acceleration and regen events. Station intake routed through Indianapolis Service Station.",
+        "severity": 3,
+        "status": "in_progress",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 215,
+        "predicted_commute_time_minutes": 65,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely electrical service case involving electrolyzers. Recommended first actions: confirm fault code FC-INVT-152, inspect electrolyzer cell stack, electrolyzer power supply unit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "yasmin.hall",
+        "priority": 3,
+        "issue_description": "Inverter temperature rises rapidly during repeated acceleration and regen events.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-INVT-152",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Electrolyzers",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-INVT-152",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Electrolyzers",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "electrical_field_service_v1",
+          "completed_steps": 3
+        },
+        "created_at": "2026-02-25T14:00:00Z",
+        "assigned_at": "2026-02-25T16:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 38,
+      "fields": {
+        "ticket": "a6fb819b-b204-4b94-af4c-95e2b683b9ad",
+        "part": "e4444444-4444-4444-8444-111111111111"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 39,
+      "fields": {
+        "ticket": "a6fb819b-b204-4b94-af4c-95e2b683b9ad",
+        "part": "e4444444-4444-4444-8444-222222222222"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 40,
+      "fields": {
+        "ticket": "a6fb819b-b204-4b94-af4c-95e2b683b9ad",
+        "part": "e4444444-4444-4444-8444-333333333333"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "8279e1ce-4037-4405-b183-0696e3f7087c",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0016",
+        "ticket_id": "a6fb819b-b204-4b94-af4c-95e2b683b9ad",
+        "title": "Diagnostic - Inverter thermal warning in urban duty cycle",
+        "severity": 3,
+        "status": "in_progress",
+        "specialization": "electrical",
+        "expertise_requirement": "mid",
+        "customer": "1fffb538-de12-43c8-8f04-5d63efc9a5b8",
+        "assigned_technician": 39,
+        "fault_code": "FC-INVT-152",
+        "component": null,
+        "ai_summary": "Likely electrical service case involving electrolyzers. Recommended first actions: confirm fault code FC-INVT-152, inspect electrolyzer cell stack, electrolyzer power supply unit, and validate system response under load.",
+        "probable_cause": "Cooling inefficiency or control derating under thermal load",
+        "description": "Initial diagnostic triage for inverter thermal warning in urban duty cycle. Inspection focused on electrolyzers and associated service parts.",
+        "recommended_actions": "Inspect and test electrolyzer cell stack, electrolyzer power supply unit, water purification module; verify repair against fault code FC-INVT-152; complete final operational validation before release.",
+        "confidence_score": 0.83,
+        "identified_at": "2026-02-25T14:30:00Z",
+        "created_at": "2026-02-25T14:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 55,
+        "performed_by": "nora.bailey"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 38,
+      "fields": {
+        "diagnosticreport": "8279e1ce-4037-4405-b183-0696e3f7087c",
+        "part": "e4444444-4444-4444-8444-111111111111"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 39,
+      "fields": {
+        "diagnosticreport": "8279e1ce-4037-4405-b183-0696e3f7087c",
+        "part": "e4444444-4444-4444-8444-222222222222"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 40,
+      "fields": {
+        "diagnosticreport": "8279e1ce-4037-4405-b183-0696e3f7087c",
+        "part": "e4444444-4444-4444-8444-333333333333"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "580b5af1-d011-460c-bdf2-0c7219d0e57c",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0017",
+        "customer": "151ea822-5757-4f0f-80ae-733156c1d7d5",
+        "assigned_technician": 41,
+        "specialization": "electrical",
+        "title": "Hydrogen leak detector alarm in service bay",
+        "description": "Leak alarm triggered during post-maintenance restart sequence. Station intake routed through Indianapolis Service Station.",
+        "severity": 4,
+        "status": "completed",
+        "customer_satisfaction_rating": 4.0,
+        "estimated_resolution_time_minutes": 240,
+        "predicted_commute_time_minutes": 35,
+        "actual_resolution_time_minutes": 237,
+        "predicted_resolution_summary": "Likely electrical service case involving battery systems. Recommended first actions: confirm fault code FC-H2-088, inspect lithium battery module 48v, battery management controller, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "zachary.ross",
+        "priority": 4,
+        "issue_description": "Leak alarm triggered during post-maintenance restart sequence.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-H2-088",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Battery systems",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-H2-088",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Battery systems",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "electrical_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-26T15:00:00Z",
+        "assigned_at": "2026-02-26T17:00:00Z",
+        "resolved_at": "2026-02-26T23:08:00Z",
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 41,
+      "fields": {
+        "ticket": "580b5af1-d011-460c-bdf2-0c7219d0e57c",
+        "part": "b1111111-1111-4111-8111-111111111111"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 42,
+      "fields": {
+        "ticket": "580b5af1-d011-460c-bdf2-0c7219d0e57c",
+        "part": "b1111111-1111-4111-8111-222222222222"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "4e6cb126-9429-4ed8-a967-0ff17842c607",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0017",
+        "ticket_id": "580b5af1-d011-460c-bdf2-0c7219d0e57c",
+        "title": "Diagnostic - Hydrogen leak detector alarm in service bay",
+        "severity": 4,
+        "status": "resolved",
+        "specialization": "electrical",
+        "expertise_requirement": "senior",
+        "customer": "151ea822-5757-4f0f-80ae-733156c1d7d5",
+        "assigned_technician": 41,
+        "fault_code": "FC-H2-088",
+        "component": null,
+        "ai_summary": "Likely electrical service case involving battery systems. Recommended first actions: confirm fault code FC-H2-088, inspect lithium battery module 48v, battery management controller, and validate system response under load.",
+        "probable_cause": "Seal, fitting, or humidifier-side leak in hydrogen circuit",
+        "description": "Initial diagnostic triage for hydrogen leak detector alarm in service bay. Inspection focused on battery systems and associated service parts.",
+        "recommended_actions": "Inspect and test lithium battery module 48v, battery management controller; verify repair against fault code FC-H2-088; complete final operational validation before release.",
+        "confidence_score": 0.87,
+        "identified_at": "2026-02-26T15:30:00Z",
+        "created_at": "2026-02-26T15:35:00Z",
+        "resolved_at": "2026-02-26T23:08:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 73,
+        "performed_by": "paige.brooks"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 41,
+      "fields": {
+        "diagnosticreport": "4e6cb126-9429-4ed8-a967-0ff17842c607",
+        "part": "b1111111-1111-4111-8111-111111111111"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 42,
+      "fields": {
+        "diagnosticreport": "4e6cb126-9429-4ed8-a967-0ff17842c607",
+        "part": "b1111111-1111-4111-8111-222222222222"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "ff3c0d1d-dab9-429a-879d-203114c9431d",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0018",
+        "customer": "c8a87008-2447-4108-a206-6e6bb9ebc3ac",
+        "assigned_technician": 43,
+        "specialization": "electrical",
+        "title": "Traction motor vibration under launch torque",
+        "description": "Abnormal vibration is felt during low-speed launch under heavy torque demand. Station intake routed through Indianapolis Service Station.",
+        "severity": 3,
+        "status": "closed",
+        "customer_satisfaction_rating": 4.3,
+        "estimated_resolution_time_minutes": 265,
+        "predicted_commute_time_minutes": 45,
+        "actual_resolution_time_minutes": 274,
+        "predicted_resolution_summary": "Likely electrical service case involving fuel cells. Recommended first actions: confirm fault code FC-MOTOR-287, inspect hydrogen fuel cell stack 90kw, fuel cell air compressor, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "amber.cooper",
+        "priority": 3,
+        "issue_description": "Abnormal vibration is felt during low-speed launch under heavy torque demand.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-MOTOR-287",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Fuel cells",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-MOTOR-287",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Fuel cells",
+            "done": true
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": true
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": true
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "electrical_field_service_v1",
+          "completed_steps": 5
+        },
+        "created_at": "2026-02-27T16:00:00Z",
+        "assigned_at": "2026-02-27T18:00:00Z",
+        "resolved_at": "2026-02-28T01:11:00Z",
+        "closed_at": "2026-02-28T13:11:00Z",
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 43,
+      "fields": {
+        "ticket": "ff3c0d1d-dab9-429a-879d-203114c9431d",
+        "part": "c2222222-2222-4222-8222-111111111111"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 44,
+      "fields": {
+        "ticket": "ff3c0d1d-dab9-429a-879d-203114c9431d",
+        "part": "c2222222-2222-4222-8222-222222222222"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 45,
+      "fields": {
+        "ticket": "ff3c0d1d-dab9-429a-879d-203114c9431d",
+        "part": "c2222222-2222-4222-8222-333333333333"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "0ccd7bfd-3189-41ce-b9e0-129dafa233ca",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0018",
+        "ticket_id": "ff3c0d1d-dab9-429a-879d-203114c9431d",
+        "title": "Diagnostic - Traction motor vibration under launch torque",
+        "severity": 3,
+        "status": "resolved",
+        "specialization": "electrical",
+        "expertise_requirement": "mid",
+        "customer": "c8a87008-2447-4108-a206-6e6bb9ebc3ac",
+        "assigned_technician": 43,
+        "fault_code": "FC-MOTOR-287",
+        "component": null,
+        "ai_summary": "Likely electrical service case involving fuel cells. Recommended first actions: confirm fault code FC-MOTOR-287, inspect hydrogen fuel cell stack 90kw, fuel cell air compressor, and validate system response under load.",
+        "probable_cause": "Motor mount or inverter torque delivery irregularity",
+        "description": "Initial diagnostic triage for traction motor vibration under launch torque. Inspection focused on fuel cells and associated service parts.",
+        "recommended_actions": "Inspect and test hydrogen fuel cell stack 90kw, fuel cell air compressor, fuel cell humidifier unit; verify repair against fault code FC-MOTOR-287; complete final operational validation before release.",
+        "confidence_score": 0.91,
+        "identified_at": "2026-02-27T16:30:00Z",
+        "created_at": "2026-02-27T16:35:00Z",
+        "resolved_at": "2026-02-28T01:11:00Z",
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 91,
+        "performed_by": "riley.carter"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 43,
+      "fields": {
+        "diagnosticreport": "0ccd7bfd-3189-41ce-b9e0-129dafa233ca",
+        "part": "c2222222-2222-4222-8222-111111111111"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 44,
+      "fields": {
+        "diagnosticreport": "0ccd7bfd-3189-41ce-b9e0-129dafa233ca",
+        "part": "c2222222-2222-4222-8222-222222222222"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 45,
+      "fields": {
+        "diagnosticreport": "0ccd7bfd-3189-41ce-b9e0-129dafa233ca",
+        "part": "c2222222-2222-4222-8222-333333333333"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "2e4018a4-49ed-4b23-8a28-af74a6898a65",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0019",
+        "customer": "dd7472fc-7263-49c9-8726-409ad46986d9",
+        "assigned_technician": 27,
+        "specialization": "electrical",
+        "title": "Electrolyzer efficiency drop during production cycle",
+        "description": "Hydrogen generation rate is below expected output for the last three cycles. Station intake routed through Indianapolis Service Station.",
+        "severity": 2,
+        "status": "pending",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 140,
+        "predicted_commute_time_minutes": 55,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely electrical service case involving epowertrain systems. Recommended first actions: confirm fault code FC-ELY-105, inspect electric drive axle assembly, traction motor 3-phase, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "blake.edwards",
+        "priority": 2,
+        "issue_description": "Hydrogen generation rate is below expected output for the last three cycles.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-ELY-105",
+            "done": false
+          },
+          {
+            "task": "Inspect component: ePowertrain systems",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-ELY-105",
+            "done": false
+          },
+          {
+            "task": "Inspect component: ePowertrain systems",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "electrical_field_service_v1",
+          "completed_steps": 1
+        },
+        "created_at": "2026-02-28T17:00:00Z",
+        "assigned_at": null,
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 46,
+      "fields": {
+        "ticket": "2e4018a4-49ed-4b23-8a28-af74a6898a65",
+        "part": "d3333333-3333-4333-8333-111111111111"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 47,
+      "fields": {
+        "ticket": "2e4018a4-49ed-4b23-8a28-af74a6898a65",
+        "part": "d3333333-3333-4333-8333-222222222222"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "508f3763-e9c7-4dbf-9b32-5db6f4107546",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0019",
+        "ticket_id": "2e4018a4-49ed-4b23-8a28-af74a6898a65",
+        "title": "Diagnostic - Electrolyzer efficiency drop during production cycle",
+        "severity": 2,
+        "status": "pending",
+        "specialization": "electrical",
+        "expertise_requirement": "mid",
+        "customer": "dd7472fc-7263-49c9-8726-409ad46986d9",
+        "assigned_technician": 27,
+        "fault_code": "FC-ELY-105",
+        "component": null,
+        "ai_summary": "Likely electrical service case involving epowertrain systems. Recommended first actions: confirm fault code FC-ELY-105, inspect electric drive axle assembly, traction motor 3-phase, and validate system response under load.",
+        "probable_cause": "Power supply or feedwater support subsystem reducing stack efficiency",
+        "description": "Initial diagnostic triage for electrolyzer efficiency drop during production cycle. Inspection focused on epowertrain systems and associated service parts.",
+        "recommended_actions": "Inspect and test electric drive axle assembly, traction motor 3-phase; verify repair against fault code FC-ELY-105; complete final operational validation before release.",
+        "confidence_score": 0.71,
+        "identified_at": "2026-02-28T17:30:00Z",
+        "created_at": "2026-02-28T17:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": false,
+        "repeat_issue": true,
+        "diagnostic_duration_minutes": 109,
+        "performed_by": "brianna.hayes"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 46,
+      "fields": {
+        "diagnosticreport": "508f3763-e9c7-4dbf-9b32-5db6f4107546",
+        "part": "d3333333-3333-4333-8333-111111111111"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 47,
+      "fields": {
+        "diagnosticreport": "508f3763-e9c7-4dbf-9b32-5db6f4107546",
+        "part": "d3333333-3333-4333-8333-222222222222"
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "54797ce0-bf9a-4223-8a80-a79508db0617",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-0020",
+        "customer": "53b81449-57d7-40ce-9914-dfd7fc720901",
+        "assigned_technician": 29,
+        "specialization": "electrical",
+        "title": "Charging interface handshake failure",
+        "description": "Vehicle intermittently fails external charging handshake at depot chargers. Station intake routed through Indianapolis Service Station.",
+        "severity": 2,
+        "status": "assigned",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 165,
+        "predicted_commute_time_minutes": 65,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely electrical service case involving electrolyzers. Recommended first actions: confirm fault code FC-CHG-174, inspect electrolyzer cell stack, electrolyzer power supply unit, and validate system response under load.",
+        "auto_assigned": true,
+        "created_by": "chloe.morris",
+        "priority": 2,
+        "issue_description": "Vehicle intermittently fails external charging handshake at depot chargers.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-CHG-174",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Electrolyzers",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run diagnostic workflow for fault code FC-CHG-174",
+            "done": true
+          },
+          {
+            "task": "Inspect component: Electrolyzers",
+            "done": false
+          },
+          {
+            "task": "Document findings and parts requirement",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification road/load test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "electrical_field_service_v1",
+          "completed_steps": 2
+        },
+        "created_at": "2026-03-01T18:00:00Z",
+        "assigned_at": "2026-03-01T20:00:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 48,
+      "fields": {
+        "ticket": "54797ce0-bf9a-4223-8a80-a79508db0617",
+        "part": "e4444444-4444-4444-8444-111111111111"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 49,
+      "fields": {
+        "ticket": "54797ce0-bf9a-4223-8a80-a79508db0617",
+        "part": "e4444444-4444-4444-8444-222222222222"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 50,
+      "fields": {
+        "ticket": "54797ce0-bf9a-4223-8a80-a79508db0617",
+        "part": "e4444444-4444-4444-8444-333333333333"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "98b0d923-6c4d-484b-af4a-03c07bf63a97",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-0020",
+        "ticket_id": "54797ce0-bf9a-4223-8a80-a79508db0617",
+        "title": "Diagnostic - Charging interface handshake failure",
+        "severity": 2,
+        "status": "pending",
+        "specialization": "electrical",
+        "expertise_requirement": "senior",
+        "customer": "53b81449-57d7-40ce-9914-dfd7fc720901",
+        "assigned_technician": 29,
+        "fault_code": "FC-CHG-174",
+        "component": null,
+        "ai_summary": "Likely electrical service case involving electrolyzers. Recommended first actions: confirm fault code FC-CHG-174, inspect electrolyzer cell stack, electrolyzer power supply unit, and validate system response under load.",
+        "probable_cause": "Controller communication issue between charger and power electronics",
+        "description": "Initial diagnostic triage for charging interface handshake failure. Inspection focused on electrolyzers and associated service parts.",
+        "recommended_actions": "Inspect and test electrolyzer cell stack, electrolyzer power supply unit, water purification module; verify repair against fault code FC-CHG-174; complete final operational validation before release.",
+        "confidence_score": 0.75,
+        "identified_at": "2026-03-01T18:30:00Z",
+        "created_at": "2026-03-01T18:35:00Z",
+        "resolved_at": null,
+        "requires_follow_up": false,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 127,
+        "performed_by": "danielle.price"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 48,
+      "fields": {
+        "diagnosticreport": "98b0d923-6c4d-484b-af4a-03c07bf63a97",
+        "part": "e4444444-4444-4444-8444-111111111111"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 49,
+      "fields": {
+        "diagnosticreport": "98b0d923-6c4d-484b-af4a-03c07bf63a97",
+        "part": "e4444444-4444-4444-8444-222222222222"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 50,
+      "fields": {
+        "diagnosticreport": "98b0d923-6c4d-484b-af4a-03c07bf63a97",
+        "part": "e4444444-4444-4444-8444-333333333333"
+      }
+    }
+  ]

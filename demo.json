@@ -1,0 +1,246 @@
+[
+    {
+      "model": "users.user",
+      "pk": 3001,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "shlok",
+        "first_name": "Shlok",
+        "last_name": "Tandon",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-03-06T11:00:00Z",
+        "email": "shlok.demo@example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "cdbce4b8-f0be-48ff-ae81-25877188c5f0",
+      "fields": {
+        "user": 3001,
+        "company_name": "Shlok Logistics Demo",
+        "profile_image": null,
+        "phone_number": "+13175553001",
+        "preferences": {
+          "preferred_contact": "email"
+        },
+        "street_address": "501 Demo Parkway",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-06T11:02:00Z",
+        "notes": "Single demo customer for Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 3002,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "sajandoe",
+        "first_name": "Sajan",
+        "last_name": "Doe",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2026-03-06T11:05:00Z",
+        "email": "sajandoe.demo@example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "7e0055d1-8dd2-4dc0-b6be-fe9edb533552",
+      "fields": {
+        "user": 3002,
+        "profile_image": null,
+        "phone_number": "+13175553002",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "100 Service Plaza",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-06T11:06:00Z",
+        "notes": "Single demo technician for Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 46,
+      "fields": {
+        "profile": "7e0055d1-8dd2-4dc0-b6be-fe9edb533552",
+        "specialization": "engine",
+        "expertise": "senior",
+        "status": "available",
+        "hourly_rate": "72.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 9.5,
+        "date_joined": "2026-03-06",
+        "performance_rating": 4.8,
+        "total_jobs_completed": 214,
+        "skill_score": 10
+      }
+    },
+    {
+      "model": "tickets.ticket",
+      "pk": "54b7fc7d-23fd-4745-a244-909e3383d52b",
+      "fields": {
+        "ticket_id": "INDY-TKT-2026-SHLOK-0001",
+        "customer": "cdbce4b8-f0be-48ff-ae81-25877188c5f0",
+        "assigned_technician": 46,
+        "specialization": "engine",
+        "title": "High-priority issue on X15 Efficiency Series (2024)",
+        "description": "Customer reported critical drivability concerns tied to X15 Efficiency Series (2024). Initial intake suggests one or more related service parts require inspection or replacement.",
+        "severity": 3,
+        "status": "assigned",
+        "customer_satisfaction_rating": null,
+        "estimated_resolution_time_minutes": 240,
+        "predicted_commute_time_minutes": 35,
+        "actual_resolution_time_minutes": null,
+        "predicted_resolution_summary": "Likely engine-side service case involving x15 efficiency series (2024). Inspect turbocharger assembly, fuel injector kit first and validate system behavior under load.",
+        "auto_assigned": true,
+        "created_by": "demo_dispatch",
+        "priority": 3,
+        "issue_description": "Vehicle shows reduced performance and warning activity associated with X15 Efficiency Series (2024) during loaded operation.",
+        "checklist_template": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run initial diagnostic workflow",
+            "done": true
+          },
+          {
+            "task": "Inspect X15 Efficiency Series (2024) and related parts",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification test",
+            "done": false
+          }
+        ],
+        "checklist_progress": [
+          {
+            "task": "Confirm customer complaint and operating conditions",
+            "done": true
+          },
+          {
+            "task": "Run initial diagnostic workflow",
+            "done": true
+          },
+          {
+            "task": "Inspect X15 Efficiency Series (2024) and related parts",
+            "done": false
+          },
+          {
+            "task": "Complete repair verification test",
+            "done": false
+          }
+        ],
+        "checklist_meta": {
+          "template_name": "engine_field_service_v1",
+          "completed_steps": 2
+        },
+        "created_at": "2026-03-06T11:20:00Z",
+        "assigned_at": "2026-03-06T11:30:00Z",
+        "resolved_at": null,
+        "closed_at": null,
+        "station": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 1,
+      "fields": {
+        "ticket": "54b7fc7d-23fd-4745-a244-909e3383d52b",
+        "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 2,
+      "fields": {
+        "ticket": "54b7fc7d-23fd-4745-a244-909e3383d52b",
+        "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6"
+      }
+    },
+    {
+      "model": "tickets.ticket_parts",
+      "pk": 3,
+      "fields": {
+        "ticket": "54b7fc7d-23fd-4745-a244-909e3383d52b",
+        "part": "cd16f81e-1e23-4420-98ed-38f506110036"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport",
+      "pk": "0d38e14f-fb85-4acc-a3a5-d6754a5c4643",
+      "fields": {
+        "diagnostics_id": "INDY-DIAG-2026-SHLOK-0001",
+        "ticket_id": "54b7fc7d-23fd-4745-a244-909e3383d52b",
+        "title": "Diagnostic - X15 Efficiency Series (2024)",
+        "severity": 3,
+        "status": "in_progress",
+        "specialization": "engine",
+        "expertise_requirement": "senior",
+        "customer": "cdbce4b8-f0be-48ff-ae81-25877188c5f0",
+        "assigned_technician": 46,
+        "fault_code": "FC-ENG-517",
+        "component": "10846ba8-2f29-4776-95f0-659ef1ad8f4e",
+        "ai_summary": "Diagnostic confidence points to a high-priority engine issue centered on x15 efficiency series (2024) with likely impact to turbocharger assembly, fuel injector kit, oil filter service kit.",
+        "probable_cause": "Operational stress or wear affecting x15 efficiency series (2024) and associated service parts.",
+        "description": "Initial diagnostic confirms a high-priority service event involving X15 Efficiency Series (2024). Technician will inspect related parts and verify corrective action under load.",
+        "recommended_actions": "Inspect and test turbocharger assembly, fuel injector kit, oil filter service kit, validate component behavior, and complete a final operational verification before release.",
+        "confidence_score": 0.89,
+        "identified_at": "2026-03-06T11:28:00Z",
+        "created_at": "2026-03-06T11:32:00Z",
+        "resolved_at": null,
+        "requires_follow_up": true,
+        "repeat_issue": false,
+        "diagnostic_duration_minutes": 80,
+        "performed_by": "sajandoe"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 1,
+      "fields": {
+        "diagnosticreport": "0d38e14f-fb85-4acc-a3a5-d6754a5c4643",
+        "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 2,
+      "fields": {
+        "diagnosticreport": "0d38e14f-fb85-4acc-a3a5-d6754a5c4643",
+        "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6"
+      }
+    },
+    {
+      "model": "diagnostics.diagnosticreport_parts",
+      "pk": 3,
+      "fields": {
+        "diagnosticreport": "0d38e14f-fb85-4acc-a3a5-d6754a5c4643",
+        "part": "cd16f81e-1e23-4420-98ed-38f506110036"
+      }
+    }
+  ]

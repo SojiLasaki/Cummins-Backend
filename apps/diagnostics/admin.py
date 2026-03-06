@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import DiagnosticReport, TechnicianReport
+from .models import DiagnosticReport, StaffReport
 # Register your models here.
 admin.site.register(DiagnosticReport)
-admin.site.register(TechnicianReport)
+admin.site.register(StaffReport)

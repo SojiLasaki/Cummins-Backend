@@ -14,20 +14,27 @@ User = get_user_model()
 
 @receiver(post_save, sender=Order)
 def deduct_inventory_on_approval(sender, instance, created, **kwargs):
+    # During fixture loading (`loaddata`), Django sends signals with `raw=True`.
+    # We must not run side effects (inventory deduction / notifications) in that mode.
+    if kwargs.get("raw"):
+        return
+
     if instance.status == "approved" and not instance.inventory_deducted:
         with transaction.atomic():
             part = Part.objects.select_for_update().get(id=instance.part.id)
-            if part.quantity < instance.quantity:
+            if part.quantity_available < instance.quantity:
                 raise ValueError("Not enough inventory available.")
 
-            part.quantity -= instance.quantity
-            part.save()
+            part.quantity_available -= instance.quantity
+            part.save(update_fields=["quantity_available"])
             instance.inventory_deducted = True
             instance.save(update_fields=["inventory_deducted"])
 
 
 @receiver(pre_save, sender=Order)
 def _capture_old_order_state(sender, instance: Order, **kwargs):
+    if kwargs.get("raw"):
+        return
     if not instance.pk:
         instance._old_status = None
         return
@@ -48,6 +55,8 @@ def _admin_and_office_users():
 
 @receiver(post_save, sender=Order)
 def order_status_change(sender, instance, created, **kwargs):
+    if kwargs.get("raw"):
+        return
     old_status = getattr(instance, "_old_status", None)
     new_status = instance.status
 
