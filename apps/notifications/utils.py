@@ -1,5 +1,10 @@
+import logging
+
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+
+logger = logging.getLogger(__name__)
+
 
 def send_notification(user, title: str, message: str, type: str, data: dict | None = None):
     """
@@ -18,22 +23,28 @@ def send_notification(user, title: str, message: str, type: str, data: dict | No
         data=data or {},
     )
 
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        f"user_{user.id}",
-        {
-            "type": "send_notification",
-            "message": {
-                "id": notif.id,
-                "title": title,
-                "message": message,
-                "type": type,
-                "data": notif.data,
-                "is_read": notif.is_read,
-                "created_at": notif.created_at.isoformat() if notif.created_at else None,
-            },
-        },
-    )
+    # Keep notification creation resilient even when websocket infrastructure
+    # (channels_redis/Redis) is unavailable in local or demo environments.
+    try:
+        channel_layer = get_channel_layer()
+        if channel_layer is not None:
+            async_to_sync(channel_layer.group_send)(
+                f"user_{user.id}",
+                {
+                    "type": "send_notification",
+                    "message": {
+                        "id": notif.id,
+                        "title": title,
+                        "message": message,
+                        "type": type,
+                        "data": notif.data,
+                        "is_read": notif.is_read,
+                        "created_at": notif.created_at.isoformat() if notif.created_at else None,
+                    },
+                },
+            )
+    except Exception as exc:
+        logger.warning("Notification websocket dispatch skipped: %s", exc)
     return notif
 
 

@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from apps.ai.models import AgentActionProposal, AgentExecutionTrace, McpAdapter
 from apps.ai.services.mcp_client import McpClient, list_enabled_mcp_clients
+from apps.diagnostics.models import DiagnosticReport
 from apps.inventory.models import Part
 from apps.technicians.models import TechnicianProfile
 from apps.tickets.checklists import ensure_ticket_checklist, generate_ticket_checklist
@@ -215,7 +216,94 @@ def _extract_missing_ticket_fields(query: str, context_payload: dict[str, Any]) 
     return missing
 
 
-def _build_checklist_preview(query: str, specialization: str) -> list[str]:
+def _coerce_string_list(value: Any) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    values: list[str] = []
+    for item in value:
+        if isinstance(item, str) and item.strip():
+            values.append(item.strip())
+        elif isinstance(item, dict):
+            text = str(item.get("name") or item.get("part_name") or "").strip()
+            if text:
+                values.append(text)
+    return values
+
+
+def _load_diagnostic_context(context_payload: dict[str, Any]) -> dict[str, Any]:
+    report_id = str(
+        context_payload.get("diagnostic_report_id")
+        or context_payload.get("diagnostic_id")
+        or ""
+    ).strip()
+    if report_id:
+        report = DiagnosticReport.objects.filter(id=report_id).select_related("component").prefetch_related("parts").first()
+        if report:
+            return {
+                "diagnostic_report_id": str(report.id),
+                "specialization": str(report.specialization or ""),
+                "component_name": str(getattr(report.component, "name", "") or ""),
+                "fault_code": str(report.fault_code or ""),
+                "issue": str(report.title or ""),
+                "description": str(report.description or report.ai_summary or ""),
+                "part_names": list(report.parts.values_list("name", flat=True)),
+                "severity": int(report.severity or 2),
+            }
+
+    part_names = _coerce_string_list(
+        context_payload.get("part_names")
+        or context_payload.get("parts_affected")
+        or context_payload.get("parts")
+    )
+    component_name = str(context_payload.get("component_name") or context_payload.get("component") or "").strip()
+    issue = str(context_payload.get("issue") or "").strip()
+    description = str(context_payload.get("description") or "").strip()
+    fault_code = str(context_payload.get("fault_code") or "").strip()
+    specialization = str(context_payload.get("specialization") or "").strip().lower()
+    severity_raw = context_payload.get("severity")
+    try:
+        severity = int(float(severity_raw))
+    except (TypeError, ValueError):
+        severity = 0
+
+    if not any([part_names, component_name, issue, description, fault_code]):
+        return {}
+    return {
+        "diagnostic_report_id": "",
+        "specialization": specialization,
+        "component_name": component_name,
+        "fault_code": fault_code,
+        "issue": issue,
+        "description": description,
+        "part_names": part_names,
+        "severity": severity,
+    }
+
+
+def _build_ticket_title_and_description(query: str, specialization: str, diagnostic_payload: dict[str, Any]) -> tuple[str, str]:
+    payload = diagnostic_payload if isinstance(diagnostic_payload, dict) else {}
+    component_name = str(payload.get("component_name") or "").strip()
+    issue = str(payload.get("issue") or "").strip()
+    fault_code = str(payload.get("fault_code") or "").strip()
+    description = str(payload.get("description") or "").strip()
+    part_names = _coerce_string_list(payload.get("part_names"))
+
+    if component_name or issue or fault_code:
+        summary_parts = [part for part in [component_name, issue or fault_code] if part]
+        title = " - ".join(summary_parts)[:200] or f"{specialization.title()} service request"
+    else:
+        title = f"{specialization.title()} service request"
+
+    details = [query.strip()]
+    if description:
+        details.append(description)
+    if part_names:
+        details.append(f"Affected parts: {', '.join(part_names[:6])}")
+    ticket_description = "\n\n".join(part for part in details if part).strip()[:1000]
+    return title, ticket_description
+
+
+def _build_checklist_preview(query: str, specialization: str, diagnostic_payload: dict[str, Any] | None = None) -> list[str]:
     try:
         pseudo_ticket = Ticket(
             title=f"{specialization.title()} service request",
@@ -223,7 +311,7 @@ def _build_checklist_preview(query: str, specialization: str) -> list[str]:
             issue_description=query,
             specialization=specialization,
         )
-        generated = generate_ticket_checklist(pseudo_ticket, limit=4)
+        generated = generate_ticket_checklist(pseudo_ticket, limit=4, diagnostic_payload=diagnostic_payload)
         preview = []
         for item in generated.get("template", [])[:5]:
             if not isinstance(item, dict):
@@ -252,14 +340,18 @@ def plan_agent_actions(
     if not _looks_like_ticket_request(query):
         return PlanningResult(proposals=proposals, mcp_reads=mcp_reads, follow_up_question="", missing_fields=[])
 
-    specialization = _derive_specialization(query)
-    priority = _derive_priority(query)
+    diagnostic_payload = _load_diagnostic_context(context_payload)
+    specialization = str(diagnostic_payload.get("specialization") or _derive_specialization(query)).strip().lower() or "engine"
+    if specialization not in {"engine", "electrical"}:
+        specialization = _derive_specialization(query)
+    priority = int(diagnostic_payload.get("severity") or 0) or _derive_priority(query)
+    priority = min(max(priority, 1), 4)
     workflow_id = str(uuid.uuid4())
     normalized_policy_mode = _normalize_policy_mode(policy_mode or context_payload.get("policy_mode"))
     normalized_intent = str(intent or context_payload.get("intent") or "qa").strip().lower() or "qa"
     if context_refs and "context_refs" not in context_payload:
         context_payload["context_refs"] = context_refs
-    missing_fields = _extract_missing_ticket_fields(query, context_payload)
+    missing_fields = [] if diagnostic_payload.get("diagnostic_report_id") else _extract_missing_ticket_fields(query, context_payload)
     if missing_fields:
         questions = []
         if "symptom_details" in missing_fields:
@@ -318,19 +410,21 @@ def plan_agent_actions(
         )
         read_context["employees"] = _coerce_tool_result(read_result.data)
 
-    ticket_title = f"{specialization.title()} service request"
-    ticket_description = query.strip()[:1000]
+    ticket_title, ticket_description = _build_ticket_title_and_description(query, specialization, diagnostic_payload)
     create_ticket_payload = {
         "workflow_id": workflow_id,
         "title": ticket_title,
         "description": ticket_description,
+        "issue_description": str(diagnostic_payload.get("issue") or query).strip()[:1000],
         "specialization": specialization,
         "priority": priority,
         "severity": min(max(priority, 1), 4),
         "station_hint": str(context_payload.get("station_id") or context_payload.get("location") or ""),
         "mcp_adapter_id": ticketing_client.adapter.id if ticketing_client else None,
+        "diagnostic_report_id": str(diagnostic_payload.get("diagnostic_report_id") or ""),
+        "diagnostic_payload": diagnostic_payload,
         "missing_fields": [],
-        "checklist_preview": _build_checklist_preview(query, specialization),
+        "checklist_preview": _build_checklist_preview(query, specialization, diagnostic_payload),
         "context": read_context,
     }
     proposals.append(
@@ -383,7 +477,8 @@ def plan_agent_actions(
         )
     )
 
-    part_name = _extract_part_name(query)
+    diagnostic_parts = _coerce_string_list(diagnostic_payload.get("part_names"))
+    part_name = diagnostic_parts[0] if diagnostic_parts else _extract_part_name(query)
     try:
         local_part = Part.objects.filter(name__icontains=part_name).order_by("name").first()
     except Exception:
@@ -618,14 +713,20 @@ def execute_agent_action(
         if proposal.action_type == AgentActionProposal.ACTION_CREATE_TICKET:
             title = str(payload.get("title") or "Service ticket").strip()[:200]
             description = str(payload.get("description") or "")
-            specialization = str(payload.get("specialization") or "engine")
+            issue_description = str(payload.get("issue_description") or description)
+            specialization = str(payload.get("specialization") or "engine").strip().lower() or "engine"
+            if specialization not in {"engine", "electrical"}:
+                specialization = "engine"
             priority = int(payload.get("priority") or 2)
             severity = min(max(priority, 1), 4)
+            diagnostic_report_id = str(payload.get("diagnostic_report_id") or "").strip()
+            diagnostic_payload = payload.get("diagnostic_payload") if isinstance(payload.get("diagnostic_payload"), dict) else {}
 
             ticket = Ticket.objects.create(
                 ticket_id=generate_ticket_id(),
                 title=title,
                 description=description,
+                issue_description=issue_description,
                 specialization=specialization,
                 priority=priority,
                 severity=severity,
@@ -633,7 +734,34 @@ def execute_agent_action(
                 created_by=getattr(actor, "username", "agent"),
                 estimated_resolution_time_minutes=90,
             )
-            ensure_ticket_checklist(ticket)
+            linked_diagnostic_id = ""
+            if diagnostic_report_id:
+                report = DiagnosticReport.objects.filter(id=diagnostic_report_id).first()
+                if report:
+                    report.ticket_id = ticket
+                    report.save(update_fields=["ticket_id"])
+                    linked_diagnostic_id = str(report.id)
+                    report_parts = list(report.parts.all())
+                    if report_parts:
+                        ticket.parts.set(report_parts)
+                    if not diagnostic_payload:
+                        diagnostic_payload = {
+                            "diagnostic_report_id": linked_diagnostic_id,
+                            "specialization": str(report.specialization or ""),
+                            "component_name": str(getattr(report.component, "name", "") if report.component_id else ""),
+                            "fault_code": str(report.fault_code or ""),
+                            "issue": str(report.title or ""),
+                            "description": str(report.description or report.ai_summary or ""),
+                            "part_names": list(report.parts.values_list("name", flat=True)),
+                        }
+            elif isinstance(diagnostic_payload, dict):
+                part_names = _coerce_string_list(diagnostic_payload.get("part_names"))
+                if part_names:
+                    matched_parts = list(Part.objects.filter(name__in=part_names))
+                    if matched_parts:
+                        ticket.parts.set(matched_parts)
+
+            ensure_ticket_checklist(ticket, diagnostic_payload=diagnostic_payload)
 
             external_result: dict[str, Any] = {}
             if adapter:
@@ -663,6 +791,7 @@ def execute_agent_action(
             proposal.result = {
                 "local_ticket_uuid": str(ticket.id),
                 "local_ticket_id": ticket.ticket_id,
+                "diagnostic_report_id": linked_diagnostic_id or diagnostic_report_id,
                 "external": external_result,
             }
 
