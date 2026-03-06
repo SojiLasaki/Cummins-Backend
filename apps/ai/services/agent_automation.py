@@ -54,7 +54,7 @@ def _looks_like_update_request(text: str) -> bool:
 
 def _extract_ticket_reference(text: str, context_payload: dict[str, Any]) -> str | None:
     """Extract ticket ID reference from text or context."""
-    # Check context first
+    # Check context first for explicit ticket_id
     if isinstance(context_payload, dict):
         ticket_id = str(context_payload.get("ticket_id") or context_payload.get("ticket_ref") or "").strip()
         if ticket_id:
@@ -76,6 +76,14 @@ def _extract_ticket_reference(text: str, context_payload: dict[str, Any]) -> str
     ticket_num_match = re.search(r"ticket\s*#?(\d+)", normalized, re.IGNORECASE)
     if ticket_num_match:
         return f"TK-{ticket_num_match.group(1)}"
+
+    # Check context_block for "Last referenced ticket: TK-xxx"
+    if isinstance(context_payload, dict):
+        context_block = str(context_payload.get("context_block") or "").strip()
+        if context_block:
+            last_ref_match = re.search(r"Last referenced ticket:\s*(TK-[\d-]+)", context_block, re.IGNORECASE)
+            if last_ref_match:
+                return last_ref_match.group(1).upper()
 
     return None
 
