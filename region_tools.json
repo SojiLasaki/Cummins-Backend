@@ -1,0 +1,922 @@
+[
+    {
+      "model": "users.region",
+      "pk": "10000000-0000-4000-8000-000000000001",
+      "fields": {
+        "name": "North America",
+        "description": "Regional network covering Canada, the United States, and Mexico service operations.",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.region",
+      "pk": "10000000-0000-4000-8000-000000000002",
+      "fields": {
+        "name": "Latin America",
+        "description": "Regional network supporting Central America and South America field operations.",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.region",
+      "pk": "10000000-0000-4000-8000-000000000003",
+      "fields": {
+        "name": "Europe",
+        "description": "Regional network supporting service and maintenance activity across European markets.",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.region",
+      "pk": "10000000-0000-4000-8000-000000000004",
+      "fields": {
+        "name": "Middle East",
+        "description": "Regional network covering strategic service hubs across the Middle East.",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.region",
+      "pk": "10000000-0000-4000-8000-000000000005",
+      "fields": {
+        "name": "Africa",
+        "description": "Regional network serving fleet, industrial, and power support operations in Africa.",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.region",
+      "pk": "10000000-0000-4000-8000-000000000006",
+      "fields": {
+        "name": "South Asia",
+        "description": "Regional network supporting customers and operational sites throughout South Asia.",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.region",
+      "pk": "10000000-0000-4000-8000-000000000007",
+      "fields": {
+        "name": "East Asia",
+        "description": "Regional network supporting manufacturing, logistics, and technical service across East Asia.",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.region",
+      "pk": "10000000-0000-4000-8000-000000000008",
+      "fields": {
+        "name": "Oceania",
+        "description": "Regional network supporting Australia and New Zealand field operations.",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000001",
+      "fields": {
+        "name": "Indianapolis Service Station",
+        "region": "10000000-0000-4000-8000-000000000001",
+        "street_address": "8750 Georgetown Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000002",
+      "fields": {
+        "name": "Dallas Fleet Support Station",
+        "region": "10000000-0000-4000-8000-000000000001",
+        "street_address": "2401 Pacific Ave",
+        "street_address_2": "Suite 300",
+        "city": "Dallas",
+        "state": "Texas",
+        "postal_code": "75226",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000003",
+      "fields": {
+        "name": "Toronto Power Systems Station",
+        "region": "10000000-0000-4000-8000-000000000001",
+        "street_address": "120 Industry St",
+        "street_address_2": "",
+        "city": "Toronto",
+        "state": "Ontario",
+        "postal_code": "M6M 4L8",
+        "country": "Canada",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000004",
+      "fields": {
+        "name": "São Paulo Energy Station",
+        "region": "10000000-0000-4000-8000-000000000002",
+        "street_address": "Av. Paulista 1578",
+        "street_address_2": "12º Andar",
+        "city": "São Paulo",
+        "state": "SP",
+        "postal_code": "01310-200",
+        "country": "Brazil",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000005",
+      "fields": {
+        "name": "Santiago Mobility Station",
+        "region": "10000000-0000-4000-8000-000000000002",
+        "street_address": "Calle San Diego 455",
+        "street_address_2": "",
+        "city": "Santiago",
+        "state": "Santiago Metropolitan",
+        "postal_code": "8320000",
+        "country": "Chile",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000006",
+      "fields": {
+        "name": "Mexico City Industrial Station",
+        "region": "10000000-0000-4000-8000-000000000002",
+        "street_address": "Av. Insurgentes Sur 1602",
+        "street_address_2": "",
+        "city": "Mexico City",
+        "state": "CDMX",
+        "postal_code": "03940",
+        "country": "Mexico",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000007",
+      "fields": {
+        "name": "London Technical Station",
+        "region": "10000000-0000-4000-8000-000000000003",
+        "street_address": "42 Dockside Rd",
+        "street_address_2": "",
+        "city": "London",
+        "state": "England",
+        "postal_code": "E16 2QT",
+        "country": "United Kingdom",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000008",
+      "fields": {
+        "name": "Rotterdam Marine Station",
+        "region": "10000000-0000-4000-8000-000000000003",
+        "street_address": "Havenweg 88",
+        "street_address_2": "",
+        "city": "Rotterdam",
+        "state": "South Holland",
+        "postal_code": "3089 AB",
+        "country": "Netherlands",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000009",
+      "fields": {
+        "name": "Munich Powertrain Station",
+        "region": "10000000-0000-4000-8000-000000000003",
+        "street_address": "Dieselstraße 14",
+        "street_address_2": "",
+        "city": "Munich",
+        "state": "Bavaria",
+        "postal_code": "80993",
+        "country": "Germany",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000010",
+      "fields": {
+        "name": "Dubai Regional Station",
+        "region": "10000000-0000-4000-8000-000000000004",
+        "street_address": "Sheikh Zayed Rd",
+        "street_address_2": "Warehouse 5",
+        "city": "Dubai",
+        "state": "Dubai",
+        "postal_code": "00000",
+        "country": "United Arab Emirates",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000011",
+      "fields": {
+        "name": "Riyadh Field Service Station",
+        "region": "10000000-0000-4000-8000-000000000004",
+        "street_address": "King Fahd Rd",
+        "street_address_2": "",
+        "city": "Riyadh",
+        "state": "Riyadh Province",
+        "postal_code": "12271",
+        "country": "Saudi Arabia",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000012",
+      "fields": {
+        "name": "Doha Energy Support Station",
+        "region": "10000000-0000-4000-8000-000000000004",
+        "street_address": "Industrial Area St 23",
+        "street_address_2": "",
+        "city": "Doha",
+        "state": "Doha",
+        "postal_code": "00000",
+        "country": "Qatar",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000013",
+      "fields": {
+        "name": "Johannesburg Service Station",
+        "region": "10000000-0000-4000-8000-000000000005",
+        "street_address": "15 Empire Rd",
+        "street_address_2": "",
+        "city": "Johannesburg",
+        "state": "Gauteng",
+        "postal_code": "2193",
+        "country": "South Africa",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000014",
+      "fields": {
+        "name": "Nairobi Mobility Station",
+        "region": "10000000-0000-4000-8000-000000000005",
+        "street_address": "Mombasa Rd",
+        "street_address_2": "Block C",
+        "city": "Nairobi",
+        "state": "Nairobi County",
+        "postal_code": "00100",
+        "country": "Kenya",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000015",
+      "fields": {
+        "name": "Lagos Industrial Station",
+        "region": "10000000-0000-4000-8000-000000000005",
+        "street_address": "12 Wharf Rd",
+        "street_address_2": "",
+        "city": "Lagos",
+        "state": "Lagos",
+        "postal_code": "101245",
+        "country": "Nigeria",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000016",
+      "fields": {
+        "name": "Pune Engine Systems Station",
+        "region": "10000000-0000-4000-8000-000000000006",
+        "street_address": "Mumbai Pune Hwy",
+        "street_address_2": "Plot 19",
+        "city": "Pune",
+        "state": "Maharashtra",
+        "postal_code": "411045",
+        "country": "India",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000017",
+      "fields": {
+        "name": "Bengaluru Digital Support Station",
+        "region": "10000000-0000-4000-8000-000000000006",
+        "street_address": "Outer Ring Rd",
+        "street_address_2": "Tech Park 2",
+        "city": "Bengaluru",
+        "state": "Karnataka",
+        "postal_code": "560103",
+        "country": "India",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000018",
+      "fields": {
+        "name": "Colombo Marine Support Station",
+        "region": "10000000-0000-4000-8000-000000000006",
+        "street_address": "47 Harbour Front",
+        "street_address_2": "",
+        "city": "Colombo",
+        "state": "Western Province",
+        "postal_code": "00100",
+        "country": "Sri Lanka",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000019",
+      "fields": {
+        "name": "Shanghai Power Hub Station",
+        "region": "10000000-0000-4000-8000-000000000007",
+        "street_address": "1888 Pudong Ave",
+        "street_address_2": "",
+        "city": "Shanghai",
+        "state": "Shanghai",
+        "postal_code": "200120",
+        "country": "China",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000020",
+      "fields": {
+        "name": "Tokyo Advanced Systems Station",
+        "region": "10000000-0000-4000-8000-000000000007",
+        "street_address": "3-12-7 Shinagawa",
+        "street_address_2": "",
+        "city": "Tokyo",
+        "state": "Tokyo",
+        "postal_code": "140-0002",
+        "country": "Japan",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000021",
+      "fields": {
+        "name": "Seoul Electrification Station",
+        "region": "10000000-0000-4000-8000-000000000007",
+        "street_address": "77 Teheran-ro",
+        "street_address_2": "",
+        "city": "Seoul",
+        "state": "Seoul",
+        "postal_code": "06164",
+        "country": "South Korea",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000022",
+      "fields": {
+        "name": "Sydney Fleet Station",
+        "region": "10000000-0000-4000-8000-000000000008",
+        "street_address": "250 Parramatta Rd",
+        "street_address_2": "",
+        "city": "Sydney",
+        "state": "New South Wales",
+        "postal_code": "2050",
+        "country": "Australia",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000023",
+      "fields": {
+        "name": "Melbourne Service Logistics Station",
+        "region": "10000000-0000-4000-8000-000000000008",
+        "street_address": "19 Lorimer St",
+        "street_address_2": "",
+        "city": "Melbourne",
+        "state": "Victoria",
+        "postal_code": "3207",
+        "country": "Australia",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "users.station",
+      "pk": "20000000-0000-4000-8000-000000000024",
+      "fields": {
+        "name": "Auckland Port Support Station",
+        "region": "10000000-0000-4000-8000-000000000008",
+        "street_address": "8 Quay St",
+        "street_address_2": "",
+        "city": "Auckland",
+        "state": "Auckland",
+        "postal_code": "1010",
+        "country": "New Zealand",
+        "is_active": true,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000001",
+      "fields": {
+        "name": "Diagnostic Scan Tablet",
+        "description": "Portable diagnostics tablet for reading fault codes and service data.",
+        "quantity_available": 18,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000002",
+      "fields": {
+        "name": "Heavy Duty Torque Wrench",
+        "description": "Calibrated torque wrench for high-load maintenance applications.",
+        "quantity_available": 26,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000003",
+      "fields": {
+        "name": "Insulation Resistance Tester",
+        "description": "Electrical test instrument for insulation and continuity verification.",
+        "quantity_available": 12,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000004",
+      "fields": {
+        "name": "Hydraulic Jack Kit",
+        "description": "Field service lifting kit for engine and drivetrain access.",
+        "quantity_available": 20,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000005",
+      "fields": {
+        "name": "Battery Analyzer",
+        "description": "Battery system analyzer for voltage, load, and health testing.",
+        "quantity_available": 11,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000006",
+      "fields": {
+        "name": "Fuel Pressure Test Kit",
+        "description": "Pressure testing kit for fuel system troubleshooting and calibration.",
+        "quantity_available": 14,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000007",
+      "fields": {
+        "name": "Portable Air Compressor",
+        "description": "Compact compressor used for cleaning, pressure testing, and tire support.",
+        "quantity_available": 16,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000008",
+      "fields": {
+        "name": "Thermal Imaging Camera",
+        "description": "Thermal inspection tool for hotspot detection in power and mechanical systems.",
+        "quantity_available": 9,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000009",
+      "fields": {
+        "name": "Oscilloscope Service Kit",
+        "description": "Field oscilloscope kit for waveform capture and electrical troubleshooting.",
+        "quantity_available": 7,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000010",
+      "fields": {
+        "name": "Hydrogen Leak Detector",
+        "description": "Leak detection device for hydrogen handling and fuel cell environments.",
+        "quantity_available": 8,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000011",
+      "fields": {
+        "name": "Coolant Flush Pump",
+        "description": "Service pump for coolant circulation, flushing, and refill operations.",
+        "quantity_available": 10,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "30000000-0000-4000-8000-000000000012",
+      "fields": {
+        "name": "High Voltage Safety Kit",
+        "description": "Protective kit with insulated gloves, matting, and lockout tools.",
+        "quantity_available": 13,
+        "created_at": "2026-03-05T20:05:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 1,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000001",
+        "station_id": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 2,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000001",
+        "station_id": "20000000-0000-4000-8000-000000000007"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 3,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000001",
+        "station_id": "20000000-0000-4000-8000-000000000016"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 4,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000001",
+        "station_id": "20000000-0000-4000-8000-000000000019"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 5,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000002",
+        "station_id": "20000000-0000-4000-8000-000000000002"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 6,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000002",
+        "station_id": "20000000-0000-4000-8000-000000000009"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 7,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000002",
+        "station_id": "20000000-0000-4000-8000-000000000013"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 8,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000002",
+        "station_id": "20000000-0000-4000-8000-000000000022"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 9,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000003",
+        "station_id": "20000000-0000-4000-8000-000000000003"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 10,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000003",
+        "station_id": "20000000-0000-4000-8000-000000000010"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 11,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000003",
+        "station_id": "20000000-0000-4000-8000-000000000017"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 12,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000003",
+        "station_id": "20000000-0000-4000-8000-000000000021"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 13,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000004",
+        "station_id": "20000000-0000-4000-8000-000000000004"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 14,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000004",
+        "station_id": "20000000-0000-4000-8000-000000000011"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 15,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000004",
+        "station_id": "20000000-0000-4000-8000-000000000015"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 16,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000004",
+        "station_id": "20000000-0000-4000-8000-000000000023"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 17,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000005",
+        "station_id": "20000000-0000-4000-8000-000000000001"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 18,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000005",
+        "station_id": "20000000-0000-4000-8000-000000000006"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 19,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000005",
+        "station_id": "20000000-0000-4000-8000-000000000020"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 20,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000006",
+        "station_id": "20000000-0000-4000-8000-000000000002"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 21,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000006",
+        "station_id": "20000000-0000-4000-8000-000000000005"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 22,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000006",
+        "station_id": "20000000-0000-4000-8000-000000000016"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 23,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000007",
+        "station_id": "20000000-0000-4000-8000-000000000008"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 24,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000007",
+        "station_id": "20000000-0000-4000-8000-000000000012"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 25,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000007",
+        "station_id": "20000000-0000-4000-8000-000000000018"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 26,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000007",
+        "station_id": "20000000-0000-4000-8000-000000000024"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 27,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000008",
+        "station_id": "20000000-0000-4000-8000-000000000007"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 28,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000008",
+        "station_id": "20000000-0000-4000-8000-000000000014"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 29,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000008",
+        "station_id": "20000000-0000-4000-8000-000000000019"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 30,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000009",
+        "station_id": "20000000-0000-4000-8000-000000000009"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 31,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000009",
+        "station_id": "20000000-0000-4000-8000-000000000017"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 32,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000009",
+        "station_id": "20000000-0000-4000-8000-000000000020"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 33,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000010",
+        "station_id": "20000000-0000-4000-8000-000000000010"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 34,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000010",
+        "station_id": "20000000-0000-4000-8000-000000000012"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 35,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000010",
+        "station_id": "20000000-0000-4000-8000-000000000021"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 36,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000011",
+        "station_id": "20000000-0000-4000-8000-000000000003"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 37,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000011",
+        "station_id": "20000000-0000-4000-8000-000000000013"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 38,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000011",
+        "station_id": "20000000-0000-4000-8000-000000000022"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 39,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000012",
+        "station_id": "20000000-0000-4000-8000-000000000011"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 40,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000012",
+        "station_id": "20000000-0000-4000-8000-000000000018"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 41,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000012",
+        "station_id": "20000000-0000-4000-8000-000000000023"
+      }
+    },
+    {
+      "model": "inventory.tool_station",
+      "pk": 42,
+      "fields": {
+        "tool_id": "30000000-0000-4000-8000-000000000012",
+        "station_id": "20000000-0000-4000-8000-000000000024"
+      }
+    }
+  ]

@@ -76,7 +76,8 @@ class Profile(models.Model):
         return ""
 
 
-class AdminUserProfile(models.Model):    
+class AdminUserProfile(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     station = models.ForeignKey("Station", on_delete=models.SET_NULL, null=True, blank=True, related_name="admin_users")
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="admin_profile")
     STATUS = {
@@ -92,7 +93,8 @@ class AdminUserProfile(models.Model):
         return f"{self.profile.user.username} - {self.profile.user.role}"
 
 
-class OfficeStaffProfile(models.Model):    
+class OfficeStaffProfile(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="office_staff_profile")
     STATUS = {
         ('Available', "Available"),

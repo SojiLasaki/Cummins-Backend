@@ -234,17 +234,17 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
         email = validated_data.pop("email")
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
-        password = validated_data.pop("password")
+        password = validated_data.pop("password", None)
 
         user = User.objects.create_user(
             username=username,
             email=email,
             first_name=first_name,
             last_name=last_name,
-            # password=password,
             role=User.Roles.ADMIN,
         )
-        user.set_password(password) 
+        if password:
+            user.set_password(password)
         user.save()
 
         profile = user.profile
@@ -261,13 +261,16 @@ class AdminUserProfileSerializer(serializers.ModelSerializer):
         # )
     
     def update(self, instance, validated_data):
-        user = instance.user
+        user = instance.profile.user
 
         # Update user fields if provided
         user.username = validated_data.pop("username", user.username)
         user.email = validated_data.pop("email", user.email)
         user.first_name = validated_data.pop("first_name", user.first_name)
         user.last_name = validated_data.pop("last_name", user.last_name)
+        password = validated_data.pop("password", None)
+        if password:
+            user.set_password(password)
         user.save()
 
         # Update profile fields

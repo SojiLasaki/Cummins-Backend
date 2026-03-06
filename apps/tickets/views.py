@@ -11,6 +11,7 @@ from apps.schedules.serializers import ScheduleListSerializer
 from django.utils import timezone
 from .checklists import ensure_ticket_checklist, regenerate_ticket_checklist
 from .id_generation import generate_ticket_id
+from .services.repair_time_and_cost import get_repair_time_stats
 
 
 class TicketViewSet(viewsets.ModelViewSet):
@@ -41,7 +42,8 @@ class TicketViewSet(viewsets.ModelViewSet):
             "assigned_technician__profile",
             "assigned_technician__profile__user",
             "customer",
-        ).prefetch_related("parts", "diagnostic_reports")
+            "customer__user",
+        ).prefetch_related("parts", "diagnostic_reports", "schedules")
         # Filter by assigned technician: profile_id (UUID) or technician pk (int)
         assigned_technician = self.request.query_params.get("assigned_technician")
         if assigned_technician:
@@ -53,6 +55,17 @@ class TicketViewSet(viewsets.ModelViewSet):
         if status:
             qs = qs.filter(status=status)
         return qs
+
+    @action(detail=False, methods=["get"], url_path="repair-time-stats")
+    def repair_time_stats(self, request):
+        """
+        GET /api/tickets/repair-time-stats/
+        Returns average repair time (predicted and actual) and descriptions.
+        Optional query params: status=... to filter tickets.
+        """
+        qs = self.get_queryset()
+        stats = get_repair_time_stats(qs)
+        return Response(stats)
 
     @action(detail=True, methods=["get"], url_path="schedules")
     def schedules(self, request, pk=None):

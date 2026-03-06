@@ -61,7 +61,14 @@ class Ticket(models.Model):
 
     # Performance Tracking
     customer_satisfaction_rating = models.FloatField(null=True, blank=True)
-    estimated_resolution_time_minutes = models.IntegerField(null=True, blank=True)
+    estimated_resolution_time_minutes = models.IntegerField(
+        null=True, blank=True,
+        help_text="Predicted on-site repair time in minutes (time to fix the issue at the job site)."
+    )
+    predicted_commute_time_minutes = models.IntegerField(
+        null=True, blank=True,
+        help_text="Predicted round-trip commute time in minutes (technician base to job site and back)."
+    )
     actual_resolution_time_minutes = models.IntegerField(null=True, blank=True)
 
     # AI Insights
@@ -86,6 +93,7 @@ class Ticket(models.Model):
     assigned_at = models.DateTimeField(null=True, blank=True)
     resolved_at = models.DateTimeField(null=True, blank=True)
     closed_at = models.DateTimeField(null=True, blank=True)
+    station = models.ForeignKey("users.Station", on_delete=models.SET_NULL, null=True, blank=True, related_name="tickets")
 
     def __str__(self):
         return f"{self.ticket_id or self.id} - {self.status}"

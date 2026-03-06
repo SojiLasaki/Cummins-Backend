@@ -12,6 +12,7 @@ class Order(models.Model):
         ("rejected", "Rejected"),
     )
     ticket = models.ForeignKey("tickets.Ticket", on_delete=models.CASCADE, related_name="purchase_orders")
+    station = models.ForeignKey("users.Station", on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     customer = models.ForeignKey("customers.CustomerProfile", verbose_name=("Customer"), on_delete=models.CASCADE)
     inventory_deducted = models.BooleanField(default=False)

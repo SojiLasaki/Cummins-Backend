@@ -1,0 +1,402 @@
+[
+  {
+    "model": "inventory.component",
+    "pk": "11111111-1111-4111-8111-111111111111",
+    "fields": {
+      "group": "Electrical",
+      "component_number": "ELEC-BATT-001",
+      "quantity_available": 14,
+      "name": "Battery systems",
+      "description": "Industry-leading batteries that deliver long-lasting power and flexible integration at a lower cost for commercial and industrial applications.",
+      "image": null,
+      "created_at": "2026-03-05T19:35:00Z"
+    }
+  },
+  {
+    "model": "inventory.component",
+    "pk": "22222222-2222-4222-8222-222222222222",
+    "fields": {
+      "group": "Electrical",
+      "component_number": "ELEC-FCELL-001",
+      "quantity_available": 8,
+      "name": "Fuel cells",
+      "description": "Modular, cutting-edge fuel cell technology that converts hydrogen into reliable electric power for scalable deployments.",
+      "image": null,
+      "created_at": "2026-03-05T19:35:00Z"
+    }
+  },
+  {
+    "model": "inventory.component",
+    "pk": "33333333-3333-4333-8333-333333333333",
+    "fields": {
+      "group": "Electrical",
+      "component_number": "ELEC-EPWR-001",
+      "quantity_available": 10,
+      "name": "ePowertrain systems",
+      "description": "Electric axles, motors, and inverters designed for easy vehicle integration, high efficiency, and instant torque delivery.",
+      "image": null,
+      "created_at": "2026-03-05T19:35:00Z"
+    }
+  },
+  {
+    "model": "inventory.component",
+    "pk": "44444444-4444-4444-8444-444444444444",
+    "fields": {
+      "group": "Electrical",
+      "component_number": "ELEC-ELYZR-001",
+      "quantity_available": 6,
+      "name": "Electrolyzers",
+      "description": "Compact hydrogen-generation systems engineered for lower production cost and market-leading efficiency.",
+      "image": null,
+      "created_at": "2026-03-05T19:35:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "b1111111-1111-4111-8111-111111111111",
+    "fields": {
+      "part_number": "BAT-MOD-1001",
+      "name": "Lithium Battery Module 48V",
+      "description": "High-density 48V lithium-ion battery module for battery system integration and scalable energy storage.",
+      "image": null,
+      "quantity_available": 32,
+      "reorder_threshold": 6,
+      "category": "electrical",
+      "weight_kg": 28,
+      "cost_price": "1850.00",
+      "resale_price": "2399.00",
+      "status": "in_stock",
+      "supplier": "Cummins New Power",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "b1111111-1111-4111-8111-222222222222",
+    "fields": {
+      "part_number": "BAT-BMS-2040",
+      "name": "Battery Management Controller",
+      "description": "Smart BMS controller for thermal balancing, voltage monitoring, and battery pack health diagnostics.",
+      "image": null,
+      "quantity_available": 18,
+      "reorder_threshold": 5,
+      "category": "electrical",
+      "weight_kg": 4,
+      "cost_price": "420.00",
+      "resale_price": "649.00",
+      "status": "in_stock",
+      "supplier": "Cummins New Power",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "b1111111-1111-4111-8111-333333333333",
+    "fields": {
+      "part_number": "BAT-COOL-3090",
+      "name": "Battery Cooling Plate Assembly",
+      "description": "Integrated cooling plate assembly for maintaining safe operating temperatures in battery systems.",
+      "image": null,
+      "quantity_available": 9,
+      "reorder_threshold": 3,
+      "category": "electrical",
+      "weight_kg": 7,
+      "cost_price": "310.00",
+      "resale_price": "489.00",
+      "status": "backordered",
+      "supplier": "Accel Thermal Solutions",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "c2222222-2222-4222-8222-111111111111",
+    "fields": {
+      "part_number": "FC-STACK-5001",
+      "name": "Hydrogen Fuel Cell Stack 90kW",
+      "description": "Modular PEM fuel cell stack designed for heavy-duty and stationary hydrogen power applications.",
+      "image": null,
+      "quantity_available": 5,
+      "reorder_threshold": 2,
+      "category": "electrical",
+      "weight_kg": 86,
+      "cost_price": "18200.00",
+      "resale_price": "21950.00",
+      "status": "in_stock",
+      "supplier": "Cummins Hydrogen Systems",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "c2222222-2222-4222-8222-222222222222",
+    "fields": {
+      "part_number": "FC-AIR-2180",
+      "name": "Fuel Cell Air Compressor",
+      "description": "High-efficiency air compressor module supporting oxygen delivery and pressure control in fuel cell systems.",
+      "image": null,
+      "quantity_available": 7,
+      "reorder_threshold": 3,
+      "category": "electrical",
+      "weight_kg": 16,
+      "cost_price": "2400.00",
+      "resale_price": "3199.00",
+      "status": "in_stock",
+      "supplier": "HydroCore Components",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "c2222222-2222-4222-8222-333333333333",
+    "fields": {
+      "part_number": "FC-HUM-1125",
+      "name": "Fuel Cell Humidifier Unit",
+      "description": "Humidity conditioning unit that improves membrane performance and durability in hydrogen fuel cells.",
+      "image": null,
+      "quantity_available": 4,
+      "reorder_threshold": 2,
+      "category": "electrical",
+      "weight_kg": 11,
+      "cost_price": "1280.00",
+      "resale_price": "1745.00",
+      "status": "backordered",
+      "supplier": "HydroCore Components",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "d3333333-3333-4333-8333-111111111111",
+    "fields": {
+      "part_number": "EP-AXLE-7001",
+      "name": "Electric Drive Axle Assembly",
+      "description": "Integrated electric axle assembly delivering compact packaging and instant torque for commercial vehicles.",
+      "image": null,
+      "quantity_available": 6,
+      "reorder_threshold": 2,
+      "category": "electrical",
+      "weight_kg": 210,
+      "cost_price": "9600.00",
+      "resale_price": "12450.00",
+      "status": "in_stock",
+      "supplier": "Meritor eMobility",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "d3333333-3333-4333-8333-222222222222",
+    "fields": {
+      "part_number": "EP-MOTOR-4480",
+      "name": "Traction Motor 3-Phase",
+      "description": "High-torque three-phase traction motor designed for ePowertrain integration in medium- and heavy-duty platforms.",
+      "image": null,
+      "quantity_available": 11,
+      "reorder_threshold": 4,
+      "category": "electrical",
+      "weight_kg": 92,
+      "cost_price": "5200.00",
+      "resale_price": "6890.00",
+      "status": "in_stock",
+      "supplier": "Meritor eMobility",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "d3333333-3333-4333-8333-333333333333",
+    "fields": {
+      "part_number": "EP-INVT-3310",
+      "name": "Power Inverter Module",
+      "description": "High-voltage inverter module for efficient motor control, torque response, and regenerative braking support.",
+      "image": null,
+      "quantity_available": 13,
+      "reorder_threshold": 5,
+      "category": "electrical",
+      "weight_kg": 19,
+      "cost_price": "2950.00",
+      "resale_price": "3895.00",
+      "status": "in_stock",
+      "supplier": "VoltDrive Electronics",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "e4444444-4444-4444-8444-111111111111",
+    "fields": {
+      "part_number": "ELY-STACK-8100",
+      "name": "Electrolyzer Cell Stack",
+      "description": "Compact cell stack assembly for hydrogen generation with high efficiency and reduced operational cost.",
+      "image": null,
+      "quantity_available": 3,
+      "reorder_threshold": 1,
+      "category": "electrical",
+      "weight_kg": 130,
+      "cost_price": "15400.00",
+      "resale_price": "18990.00",
+      "status": "in_stock",
+      "supplier": "Cummins Hydrogen Systems",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "e4444444-4444-4444-8444-222222222222",
+    "fields": {
+      "part_number": "ELY-PSU-2400",
+      "name": "Electrolyzer Power Supply Unit",
+      "description": "Industrial-grade power supply unit optimized for stable electrolyzer operation and energy conversion efficiency.",
+      "image": null,
+      "quantity_available": 5,
+      "reorder_threshold": 2,
+      "category": "electrical",
+      "weight_kg": 38,
+      "cost_price": "4100.00",
+      "resale_price": "5390.00",
+      "status": "in_stock",
+      "supplier": "VoltDrive Electronics",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "e4444444-4444-4444-8444-333333333333",
+    "fields": {
+      "part_number": "ELY-WTR-1560",
+      "name": "Water Purification Module",
+      "description": "Water treatment module ensuring feedwater purity and system longevity for electrolyzer installations.",
+      "image": null,
+      "quantity_available": 7,
+      "reorder_threshold": 3,
+      "category": "electrical",
+      "weight_kg": 24,
+      "cost_price": "1650.00",
+      "resale_price": "2240.00",
+      "status": "in_stock",
+      "supplier": "PureStream Industrial",
+      "created_at": "2026-03-05T19:35:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T14:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 1,
+    "fields": {
+      "part_id": "b1111111-1111-4111-8111-111111111111",
+      "component_id": "11111111-1111-4111-8111-111111111111"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 2,
+    "fields": {
+      "part_id": "b1111111-1111-4111-8111-222222222222",
+      "component_id": "11111111-1111-4111-8111-111111111111"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 3,
+    "fields": {
+      "part_id": "b1111111-1111-4111-8111-333333333333",
+      "component_id": "11111111-1111-4111-8111-111111111111"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 4,
+    "fields": {
+      "part_id": "c2222222-2222-4222-8222-111111111111",
+      "component_id": "22222222-2222-4222-8222-222222222222"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 5,
+    "fields": {
+      "part_id": "c2222222-2222-4222-8222-222222222222",
+      "component_id": "22222222-2222-4222-8222-222222222222"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 6,
+    "fields": {
+      "part_id": "c2222222-2222-4222-8222-333333333333",
+      "component_id": "22222222-2222-4222-8222-222222222222"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 7,
+    "fields": {
+      "part_id": "d3333333-3333-4333-8333-111111111111",
+      "component_id": "33333333-3333-4333-8333-333333333333"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 8,
+    "fields": {
+      "part_id": "d3333333-3333-4333-8333-222222222222",
+      "component_id": "33333333-3333-4333-8333-333333333333"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 9,
+    "fields": {
+      "part_id": "d3333333-3333-4333-8333-333333333333",
+      "component_id": "33333333-3333-4333-8333-333333333333"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 10,
+    "fields": {
+      "part_id": "e4444444-4444-4444-8444-111111111111",
+      "component_id": "44444444-4444-4444-8444-444444444444"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 11,
+    "fields": {
+      "part_id": "e4444444-4444-4444-8444-222222222222",
+      "component_id": "44444444-4444-4444-8444-444444444444"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 12,
+    "fields": {
+      "part_id": "e4444444-4444-4444-8444-333333333333",
+      "component_id": "44444444-4444-4444-8444-444444444444"
+    }
+  }
+]

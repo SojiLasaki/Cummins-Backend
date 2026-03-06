@@ -1,0 +1,602 @@
+[
+  {
+    "model": "inventory.component",
+    "pk": "10846ba8-2f29-4776-95f0-659ef1ad8f4e",
+    "fields": {
+      "group": "Engine",
+      "component_number": "CM-ENG-X15EFF-2024",
+      "quantity_available": 4,
+      "name": "X15 Efficiency Series (2024)",
+      "description": "Cummins X15 Efficiency Series engine compliant with EPA 2024 standards. Power: 400-500 hp. Torque: 1450-1850 lb-ft. Intended for fuel-efficient heavy-duty on-highway applications.",
+      "image": null,
+      "created_at": "2026-03-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.component",
+    "pk": "359e4d5a-c3d2-4151-b530-8e22758989ae",
+    "fields": {
+      "group": "Engine",
+      "component_number": "CM-ENG-X15PERF-2024",
+      "quantity_available": 1,
+      "name": "X15 Performance Series (2024)",
+      "description": "Cummins X15 Performance Series engine compliant with EPA 2024 standards. Power: 525-565 hp. Torque: 1650-2050 lb-ft. Built for demanding heavy-haul and performance-focused applications.",
+      "image": null,
+      "created_at": "2026-03-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.component",
+    "pk": "92d49fa7-aebe-4f17-bfd8-cc67c7143372",
+    "fields": {
+      "group": "Engine",
+      "component_number": "CM-ENG-X15PROD-2024",
+      "quantity_available": 6,
+      "name": "X15 Productivity Series (2024)",
+      "description": "Cummins X15 Productivity Series engine compliant with EPA 2024 standards. Power: 430-605 hp. Torque: 1650-2050 lb-ft. Tuned for productivity and vocational versatility.",
+      "image": null,
+      "created_at": "2026-03-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.component",
+    "pk": "172ef102-256a-46a1-8e4e-eecba0593c65",
+    "fields": {
+      "group": "Engine",
+      "component_number": "CM-ENG-X12-2024",
+      "quantity_available": 2,
+      "name": "X12 (2024)",
+      "description": "Cummins X12 engine compliant with EPA 2024 standards. Power: 350-500 hp. Torque: 1250-1700 lb-ft. Lightweight heavy-duty engine for regional haul and vocational use.",
+      "image": null,
+      "created_at": "2026-03-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.component",
+    "pk": "556b96b2-5ff0-463a-b3f0-e689bc675f90",
+    "fields": {
+      "group": "Engine",
+      "component_number": "CM-ENG-X12HDT-2024",
+      "quantity_available": 4,
+      "name": "X12 for Heavy-duty Truck (2024)",
+      "description": "Cummins X12 engine for heavy-duty truck applications, compliant with EPA 2024 standards. Power: 350-500 hp. Torque: 1250-1700 lb-ft. Designed for commercial truck duty cycles.",
+      "image": null,
+      "created_at": "2026-03-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.component",
+    "pk": "43ec0c07-2a99-49a5-90b2-213fc979a468",
+    "fields": {
+      "group": "Engine",
+      "component_number": "CM-ENG-X12RV-2024",
+      "quantity_available": 4,
+      "name": "X12 for Motorhome and RV (2024)",
+      "description": "Cummins X12 engine for motorhome and RV applications, compliant with EPA 2024 standards. Power: 350-500 hp. Torque: 1250-1700 lb-ft. Calibrated for premium RV drivability and reliability.",
+      "image": null,
+      "created_at": "2026-03-05T12:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8",
+    "fields": {
+      "part_number": "PT-X15EFF-2024-01",
+      "name": "Turbocharger Assembly",
+      "description": "High-efficiency turbocharger assembly matched for X15 Efficiency Series (2024). Supports boost delivery, transient response, and emissions-compliant airflow.",
+      "image": null,
+      "quantity_available": 12,
+      "reorder_threshold": 3,
+      "category": "engine",
+      "weight_kg": 42,
+      "cost_price": "2850.00",
+      "resale_price": "3695.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 1,
+    "fields": {
+      "part": "38bb312a-d2fb-49d5-8104-8c6c3cbdeaf8",
+      "component": "10846ba8-2f29-4776-95f0-659ef1ad8f4e"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "0b9f0417-5281-479f-ac5f-40c817cee3c6",
+    "fields": {
+      "part_number": "PT-X15EFF-2024-02",
+      "name": "Fuel Injector Kit",
+      "description": "OEM fuel injector service kit for X15 Efficiency Series (2024). Designed for precise fuel metering, combustion stability, and service replacement intervals.",
+      "image": null,
+      "quantity_available": 8,
+      "reorder_threshold": 2,
+      "category": "engine",
+      "weight_kg": 9,
+      "cost_price": "1980.00",
+      "resale_price": "2575.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 2,
+    "fields": {
+      "part": "0b9f0417-5281-479f-ac5f-40c817cee3c6",
+      "component": "10846ba8-2f29-4776-95f0-659ef1ad8f4e"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "cd16f81e-1e23-4420-98ed-38f506110036",
+    "fields": {
+      "part_number": "PT-X15EFF-2024-03",
+      "name": "Oil Filter Service Kit",
+      "description": "Scheduled maintenance oil filter service kit for X15 Efficiency Series (2024). Includes primary oil filtration components for regular preventive maintenance.",
+      "image": null,
+      "quantity_available": 20,
+      "reorder_threshold": 10,
+      "category": "engine",
+      "weight_kg": 4,
+      "cost_price": "85.00",
+      "resale_price": "129.00",
+      "status": "backordered",
+      "supplier": "Fleetguard / Cummins",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 3,
+    "fields": {
+      "part": "cd16f81e-1e23-4420-98ed-38f506110036",
+      "component": "10846ba8-2f29-4776-95f0-659ef1ad8f4e"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "47375f66-2836-4862-81cb-244bc1cd425f",
+    "fields": {
+      "part_number": "PT-X15PERF-2024-01",
+      "name": "Turbocharger Assembly",
+      "description": "High-efficiency turbocharger assembly matched for X15 Performance Series (2024). Supports boost delivery, transient response, and emissions-compliant airflow.",
+      "image": null,
+      "quantity_available": 12,
+      "reorder_threshold": 3,
+      "category": "engine",
+      "weight_kg": 42,
+      "cost_price": "2850.00",
+      "resale_price": "3695.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 4,
+    "fields": {
+      "part": "47375f66-2836-4862-81cb-244bc1cd425f",
+      "component": "359e4d5a-c3d2-4151-b530-8e22758989ae"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "c6f283b9-bb11-4c97-b525-e4add1e20421",
+    "fields": {
+      "part_number": "PT-X15PERF-2024-02",
+      "name": "Fuel Injector Kit",
+      "description": "OEM fuel injector service kit for X15 Performance Series (2024). Designed for precise fuel metering, combustion stability, and service replacement intervals.",
+      "image": null,
+      "quantity_available": 8,
+      "reorder_threshold": 2,
+      "category": "engine",
+      "weight_kg": 9,
+      "cost_price": "1980.00",
+      "resale_price": "2575.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 5,
+    "fields": {
+      "part": "c6f283b9-bb11-4c97-b525-e4add1e20421",
+      "component": "359e4d5a-c3d2-4151-b530-8e22758989ae"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "ba52cec8-130c-4202-a2e4-693468ad7aa0",
+    "fields": {
+      "part_number": "PT-X15PERF-2024-03",
+      "name": "Oil Filter Service Kit",
+      "description": "Scheduled maintenance oil filter service kit for X15 Performance Series (2024). Includes primary oil filtration components for regular preventive maintenance.",
+      "image": null,
+      "quantity_available": 20,
+      "reorder_threshold": 10,
+      "category": "engine",
+      "weight_kg": 4,
+      "cost_price": "85.00",
+      "resale_price": "129.00",
+      "status": "backordered",
+      "supplier": "Fleetguard / Cummins",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 6,
+    "fields": {
+      "part": "ba52cec8-130c-4202-a2e4-693468ad7aa0",
+      "component": "359e4d5a-c3d2-4151-b530-8e22758989ae"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "2e8a5695-dc55-4c3c-9a98-cdf2ec8532c1",
+    "fields": {
+      "part_number": "PT-X15PROD-2024-01",
+      "name": "Turbocharger Assembly",
+      "description": "High-efficiency turbocharger assembly matched for X15 Productivity Series (2024). Supports boost delivery, transient response, and emissions-compliant airflow.",
+      "image": null,
+      "quantity_available": 12,
+      "reorder_threshold": 3,
+      "category": "engine",
+      "weight_kg": 42,
+      "cost_price": "2850.00",
+      "resale_price": "3695.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 7,
+    "fields": {
+      "part": "2e8a5695-dc55-4c3c-9a98-cdf2ec8532c1",
+      "component": "92d49fa7-aebe-4f17-bfd8-cc67c7143372"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "e8111cdc-d196-438a-8e75-e2dc9430b839",
+    "fields": {
+      "part_number": "PT-X15PROD-2024-02",
+      "name": "Fuel Injector Kit",
+      "description": "OEM fuel injector service kit for X15 Productivity Series (2024). Designed for precise fuel metering, combustion stability, and service replacement intervals.",
+      "image": null,
+      "quantity_available": 8,
+      "reorder_threshold": 2,
+      "category": "engine",
+      "weight_kg": 9,
+      "cost_price": "1980.00",
+      "resale_price": "2575.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 8,
+    "fields": {
+      "part": "e8111cdc-d196-438a-8e75-e2dc9430b839",
+      "component": "92d49fa7-aebe-4f17-bfd8-cc67c7143372"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "29eaa394-19b6-4381-b8b5-31221d546cf2",
+    "fields": {
+      "part_number": "PT-X15PROD-2024-03",
+      "name": "Oil Filter Service Kit",
+      "description": "Scheduled maintenance oil filter service kit for X15 Productivity Series (2024). Includes primary oil filtration components for regular preventive maintenance.",
+      "image": null,
+      "quantity_available": 20,
+      "reorder_threshold": 10,
+      "category": "engine",
+      "weight_kg": 4,
+      "cost_price": "85.00",
+      "resale_price": "129.00",
+      "status": "backordered",
+      "supplier": "Fleetguard / Cummins",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 9,
+    "fields": {
+      "part": "29eaa394-19b6-4381-b8b5-31221d546cf2",
+      "component": "92d49fa7-aebe-4f17-bfd8-cc67c7143372"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "6b1faf7d-dccc-44ad-bf7d-e39f2a5b8c4f",
+    "fields": {
+      "part_number": "PT-X12-2024-01",
+      "name": "Turbocharger Assembly",
+      "description": "High-efficiency turbocharger assembly matched for X12 (2024). Supports boost delivery, transient response, and emissions-compliant airflow.",
+      "image": null,
+      "quantity_available": 12,
+      "reorder_threshold": 3,
+      "category": "engine",
+      "weight_kg": 42,
+      "cost_price": "2850.00",
+      "resale_price": "3695.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 10,
+    "fields": {
+      "part": "6b1faf7d-dccc-44ad-bf7d-e39f2a5b8c4f",
+      "component": "172ef102-256a-46a1-8e4e-eecba0593c65"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "dda9e50f-dd3b-478a-a022-0262eaa2f204",
+    "fields": {
+      "part_number": "PT-X12-2024-02",
+      "name": "Fuel Injector Kit",
+      "description": "OEM fuel injector service kit for X12 (2024). Designed for precise fuel metering, combustion stability, and service replacement intervals.",
+      "image": null,
+      "quantity_available": 8,
+      "reorder_threshold": 2,
+      "category": "engine",
+      "weight_kg": 9,
+      "cost_price": "1980.00",
+      "resale_price": "2575.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 11,
+    "fields": {
+      "part": "dda9e50f-dd3b-478a-a022-0262eaa2f204",
+      "component": "172ef102-256a-46a1-8e4e-eecba0593c65"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "059dd27d-1254-4899-8f48-685720564c18",
+    "fields": {
+      "part_number": "PT-X12-2024-03",
+      "name": "Oil Filter Service Kit",
+      "description": "Scheduled maintenance oil filter service kit for X12 (2024). Includes primary oil filtration components for regular preventive maintenance.",
+      "image": null,
+      "quantity_available": 20,
+      "reorder_threshold": 10,
+      "category": "engine",
+      "weight_kg": 4,
+      "cost_price": "85.00",
+      "resale_price": "129.00",
+      "status": "backordered",
+      "supplier": "Fleetguard / Cummins",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 12,
+    "fields": {
+      "part": "059dd27d-1254-4899-8f48-685720564c18",
+      "component": "172ef102-256a-46a1-8e4e-eecba0593c65"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "829845de-23c4-4dd1-adfb-75305df2120e",
+    "fields": {
+      "part_number": "PT-X12HDT-2024-01",
+      "name": "Turbocharger Assembly",
+      "description": "High-efficiency turbocharger assembly matched for X12 for Heavy-duty Truck (2024). Supports boost delivery, transient response, and emissions-compliant airflow.",
+      "image": null,
+      "quantity_available": 12,
+      "reorder_threshold": 3,
+      "category": "engine",
+      "weight_kg": 42,
+      "cost_price": "2850.00",
+      "resale_price": "3695.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 13,
+    "fields": {
+      "part": "829845de-23c4-4dd1-adfb-75305df2120e",
+      "component": "556b96b2-5ff0-463a-b3f0-e689bc675f90"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "32ac47dd-6abd-4b9f-9555-552515662314",
+    "fields": {
+      "part_number": "PT-X12HDT-2024-02",
+      "name": "Fuel Injector Kit",
+      "description": "OEM fuel injector service kit for X12 for Heavy-duty Truck (2024). Designed for precise fuel metering, combustion stability, and service replacement intervals.",
+      "image": null,
+      "quantity_available": 8,
+      "reorder_threshold": 2,
+      "category": "engine",
+      "weight_kg": 9,
+      "cost_price": "1980.00",
+      "resale_price": "2575.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 14,
+    "fields": {
+      "part": "32ac47dd-6abd-4b9f-9555-552515662314",
+      "component": "556b96b2-5ff0-463a-b3f0-e689bc675f90"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "54582c09-0633-4d35-809f-8a3301b93577",
+    "fields": {
+      "part_number": "PT-X12HDT-2024-03",
+      "name": "Oil Filter Service Kit",
+      "description": "Scheduled maintenance oil filter service kit for X12 for Heavy-duty Truck (2024). Includes primary oil filtration components for regular preventive maintenance.",
+      "image": null,
+      "quantity_available": 20,
+      "reorder_threshold": 10,
+      "category": "engine",
+      "weight_kg": 4,
+      "cost_price": "85.00",
+      "resale_price": "129.00",
+      "status": "backordered",
+      "supplier": "Fleetguard / Cummins",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 15,
+    "fields": {
+      "part": "54582c09-0633-4d35-809f-8a3301b93577",
+      "component": "556b96b2-5ff0-463a-b3f0-e689bc675f90"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "65b5d867-c7c2-42bd-85d8-b8654be7ba90",
+    "fields": {
+      "part_number": "PT-X12RV-2024-01",
+      "name": "Turbocharger Assembly",
+      "description": "High-efficiency turbocharger assembly matched for X12 for Motorhome and RV (2024). Supports boost delivery, transient response, and emissions-compliant airflow.",
+      "image": null,
+      "quantity_available": 12,
+      "reorder_threshold": 3,
+      "category": "engine",
+      "weight_kg": 42,
+      "cost_price": "2850.00",
+      "resale_price": "3695.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 16,
+    "fields": {
+      "part": "65b5d867-c7c2-42bd-85d8-b8654be7ba90",
+      "component": "43ec0c07-2a99-49a5-90b2-213fc979a468"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "79fab406-3a08-470f-be9b-c05217e278cb",
+    "fields": {
+      "part_number": "PT-X12RV-2024-02",
+      "name": "Fuel Injector Kit",
+      "description": "OEM fuel injector service kit for X12 for Motorhome and RV (2024). Designed for precise fuel metering, combustion stability, and service replacement intervals.",
+      "image": null,
+      "quantity_available": 8,
+      "reorder_threshold": 2,
+      "category": "engine",
+      "weight_kg": 9,
+      "cost_price": "1980.00",
+      "resale_price": "2575.00",
+      "status": "in_stock",
+      "supplier": "Cummins Genuine Parts",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 17,
+    "fields": {
+      "part": "79fab406-3a08-470f-be9b-c05217e278cb",
+      "component": "43ec0c07-2a99-49a5-90b2-213fc979a468"
+    }
+  },
+  {
+    "model": "inventory.part",
+    "pk": "40aa03d1-9700-4f0d-80aa-d5d47b565058",
+    "fields": {
+      "part_number": "PT-X12RV-2024-03",
+      "name": "Oil Filter Service Kit",
+      "description": "Scheduled maintenance oil filter service kit for X12 for Motorhome and RV (2024). Includes primary oil filtration components for regular preventive maintenance.",
+      "image": null,
+      "quantity_available": 20,
+      "reorder_threshold": 10,
+      "category": "engine",
+      "weight_kg": 4,
+      "cost_price": "85.00",
+      "resale_price": "129.00",
+      "status": "backordered",
+      "supplier": "Fleetguard / Cummins",
+      "created_at": "2026-03-05T12:00:00Z",
+      "inventory_deducted": false,
+      "last_ordered_at": "2026-02-20T15:30:00Z"
+    }
+  },
+  {
+    "model": "inventory.part_components",
+    "pk": 18,
+    "fields": {
+      "part": "40aa03d1-9700-4f0d-80aa-d5d47b565058",
+      "component": "43ec0c07-2a99-49a5-90b2-213fc979a468"
+    }
+  }
+]

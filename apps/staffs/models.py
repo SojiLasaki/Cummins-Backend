@@ -3,6 +3,7 @@ from apps.users.models import Profile
 from apps.users.models import Station
 # Create your models here.
 
+
 class StaffProfile(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name="staff_profile")
     STATUS = {

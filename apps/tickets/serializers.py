@@ -3,6 +3,11 @@ from .models import Ticket
 from apps.diagnostics.serializers import DiagnosticReportSerializer
 from apps.inventory.serializers import PartSerializer
 from apps.schedules.serializers import ScheduleListSerializer
+from .services.repair_time_and_cost import (
+    get_predicted_total_time_minutes,
+    get_predicted_labor_cost,
+    get_maintenance_cost_breakdown,
+)
 
 
 class TicketSerializer(serializers.ModelSerializer):
@@ -14,6 +19,11 @@ class TicketSerializer(serializers.ModelSerializer):
     assigned_technician_first_name = serializers.SerializerMethodField(read_only=True)
     assigned_technician_last_name = serializers.SerializerMethodField(read_only=True)
     assigned_technician_id = serializers.SerializerMethodField(read_only=True)
+
+    # Repair time & cost (predicted total = repair + commute; labor = total hours × hourly rate)
+    predicted_total_time_minutes = serializers.SerializerMethodField(read_only=True)
+    predicted_labor_cost = serializers.SerializerMethodField(read_only=True)
+    maintenance_cost_breakdown = serializers.SerializerMethodField(read_only=True)
 
     # Customer display fields
     customer_first_name = serializers.CharField(
@@ -65,6 +75,16 @@ class TicketSerializer(serializers.ModelSerializer):
     def get_assigned_technician_id(self, obj):
         return obj.assigned_technician_id if obj.assigned_technician_id else None
 
+    def get_predicted_total_time_minutes(self, obj):
+        return get_predicted_total_time_minutes(obj)
+
+    def get_predicted_labor_cost(self, obj):
+        cost = get_predicted_labor_cost(obj)
+        return float(cost) if cost is not None else None
+
+    def get_maintenance_cost_breakdown(self, obj):
+        return get_maintenance_cost_breakdown(obj)
+
     def get_customer_name(self, obj):
         if not getattr(obj, "customer", None):
             return ""
@@ -106,7 +126,11 @@ class TicketSerializer(serializers.ModelSerializer):
             "priority",
             "customer_satisfaction_rating",
             "estimated_resolution_time_minutes",
+            "predicted_commute_time_minutes",
             "actual_resolution_time_minutes",
+            "predicted_total_time_minutes",
+            "predicted_labor_cost",
+            "maintenance_cost_breakdown",
             "predicted_resolution_summary",
             "auto_assigned",
             "parts",

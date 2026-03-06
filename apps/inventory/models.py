@@ -79,7 +79,7 @@ class Tool(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     quantity_available = models.IntegerField(default=1)
-    statin = models.ManyToManyField("users.Station", related_name="tools")
+    station = models.ManyToManyField("users.Station", related_name="tools")
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

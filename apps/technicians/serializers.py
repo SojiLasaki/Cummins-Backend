@@ -113,10 +113,10 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
             email=email,
             first_name=first_name,
             last_name=last_name,
-            # password=password,
             role=User.Roles.TECHNICIAN,
         )
-        user.set_password(password) 
+        if password:
+            user.set_password(password)
         user.save()
 
         profile = user.profile
@@ -135,6 +135,9 @@ class TechnicianProfileSerializer(serializers.ModelSerializer):
         user.email = validated_data.pop("email", user.email)
         user.first_name = validated_data.pop("first_name", user.first_name)
         user.last_name = validated_data.pop("last_name", user.last_name)
+        password = validated_data.pop("password", None)
+        if password:
+            user.set_password(password)
         user.save()
 
         # Update profile fields

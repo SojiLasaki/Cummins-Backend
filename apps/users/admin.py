@@ -4,11 +4,6 @@ from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
 
-admin.site.register(User)
-admin.site.register(Profile)
-admin.site.register(AdminUserProfile)
-admin.site.register(Station)
-admin.site.register(Region)
 
 class CustomUserAdmin(UserAdmin):
     model = User
@@ -22,3 +17,10 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         ("Role Info", {"fields": ("role",)}),
     )
+
+
+admin.site.register(User, CustomUserAdmin)
+admin.site.register(Profile)
+admin.site.register(AdminUserProfile)
+admin.site.register(Station)
+admin.site.register(Region)

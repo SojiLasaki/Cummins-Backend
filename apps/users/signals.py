@@ -21,26 +21,24 @@ def create_user_profiles(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=AdminUserProfile)
 def update_user_from_profile(sender, instance, created, **kwargs):
-    if not created:
-        user = instance.user
+    if created:
+        return
+    user = getattr(instance, "user", None) or (
+        getattr(instance, "profile", None) and getattr(instance.profile, "user", None)
+    )
+    if user is None:
+        return
+    if hasattr(instance, "username"):
         user.username = instance.username
+    if hasattr(instance, "email"):
         user.email = instance.email
+    if hasattr(instance, "first_name"):
         user.first_name = instance.first_name
+    if hasattr(instance, "last_name"):
         user.last_name = instance.last_name
+    if hasattr(instance, "role"):
         user.role = instance.role
-        user.save()
-
-
-@receiver(post_save, sender=AdminUserProfile)
-def update_user_from_profile(sender, instance, created, **kwargs):
-    if not created:
-        user = instance.user
-        user.username = instance.username
-        user.email = instance.email
-        user.first_name = instance.first_name
-        user.last_name = instance.last_name
-        user.role = instance.role
-        user.save()
+    user.save()
 
 
 

@@ -1,0 +1,102 @@
+[
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000001",
+      "fields": {
+        "name": "Torque Wrench Set",
+        "description": "Precision torque wrench set used for fastening and reassembly across battery systems, fuel cells, ePowertrain systems, and electrolyzers.",
+        "quantity_available": 12,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000002",
+      "fields": {
+        "name": "Insulated Socket Set",
+        "description": "High-voltage insulated socket set for safe servicing of electrical components and battery-related assemblies.",
+        "quantity_available": 10,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000003",
+      "fields": {
+        "name": "High-Voltage Multimeter",
+        "description": "Diagnostic meter designed for voltage, continuity, and electrical verification on battery, inverter, and fuel cell systems.",
+        "quantity_available": 8,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000004",
+      "fields": {
+        "name": "Thermal Imaging Camera",
+        "description": "Infrared thermal camera used to detect overheating cells, connectors, power electronics, and cooling issues.",
+        "quantity_available": 5,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000005",
+      "fields": {
+        "name": "Hydrogen Leak Detector",
+        "description": "Portable detector for identifying hydrogen leaks in fuel cell and electrolyzer systems.",
+        "quantity_available": 6,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000006",
+      "fields": {
+        "name": "Diagnostic Scan Tool",
+        "description": "Electronic diagnostic interface for reading faults, status codes, and performance data from smart power systems.",
+        "quantity_available": 7,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000007",
+      "fields": {
+        "name": "Pressure Calibration Kit",
+        "description": "Calibration and pressure verification kit for hydrogen, coolant, and process line systems.",
+        "quantity_available": 4,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000008",
+      "fields": {
+        "name": "Coolant Line Service Kit",
+        "description": "Tool kit for servicing coolant hoses, fittings, clamps, and thermal management loops.",
+        "quantity_available": 9,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000009",
+      "fields": {
+        "name": "Insulation Resistance Tester",
+        "description": "Electrical insulation tester for validating HV cable and motor/inverter isolation performance.",
+        "quantity_available": 5,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    },
+    {
+      "model": "inventory.tool",
+      "pk": "90000000-0000-4000-8000-000000000010",
+      "fields": {
+        "name": "Seal and Gasket Installation Kit",
+        "description": "Service kit used for seal, gasket, and membrane-safe installation during repairs and reassembly.",
+        "quantity_available": 11,
+        "created_at": "2026-03-05T19:45:00Z"
+      }
+    }
+  ]

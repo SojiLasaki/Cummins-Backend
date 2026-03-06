@@ -42,6 +42,7 @@ class ActivityLog(models.Model):
     object_type = models.CharField(max_length=100, blank=True, null=True)
     object_id = models.UUIDField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="success")
+    station = models.ForeignKey("users.Station", on_delete=models.SET_NULL, null=True, blank=True, related_name="logs")
     severity = models.CharField(max_length=20, choices=SEVERITY_LEVELS, default="info")
     ip_address = models.GenericIPAddressField(blank=True, null=True)
     user_agent = models.TextField(blank=True, null=True)
