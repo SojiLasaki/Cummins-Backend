@@ -34,7 +34,87 @@ def _normalized(text: str) -> str:
 def _looks_like_ticket_request(text: str) -> bool:
     checks = ["ticket", "issue", "fault", "breakdown", "create", "assign", "repair"]
     normalized = _normalized(text)
+    # Exclude update requests from ticket creation
+    update_checks = ["update", "change", "modify", "edit", "set status", "mark as", "close"]
+    if any(token in normalized for token in update_checks):
+        return False
     return any(token in normalized for token in checks)
+
+
+def _looks_like_update_request(text: str) -> bool:
+    """Detect if user wants to update an existing ticket."""
+    update_checks = [
+        "update", "change", "modify", "edit", "set status", "mark as",
+        "close ticket", "resolve", "complete", "reassign", "change priority",
+        "update description", "add notes", "change status"
+    ]
+    normalized = _normalized(text)
+    return any(token in normalized for token in update_checks)
+
+
+def _extract_ticket_reference(text: str, context_payload: dict[str, Any]) -> str | None:
+    """Extract ticket ID reference from text or context."""
+    # Check context first
+    if isinstance(context_payload, dict):
+        ticket_id = str(context_payload.get("ticket_id") or context_payload.get("ticket_ref") or "").strip()
+        if ticket_id:
+            return ticket_id
+
+    normalized = text.strip()
+
+    # Match TK-xxx pattern
+    tk_match = re.search(r"TK-\d+", normalized, re.IGNORECASE)
+    if tk_match:
+        return tk_match.group(0).upper()
+
+    # Match "ticket #123" or "ticket 123" patterns
+    ticket_num_match = re.search(r"ticket\s*#?(\d+)", normalized, re.IGNORECASE)
+    if ticket_num_match:
+        return f"TK-{ticket_num_match.group(1)}"
+
+    return None
+
+
+def _extract_update_fields(text: str, ticket: "Ticket") -> dict[str, Any]:
+    """Extract fields to update from the user's request."""
+    normalized = _normalized(text)
+    updates: dict[str, Any] = {}
+
+    # Status updates
+    status_mappings = {
+        ("close", "closed", "complete", "completed", "resolve", "resolved", "done", "finish", "finished"): "completed",
+        ("in progress", "start", "working", "started", "begin"): "in_progress",
+        ("pending", "wait", "waiting", "on hold"): "pending",
+        ("assign", "assigned"): "assigned",
+        ("cancel", "cancelled", "canceled"): "cancelled",
+        ("awaiting parts", "waiting for parts", "needs parts"): "awaiting_parts",
+    }
+    for keywords, status_value in status_mappings.items():
+        if any(kw in normalized for kw in keywords):
+            updates["status"] = status_value
+            break
+
+    # Priority updates
+    priority_mappings = {
+        ("critical", "urgent", "asap", "emergency", "p1", "priority 1"): 4,
+        ("high priority", "high", "important", "p2", "priority 2"): 3,
+        ("medium priority", "medium", "normal", "p3", "priority 3"): 2,
+        ("low priority", "low", "minor", "p4", "priority 4"): 1,
+    }
+    for keywords, priority_value in priority_mappings.items():
+        if any(kw in normalized for kw in keywords):
+            updates["priority"] = priority_value
+            updates["severity"] = priority_value
+            break
+
+    # Description updates - look for quoted text or "description:" prefix
+    desc_match = re.search(r'(?:description|notes?|details?)[\s:]+["\']?([^"\']+)["\']?', normalized, re.IGNORECASE)
+    if desc_match:
+        new_desc = desc_match.group(1).strip()
+        if new_desc and len(new_desc) > 5:
+            updates["description"] = new_desc
+
+    return updates
 
 
 def _derive_specialization(text: str) -> str:
@@ -75,6 +155,9 @@ def _action_risk_level(action_type: str, priority: int) -> str:
         return "medium"
     if action_type == AgentActionProposal.ACTION_CREATE_TICKET:
         return "medium" if priority >= 3 else "low"
+    if action_type == AgentActionProposal.ACTION_UPDATE_TICKET:
+        # Status changes to completed/cancelled are higher risk
+        return "low"
     return "medium"
 
 
@@ -336,6 +419,85 @@ def plan_agent_actions(
 ) -> PlanningResult:
     proposals: list[AgentActionProposal] = []
     mcp_reads: list[dict[str, Any]] = []
+
+    # Handle update ticket requests first
+    if _looks_like_update_request(query):
+        ticket_ref = _extract_ticket_reference(query, context_payload)
+        if not ticket_ref:
+            return PlanningResult(
+                proposals=[],
+                mcp_reads=[],
+                follow_up_question="I can help update a ticket, but I need to know which ticket. Please provide the ticket ID (e.g., TK-001).",
+                missing_fields=["ticket_reference"],
+            )
+
+        # Look up the ticket
+        ticket = Ticket.objects.filter(ticket_id=ticket_ref).first()
+        if not ticket:
+            # Try by UUID
+            try:
+                ticket = Ticket.objects.filter(id=ticket_ref).first()
+            except Exception:
+                ticket = None
+
+        if not ticket:
+            return PlanningResult(
+                proposals=[],
+                mcp_reads=[],
+                follow_up_question=f"I couldn't find ticket {ticket_ref}. Please verify the ticket ID and try again.",
+                missing_fields=["valid_ticket_reference"],
+            )
+
+        # Extract what to update
+        updates = _extract_update_fields(query, ticket)
+        if not updates:
+            return PlanningResult(
+                proposals=[],
+                mcp_reads=[],
+                follow_up_question=f"I found ticket {ticket.ticket_id}, but I'm not sure what to update. Please specify what you'd like to change (e.g., status, priority, description).",
+                missing_fields=["update_fields"],
+            )
+
+        workflow_id = str(uuid.uuid4())
+        normalized_policy_mode = _normalize_policy_mode(policy_mode or context_payload.get("policy_mode"))
+        normalized_intent = str(intent or context_payload.get("intent") or "update").strip().lower() or "update"
+
+        update_payload = {
+            "workflow_id": workflow_id,
+            "ticket_id": str(ticket.id),
+            "ticket_ref": ticket.ticket_id,
+            "reason": f"User requested update: {query[:200]}",
+            "updates": updates,
+            "current_values": {
+                "status": ticket.status,
+                "priority": ticket.priority,
+                "severity": ticket.severity,
+                "description": ticket.description[:200] if ticket.description else "",
+            },
+        }
+
+        proposals.append(
+            AgentActionProposal.objects.create(
+                action_type=AgentActionProposal.ACTION_UPDATE_TICKET,
+                status=AgentActionProposal.STATUS_PENDING,
+                payload=update_payload,
+                source_query=query,
+                source_context=context_payload,
+                created_by=user if getattr(user, "is_authenticated", False) else None,
+                metadata=_proposal_metadata(
+                    action_type=AgentActionProposal.ACTION_UPDATE_TICKET,
+                    workflow_id=workflow_id,
+                    query=query,
+                    context_payload=context_payload,
+                    policy_mode=normalized_policy_mode,
+                    intent=normalized_intent,
+                    reason=f"User requested to update ticket {ticket.ticket_id}.",
+                    priority=ticket.priority or 2,
+                ),
+            )
+        )
+
+        return PlanningResult(proposals=proposals, mcp_reads=mcp_reads)
 
     if not _looks_like_ticket_request(query):
         return PlanningResult(proposals=proposals, mcp_reads=mcp_reads, follow_up_question="", missing_fields=[])
@@ -842,6 +1004,61 @@ def execute_agent_action(
                 if local_pick
                 else None,
                 "external": external_result,
+            }
+
+        elif proposal.action_type == AgentActionProposal.ACTION_UPDATE_TICKET:
+            # Update an existing ticket
+            ticket_id = str(payload.get("ticket_id") or "").strip()
+            ticket_ref = str(payload.get("ticket_ref") or "").strip()
+
+            ticket = None
+            if ticket_id:
+                try:
+                    ticket = Ticket.objects.filter(id=ticket_id).first()
+                except Exception:
+                    pass
+            if not ticket and ticket_ref:
+                ticket = Ticket.objects.filter(ticket_id=ticket_ref).first()
+
+            if not ticket:
+                raise ValueError(f"Ticket not found: {ticket_ref or ticket_id}")
+
+            updates = payload.get("updates") if isinstance(payload.get("updates"), dict) else {}
+
+            # Apply updates
+            updated_fields = []
+            if "status" in updates:
+                old_status = ticket.status
+                ticket.status = str(updates["status"])
+                updated_fields.append("status")
+                # Update timestamps based on status change
+                if ticket.status == "completed" and old_status != "completed":
+                    ticket.resolved_at = timezone.now()
+                    updated_fields.append("resolved_at")
+                elif ticket.status == "closed" and old_status != "closed":
+                    ticket.closed_at = timezone.now()
+                    updated_fields.append("closed_at")
+
+            if "priority" in updates:
+                ticket.priority = int(updates["priority"])
+                updated_fields.append("priority")
+
+            if "severity" in updates:
+                ticket.severity = int(updates["severity"])
+                updated_fields.append("severity")
+
+            if "description" in updates:
+                ticket.description = str(updates["description"])
+                updated_fields.append("description")
+
+            if updated_fields:
+                ticket.save(update_fields=updated_fields)
+
+            proposal.result = {
+                "local_ticket_uuid": str(ticket.id),
+                "local_ticket_id": ticket.ticket_id,
+                "updated_fields": updated_fields,
+                "updates_applied": updates,
             }
 
         elif proposal.action_type == AgentActionProposal.ACTION_ORDER_PART:

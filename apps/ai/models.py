@@ -198,10 +198,12 @@ class AgentPromptConfig(models.Model):
 
 class AgentActionProposal(models.Model):
     ACTION_CREATE_TICKET = "create_ticket"
+    ACTION_UPDATE_TICKET = "update_ticket"
     ACTION_ASSIGN_EMPLOYEE = "assign_employee"
     ACTION_ORDER_PART = "order_part"
     ACTION_TYPE_CHOICES = (
         (ACTION_CREATE_TICKET, "Create Ticket"),
+        (ACTION_UPDATE_TICKET, "Update Ticket"),
         (ACTION_ASSIGN_EMPLOYEE, "Assign Employee"),
         (ACTION_ORDER_PART, "Order Part"),
     )

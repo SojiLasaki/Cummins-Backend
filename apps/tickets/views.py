@@ -121,8 +121,22 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"], url_path="regenerate_checklist")
     def regenerate_checklist(self, request, pk=None):
+        """Forcefully regenerate the checklist, replacing existing template."""
         ticket = self.get_object()
         regenerate_ticket_checklist(ticket)
+        return Response(TicketSerializer(ticket).data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="sync_checklist")
+    def sync_checklist(self, request, pk=None):
+        """Generate checklist only if the ticket doesn't already have one.
+
+        Use this endpoint to manually trigger checklist generation for tickets
+        that were created without a checklist (e.g., legacy tickets or those
+        created through other channels). Unlike regenerate_checklist, this
+        preserves any existing checklist.
+        """
+        ticket = self.get_object()
+        ensure_ticket_checklist(ticket)
         return Response(TicketSerializer(ticket).data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["patch"], url_path="checklist_progress")
