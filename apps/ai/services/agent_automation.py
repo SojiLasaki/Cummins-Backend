@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 from typing import Any
 
+from django.db import models
 from django.utils import timezone
 
 from apps.ai.models import AgentActionProposal, AgentExecutionTrace, McpAdapter
@@ -50,6 +51,184 @@ def _looks_like_update_request(text: str) -> bool:
     ]
     normalized = _normalized(text)
     return any(token in normalized for token in update_checks)
+
+
+def _looks_like_inventory_query(text: str) -> bool:
+    """Detect if user is asking about inventory/parts status."""
+    inventory_checks = [
+        "inventory", "stock", "parts available", "low stock", "reorder",
+        "what parts", "show parts", "list parts", "check stock", "stock level",
+        "how many", "in stock", "out of stock", "parts status", "inventory status",
+        "need to order", "running low", "parts list"
+    ]
+    normalized = _normalized(text)
+    return any(token in normalized for token in inventory_checks)
+
+
+def _looks_like_order_request(text: str) -> bool:
+    """Detect if user wants to order parts directly."""
+    order_checks = [
+        "order part", "order parts", "purchase", "buy", "restock",
+        "place order", "create order", "need to order", "order more",
+        "replenish", "get more"
+    ]
+    normalized = _normalized(text)
+    # Must have order-related keyword AND part-related keyword
+    has_order = any(token in normalized for token in order_checks)
+    has_part = any(token in normalized for token in ["part", "parts", "injector", "filter", "sensor", "hose", "alternator", "pump", "valve"])
+    return has_order or (has_part and "order" in normalized)
+
+
+def _get_inventory_summary(query: str) -> str:
+    """Generate inventory summary based on user query."""
+    normalized = _normalized(query)
+
+    # Check for low stock query
+    if any(kw in normalized for kw in ["low stock", "reorder", "running low", "need to order"]):
+        low_stock_parts = Part.objects.filter(
+            quantity_available__lte=models.F("reorder_threshold")
+        ).order_by("quantity_available")[:10]
+
+        if not low_stock_parts:
+            return "✅ **Inventory Status**: All parts are above reorder threshold. No immediate restocking needed."
+
+        lines = ["⚠️ **Low Stock Alert** - Parts below reorder threshold:\n"]
+        for part in low_stock_parts:
+            status_icon = "🔴" if part.quantity_available == 0 else "🟡"
+            lines.append(
+                f"{status_icon} **{part.name}** ({part.part_number}): "
+                f"{part.quantity_available} in stock (reorder at {part.reorder_threshold})"
+            )
+        lines.append("\n_Reply with 'Order [part name]' to create a purchase order._")
+        return "\n".join(lines)
+
+    # Check for specific part query
+    for keyword, part_name in PART_KEYWORDS.items():
+        if keyword in normalized:
+            parts = Part.objects.filter(name__icontains=keyword)[:5]
+            if parts:
+                lines = [f"📦 **{part_name} Inventory**:\n"]
+                for part in parts:
+                    status = "✅" if part.quantity_available > part.reorder_threshold else "⚠️"
+                    lines.append(f"{status} {part.name}: {part.quantity_available} available")
+                return "\n".join(lines)
+
+    # General inventory summary
+    total_parts = Part.objects.count()
+    low_stock_count = Part.objects.filter(
+        quantity_available__lte=models.F("reorder_threshold")
+    ).count()
+    out_of_stock = Part.objects.filter(quantity_available=0).count()
+
+    summary = f"""📊 **Inventory Summary**
+
+• **Total Parts**: {total_parts}
+• **Low Stock**: {low_stock_count} parts need reordering
+• **Out of Stock**: {out_of_stock} parts
+
+_Ask "show low stock parts" for details or "order [part name]" to restock._"""
+    return summary
+
+
+def _extract_part_from_query(query: str) -> Part | None:
+    """Extract part reference from query text."""
+    normalized = _normalized(query)
+
+    # Check for part number pattern (e.g., PRT-001, 12345)
+    part_num_match = re.search(r"\b(PRT[-]?\d+|\d{4,})\b", query, re.IGNORECASE)
+    if part_num_match:
+        part = Part.objects.filter(part_number__icontains=part_num_match.group(1)).first()
+        if part:
+            return part
+
+    # Check for part name keywords
+    for keyword, _ in PART_KEYWORDS.items():
+        if keyword in normalized:
+            part = Part.objects.filter(name__icontains=keyword).first()
+            if part:
+                return part
+
+    # Try to find any mentioned part
+    words = normalized.split()
+    for word in words:
+        if len(word) > 3:
+            part = Part.objects.filter(
+                models.Q(name__icontains=word) | models.Q(part_number__icontains=word)
+            ).first()
+            if part:
+                return part
+
+    return None
+
+
+def _extract_quantity_from_query(query: str, default: int = 1) -> int:
+    """Extract quantity from query text."""
+    # Match patterns like "order 5", "buy 10", "5 units"
+    qty_match = re.search(r"\b(\d+)\s*(?:unit|piece|part|pcs)?s?\b", query, re.IGNORECASE)
+    if qty_match:
+        qty = int(qty_match.group(1))
+        return min(max(qty, 1), 100)  # Cap at 100
+    return default
+
+
+def _plan_order_from_query(
+    query: str,
+    context_payload: dict[str, Any],
+    user,
+    policy_mode: str,
+) -> PlanningResult | None:
+    """Create an order proposal from a direct order request."""
+    part = _extract_part_from_query(query)
+
+    if not part:
+        return PlanningResult(
+            proposals=[],
+            mcp_reads=[],
+            follow_up_question=(
+                "I can help you order parts. Please specify which part you need. "
+                "For example: 'Order 5 fuel injectors' or 'Restock part PRT-001'"
+            ),
+            missing_fields=["part_reference"],
+        )
+
+    quantity = _extract_quantity_from_query(query, default=max(1, part.reorder_threshold or 1))
+    workflow_id = str(uuid.uuid4())
+    normalized_policy_mode = _normalize_policy_mode(policy_mode)
+
+    order_payload = {
+        "workflow_id": workflow_id,
+        "part_id": str(part.id),
+        "part_number": part.part_number,
+        "part_name": part.name,
+        "quantity": quantity,
+        "current_stock": part.quantity_available,
+        "reorder_threshold": part.reorder_threshold,
+        "unit_cost": float(part.cost_price) if part.cost_price else None,
+        "estimated_total": float(part.cost_price * quantity) if part.cost_price else None,
+        "supplier": part.supplier or "Default Supplier",
+        "reason": f"User requested order: {query[:200]}",
+    }
+
+    proposal = AgentActionProposal.objects.create(
+        action_type=AgentActionProposal.ACTION_ORDER_PART,
+        status=AgentActionProposal.STATUS_PENDING,
+        payload=order_payload,
+        source_query=query,
+        source_context=context_payload,
+        created_by=user if getattr(user, "is_authenticated", False) else None,
+        metadata=_proposal_metadata(
+            action_type=AgentActionProposal.ACTION_ORDER_PART,
+            workflow_id=workflow_id,
+            query=query,
+            context_payload=context_payload,
+            policy_mode=normalized_policy_mode,
+            intent="parts_ops",
+            reason=f"User requested to order {quantity}x {part.name}",
+            priority=2,
+        ),
+    )
+
+    return PlanningResult(proposals=[proposal], mcp_reads=[])
 
 
 def _extract_ticket_reference(text: str, context_payload: dict[str, Any]) -> str | None:
@@ -511,6 +690,23 @@ def plan_agent_actions(
         )
 
         return PlanningResult(proposals=proposals, mcp_reads=mcp_reads)
+
+    # Handle inventory queries
+    if _looks_like_inventory_query(query):
+        inventory_data = _get_inventory_summary(query)
+        # Return inventory info as a follow-up (no proposal needed for read-only queries)
+        return PlanningResult(
+            proposals=[],
+            mcp_reads=[],
+            follow_up_question=inventory_data,
+            missing_fields=[],
+        )
+
+    # Handle direct order requests
+    if _looks_like_order_request(query):
+        order_result = _plan_order_from_query(query, context_payload, user, policy_mode)
+        if order_result:
+            return order_result
 
     if not _looks_like_ticket_request(query):
         return PlanningResult(proposals=proposals, mcp_reads=mcp_reads, follow_up_question="", missing_fields=[])
