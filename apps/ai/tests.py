@@ -3,7 +3,15 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from unittest.mock import patch
 
-from apps.ai.models import AgentActionProposal, AgentPromptConfig, KnowledgeChunk, KnowledgeDocument, McpAdapter
+from apps.ai.models import (
+    AgentActionProposal,
+    AgentPromptConfig,
+    FelixChatMessage,
+    FelixChatThread,
+    KnowledgeChunk,
+    KnowledgeDocument,
+    McpAdapter,
+)
 from apps.diagnostics.models import DiagnosticReport
 from apps.tickets.models import Ticket
 
@@ -435,3 +443,84 @@ class AIApiTests(TestCase):
         self.assertTrue(resp.data.get("result", {}).get("idempotent_reuse"))
         self.assertEqual(resp.data.get("result", {}).get("reused_proposal_id"), first.id)
         self.assertEqual(Ticket.objects.count(), 0)
+
+    @patch("apps.ai.views.run_langgraph_agent")
+    def test_chat_creates_thread_and_messages(self, mocked_agent):
+        mocked_agent.return_value = {
+            "answer": "Threaded response.",
+            "snippets": [],
+            "provider": "ollama",
+            "model": "qwen2.5:3b",
+            "agent_trace": [],
+        }
+
+        resp = self.client.post(
+            "/api/ai/chat/",
+            {
+                "query": "Explain injector return flow test on X15.",
+                "provider": "ollama",
+                "model": "qwen2.5:3b",
+            },
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        thread_id = str(resp.data.get("thread_id") or "").strip()
+        self.assertTrue(thread_id)
+
+        thread = FelixChatThread.objects.get(id=thread_id)
+        self.assertEqual(thread.owner_id, self.user.id)
+        messages = list(thread.messages.all())
+        self.assertEqual(len(messages), 2)
+        self.assertEqual(messages[0].role, FelixChatMessage.ROLE_USER)
+        self.assertEqual(messages[1].role, FelixChatMessage.ROLE_ASSISTANT)
+        self.assertIn("Threaded response", messages[1].content)
+
+    @patch("apps.ai.views.run_langgraph_agent")
+    def test_chat_reuses_existing_thread_when_thread_id_provided(self, mocked_agent):
+        mocked_agent.return_value = {
+            "answer": "Reused thread response.",
+            "snippets": [],
+            "provider": "openai",
+            "model": "gpt-4o-mini",
+            "agent_trace": [],
+        }
+
+        thread = FelixChatThread.objects.create(owner=self.user, title="Existing thread")
+        resp = self.client.post(
+            "/api/ai/chat/",
+            {
+                "query": "Follow up on prior thread.",
+                "thread_id": str(thread.id),
+                "provider": "openai",
+                "model": "gpt-4o-mini",
+            },
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(str(resp.data.get("thread_id")), str(thread.id))
+        thread.refresh_from_db()
+        self.assertEqual(thread.messages.count(), 2)
+
+    def test_thread_share_endpoint_returns_public_readable_snapshot(self):
+        thread = FelixChatThread.objects.create(owner=self.user, title="Shareable thread")
+        FelixChatMessage.objects.create(
+            thread=thread,
+            role=FelixChatMessage.ROLE_USER,
+            content="How to inspect coolant hose leak?",
+        )
+        FelixChatMessage.objects.create(
+            thread=thread,
+            role=FelixChatMessage.ROLE_ASSISTANT,
+            content="Start with pressure test and visual inspection near clamps.",
+        )
+
+        share_resp = self.client.post(f"/api/ai/chat_threads/{thread.id}/share/", {}, format="json")
+        self.assertEqual(share_resp.status_code, 200)
+        share_id = str(share_resp.data.get("share_id") or "").strip()
+        self.assertTrue(share_id)
+
+        public_client = APIClient()
+        public_resp = public_client.get(f"/api/ai/chat_threads/shared/{share_id}/")
+        self.assertEqual(public_resp.status_code, 200)
+        self.assertEqual(public_resp.data.get("id"), str(thread.id))
+        self.assertGreaterEqual(len(public_resp.data.get("messages") or []), 2)

@@ -5,6 +5,8 @@ from .views import (
     AIChatAPIView,
     AgentActionProposalViewSet,
     AgentPromptCurrentAPIView,
+    FelixChatThreadViewSet,
+    FelixSharedThreadAPIView,
     KnowledgeChunkViewSet,
     KnowledgeDocumentViewSet,
     KnowledgeEntityViewSet,
@@ -21,11 +23,13 @@ router.register(r"knowledge_entities", KnowledgeEntityViewSet)
 router.register(r"knowledge_relations", KnowledgeRelationViewSet)
 router.register(r"model_endpoints", ModelEndpointViewSet)
 router.register(r"mcp_adapters", McpAdapterViewSet)
+router.register(r"chat_threads", FelixChatThreadViewSet, basename="chat_threads")
 router.register(r"knowledge_graph", KnowledgeGraphViewSet, basename="knowledge_graph")
 router.register(r"agent_actions", AgentActionProposalViewSet, basename="agent_actions")
 
 urlpatterns = [
     path("chat/", AIChatAPIView.as_view(), name="ai-chat"),
+    path("chat_threads/shared/<str:share_token>/", FelixSharedThreadAPIView.as_view(), name="ai-shared-chat-thread"),
     path("agent_prompts/current/", AgentPromptCurrentAPIView.as_view(), name="agent-prompt-current"),
 ]
 urlpatterns += router.urls

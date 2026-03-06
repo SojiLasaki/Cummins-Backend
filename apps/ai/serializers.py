@@ -4,6 +4,8 @@ from .models import (
     AgentActionProposal,
     AgentExecutionTrace,
     AgentPromptConfig,
+    FelixChatMessage,
+    FelixChatThread,
     KnowledgeChunk,
     KnowledgeDocument,
     KnowledgeEntity,
@@ -111,3 +113,48 @@ class AgentActionProposalSerializer(serializers.ModelSerializer):
             "executed_at",
             "updated_at",
         )
+
+
+class FelixChatMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FelixChatMessage
+        fields = ("id", "role", "content", "metadata", "created_at")
+        read_only_fields = ("id", "created_at")
+
+
+class FelixChatThreadSerializer(serializers.ModelSerializer):
+    message_count = serializers.IntegerField(read_only=True)
+    is_shared = serializers.SerializerMethodField()
+    last_message_preview = serializers.SerializerMethodField()
+
+    class Meta:
+        model = FelixChatThread
+        fields = (
+            "id",
+            "title",
+            "message_count",
+            "is_shared",
+            "last_message_preview",
+            "last_message_at",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "message_count", "is_shared", "last_message_preview", "last_message_at", "created_at", "updated_at")
+
+    def get_is_shared(self, obj: FelixChatThread) -> bool:
+        return bool(obj.shared_token)
+
+    def get_last_message_preview(self, obj: FelixChatThread) -> str:
+        message = obj.messages.order_by("-created_at").values_list("content", flat=True).first()
+        if not message:
+            return ""
+        text = str(message).strip().replace("\n", " ")
+        return text[:140]
+
+
+class FelixChatThreadDetailSerializer(FelixChatThreadSerializer):
+    messages = FelixChatMessageSerializer(many=True, read_only=True)
+
+    class Meta(FelixChatThreadSerializer.Meta):
+        fields = FelixChatThreadSerializer.Meta.fields + ("messages", "shared_at")
+        read_only_fields = FelixChatThreadSerializer.Meta.read_only_fields + ("messages", "shared_at")

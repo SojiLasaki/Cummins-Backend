@@ -1,4 +1,8 @@
+import uuid
+from secrets import token_urlsafe
+
 from django.db import models
+from django.utils import timezone
 
 
 class KnowledgeDocument(models.Model):
@@ -257,6 +261,71 @@ class AgentActionProposal(models.Model):
 
     def __str__(self):
         return f"AgentActionProposal<{self.action_type}:{self.status}>"
+
+
+class FelixChatThread(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(
+        "users.User",
+        on_delete=models.CASCADE,
+        related_name="felix_chat_threads",
+    )
+    title = models.CharField(max_length=255, blank=True, default="")
+    shared_token = models.CharField(max_length=64, unique=True, null=True, blank=True)
+    shared_at = models.DateTimeField(null=True, blank=True)
+    last_message_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-last_message_at", "-updated_at"]
+        indexes = [
+            models.Index(fields=["owner", "-last_message_at"]),
+            models.Index(fields=["shared_token"]),
+        ]
+
+    def __str__(self):
+        return f"FelixChatThread<{self.id}>"
+
+    def ensure_share_token(self):
+        if self.shared_token:
+            return self.shared_token
+        self.shared_token = token_urlsafe(24)
+        self.shared_at = timezone.now()
+        self.save(update_fields=["shared_token", "shared_at", "updated_at"])
+        return self.shared_token
+
+
+class FelixChatMessage(models.Model):
+    ROLE_USER = "user"
+    ROLE_ASSISTANT = "assistant"
+    ROLE_SYSTEM = "system"
+    ROLE_CHOICES = (
+        (ROLE_USER, "User"),
+        (ROLE_ASSISTANT, "Assistant"),
+        (ROLE_SYSTEM, "System"),
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    thread = models.ForeignKey(
+        FelixChatThread,
+        on_delete=models.CASCADE,
+        related_name="messages",
+    )
+    role = models.CharField(max_length=16, choices=ROLE_CHOICES, default=ROLE_USER)
+    content = models.TextField(blank=True, default="")
+    metadata = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+        indexes = [
+            models.Index(fields=["thread", "created_at"]),
+            models.Index(fields=["role"]),
+        ]
+
+    def __str__(self):
+        return f"FelixChatMessage<{self.id}:{self.role}>"
 
 
 class AgentExecutionTrace(models.Model):

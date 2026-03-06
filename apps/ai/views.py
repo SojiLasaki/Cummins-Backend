@@ -1,12 +1,14 @@
 import json
 import os
 import re
+import uuid
 from html import unescape
 from django.http import HttpResponse
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from django.db import transaction
+from django.db.models import Count
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -18,6 +20,8 @@ from .models import (
     AgentActionProposal,
     AgentPromptConfig,
     AgentExecutionTrace,
+    FelixChatMessage,
+    FelixChatThread,
     KnowledgeChunk,
     KnowledgeDocument,
     KnowledgeEntity,
@@ -29,6 +33,9 @@ from .serializers import (
     AgentActionProposalSerializer,
     AgentPromptConfigSerializer,
     AgentExecutionTraceSerializer,
+    FelixChatMessageSerializer,
+    FelixChatThreadDetailSerializer,
+    FelixChatThreadSerializer,
     KnowledgeChunkSerializer,
     KnowledgeDocumentIngestSerializer,
     KnowledgeDocumentSerializer,
@@ -153,6 +160,16 @@ def _safe_int(value, default, minimum=1, maximum=100):
     except (TypeError, ValueError):
         parsed = int(default)
     return max(minimum, min(parsed, maximum))
+
+
+def _thread_title_from_query(query: str) -> str:
+    text = str(query or "").strip()
+    if not text:
+        return "New chat"
+    first_line = text.splitlines()[0].strip()
+    if len(first_line) <= 80:
+        return first_line
+    return f"{first_line[:80].rstrip()}…"
 
 
 def _tokenize_for_entities(text: str):
@@ -442,6 +459,77 @@ class ModelEndpointViewSet(viewsets.ModelViewSet):
         if combined and not any(bool(item.get("active")) for item in combined):
             combined[0]["active"] = True
         return Response(combined)
+
+
+class FelixChatThreadViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return (
+            FelixChatThread.objects.filter(owner=self.request.user)
+            .annotate(message_count=Count("messages"))
+            .prefetch_related("messages")
+        )
+
+    def get_serializer_class(self):
+        if self.action in {"retrieve", "messages"}:
+            return FelixChatThreadDetailSerializer
+        return FelixChatThreadSerializer
+
+    def perform_create(self, serializer):
+        title = str(self.request.data.get("title") or "").strip() or "New chat"
+        serializer.save(owner=self.request.user, title=title)
+
+    @action(detail=True, methods=["get"], url_path="messages")
+    def messages(self, request, pk=None):
+        thread = self.get_object()
+        data = FelixChatMessageSerializer(thread.messages.all(), many=True).data
+        return Response({"thread_id": str(thread.id), "messages": data}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="share")
+    def share(self, request, pk=None):
+        thread = self.get_object()
+        share_token = thread.ensure_share_token()
+        shared_api_path = f"/api/ai/chat_threads/shared/{share_token}/"
+        return Response(
+            {
+                "ok": True,
+                "share_id": share_token,
+                "thread_id": str(thread.id),
+                "shared_api_url": request.build_absolute_uri(shared_api_path),
+                "shared_api_path": shared_api_path,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class FelixSharedThreadAPIView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def get(self, request, share_token: str):
+        token = str(share_token or "").strip()
+        if not token:
+            return Response({"error": "share token is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        thread = (
+            FelixChatThread.objects.filter(shared_token=token)
+            .prefetch_related("messages")
+            .first()
+        )
+        if not thread:
+            return Response({"error": "shared conversation not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(
+            {
+                "id": str(thread.id),
+                "title": thread.title,
+                "shared_at": thread.shared_at,
+                "last_message_at": thread.last_message_at,
+                "messages": FelixChatMessageSerializer(thread.messages.all(), many=True).data,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class McpAdapterViewSet(viewsets.ModelViewSet):
@@ -1065,6 +1153,31 @@ class AIChatAPIView(APIView):
         else:
             context_payload = {"context_block": _coerce_context_text(raw_context)}
 
+        thread = None
+        raw_thread_id = (
+            payload.get("thread_id")
+            or payload.get("chat_thread_id")
+            or context_payload.get("thread_id")
+            or context_payload.get("chat_thread_id")
+            or ""
+        )
+        thread_id_text = str(raw_thread_id).strip()
+        if thread_id_text:
+            try:
+                parsed_thread_id = uuid.UUID(thread_id_text)
+            except (TypeError, ValueError):
+                return Response({"error": "Invalid thread_id format."}, status=status.HTTP_400_BAD_REQUEST)
+            thread = FelixChatThread.objects.filter(id=parsed_thread_id, owner=request.user).first()
+            if not thread:
+                return Response({"error": "Thread not found."}, status=status.HTTP_404_NOT_FOUND)
+        if not thread:
+            thread = FelixChatThread.objects.create(
+                owner=request.user,
+                title=_thread_title_from_query(query),
+                last_message_at=timezone.now(),
+            )
+        context_payload["thread_id"] = str(thread.id)
+
         prompt_config = AgentPromptConfig.get_current()
         context_payload.setdefault("system_prompt", prompt_config.system_prompt)
         context_payload.setdefault("domain_guardrail_prompt", prompt_config.domain_guardrail_prompt)
@@ -1117,6 +1230,26 @@ class AIChatAPIView(APIView):
         provider = str(payload.get("provider") or "").strip().lower() or None
         model = str(payload.get("model") or "").strip() or None
         retrieval_limit = _safe_int(payload.get("retrieval_limit", 6), default=6, minimum=1, maximum=20)
+        first_user_message = not thread.messages.filter(role=FelixChatMessage.ROLE_USER).exists()
+        FelixChatMessage.objects.create(
+            thread=thread,
+            role=FelixChatMessage.ROLE_USER,
+            content=query,
+            metadata={
+                "provider": provider or "",
+                "model": model or "",
+                "policy_mode": policy_mode,
+                "intent": intent,
+                "context_refs": context_refs,
+                "mcp_adapters": deduped_adapter_ids,
+            },
+        )
+        thread.last_message_at = timezone.now()
+        if first_user_message:
+            thread.title = _thread_title_from_query(query)
+            thread.save(update_fields=["title", "last_message_at", "updated_at"])
+        else:
+            thread.save(update_fields=["last_message_at", "updated_at"])
 
         try:
             result = run_langgraph_agent(
@@ -1161,12 +1294,25 @@ class AIChatAPIView(APIView):
                 if planning_result.follow_up_question and not proposals:
                     result["answer"] = planning_result.follow_up_question
 
+            FelixChatMessage.objects.create(
+                thread=thread,
+                role=FelixChatMessage.ROLE_ASSISTANT,
+                content=str(result.get("answer") or ""),
+                metadata={
+                    "proposals": proposals,
+                    "telemetry": telemetry,
+                },
+            )
+            thread.last_message_at = timezone.now()
+            thread.save(update_fields=["last_message_at", "updated_at"])
+
             return Response(
                 {
                     **result,
                     "proposals": proposals,
                     "telemetry": telemetry,
                     "agent_trace": result.get("agent_trace", []),
+                    "thread_id": str(thread.id),
                 },
                 status=status.HTTP_200_OK,
             )
