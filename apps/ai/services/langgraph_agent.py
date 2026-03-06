@@ -381,13 +381,25 @@ def _resolve_model_config(provider: str | None, model: str | None):
         queryset = queryset.filter(model_identifier=model)
     endpoint = queryset.order_by("-is_default", "name").first()
 
-    # Default to free online model (OpenRouter) - no local server needed
-    default_provider = os.getenv("FELIX_DEFAULT_PROVIDER", "openrouter")
-    default_model = os.getenv("FELIX_OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free")
+    default_provider = os.getenv("FELIX_DEFAULT_PROVIDER", "ollama")
+    default_model_by_provider = {
+        "openrouter": os.getenv("FELIX_OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free"),
+        "langgraph": os.getenv("FELIX_LANGGRAPH_MODEL", "gpt-4o-mini"),
+        "openai": os.getenv("FELIX_OPENAI_MODEL", "gpt-4.1-mini"),
+        "google": os.getenv("FELIX_GOOGLE_MODEL", "gemini-3-flash-preview"),
+        "anthropic": os.getenv("FELIX_ANTHROPIC_MODEL", "claude-3-5-sonnet-latest"),
+        "ollama": os.getenv("FELIX_OLLAMA_MODEL", "qwen2.5:3b"),
+        "vllm": os.getenv("FELIX_VLLM_MODEL", "Qwen/Qwen2.5-7B-Instruct"),
+        "llamacpp": os.getenv("FELIX_LLAMACPP_MODEL", "local-model"),
+    }
     default_base_url = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
 
     resolved_provider = provider or (endpoint.provider if endpoint else default_provider)
-    resolved_model = model or (endpoint.model_identifier if endpoint else default_model)
+    provider_default_model = default_model_by_provider.get(
+        str(resolved_provider or "").strip().lower(),
+        default_model_by_provider["openrouter"],
+    )
+    resolved_model = model or (endpoint.model_identifier if endpoint else provider_default_model)
     if endpoint and endpoint.base_url:
         base_url = endpoint.base_url
     elif resolved_provider == "openrouter":

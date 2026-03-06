@@ -188,6 +188,22 @@ def _mcp_auth_headers(adapter: McpAdapter) -> dict[str, str]:
 
 
 def _build_default_model_endpoints():
+    configured_default_provider = str(os.getenv("FELIX_DEFAULT_PROVIDER", "ollama") or "ollama").strip().lower()
+    supported_providers = {
+        "langgraph",
+        "openrouter",
+        "google",
+        "openai",
+        "anthropic",
+        "ollama",
+        "vllm",
+        "llamacpp",
+    }
+    default_provider = configured_default_provider if configured_default_provider in supported_providers else "ollama"
+
+    def is_default(provider: str) -> bool:
+        return provider == default_provider
+
     return [
         {
             "id": "builtin-langgraph",
@@ -195,7 +211,7 @@ def _build_default_model_endpoints():
             "provider": "langgraph",
             "model_identifier": os.getenv("FELIX_LANGGRAPH_MODEL", "gpt-4o-mini"),
             "label": "Backend AI Orchestrator · GPT-4o Mini",
-            "active": False,
+            "active": is_default("langgraph"),
         },
         {
             "id": "builtin-openrouter",
@@ -204,7 +220,7 @@ def _build_default_model_endpoints():
             "model_identifier": os.getenv("FELIX_OPENROUTER_MODEL", "meta-llama/llama-3.2-3b-instruct:free"),
             "base_url": os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
             "label": "OpenRouter · Llama 3.2 3B (free, set OPENROUTER_API_KEY)",
-            "active": True,
+            "active": is_default("openrouter"),
         },
         {
             "id": "builtin-google",
@@ -212,7 +228,7 @@ def _build_default_model_endpoints():
             "provider": "google",
             "model_identifier": os.getenv("FELIX_GOOGLE_MODEL", "gemini-3-flash-preview"),
             "label": "Google · Gemini 3 Flash Preview",
-            "active": False,
+            "active": is_default("google"),
         },
         {
             "id": "builtin-openai",
@@ -220,7 +236,7 @@ def _build_default_model_endpoints():
             "provider": "openai",
             "model_identifier": os.getenv("FELIX_OPENAI_MODEL", "gpt-4.1-mini"),
             "label": "OpenAI · GPT-4.1 Mini",
-            "active": False,
+            "active": is_default("openai"),
         },
         {
             "id": "builtin-anthropic",
@@ -228,16 +244,16 @@ def _build_default_model_endpoints():
             "provider": "anthropic",
             "model_identifier": os.getenv("FELIX_ANTHROPIC_MODEL", "claude-3-5-sonnet-latest"),
             "label": "Anthropic · Claude 3.5 Sonnet",
-            "active": False,
+            "active": is_default("anthropic"),
         },
         {
             "id": "builtin-ollama",
             "name": "Ollama (free local)",
             "provider": "ollama",
-            "model_identifier": os.getenv("FELIX_OLLAMA_MODEL", "llama3.2"),
+            "model_identifier": os.getenv("FELIX_OLLAMA_MODEL", "qwen2.5:3b"),
             "base_url": os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
-            "label": "Ollama · Llama 3.2 (free local)",
-            "active": False,
+            "label": "Ollama · Qwen2.5 3B (free local)",
+            "active": is_default("ollama"),
         },
         {
             "id": "builtin-vllm",
@@ -246,7 +262,7 @@ def _build_default_model_endpoints():
             "model_identifier": os.getenv("FELIX_VLLM_MODEL", "Qwen/Qwen2.5-7B-Instruct"),
             "base_url": os.getenv("VLLM_BASE_URL", "http://localhost:8001/v1"),
             "label": "vLLM (Local) · Qwen2.5 7B",
-            "active": False,
+            "active": is_default("vllm"),
         },
         {
             "id": "builtin-llamacpp",
@@ -255,7 +271,7 @@ def _build_default_model_endpoints():
             "model_identifier": os.getenv("FELIX_LLAMACPP_MODEL", "local-model"),
             "base_url": os.getenv("LLAMACPP_BASE_URL", "http://localhost:8088/v1"),
             "label": "llama.cpp (Local) · OpenAI-compatible",
-            "active": False,
+            "active": is_default("llamacpp"),
         },
     ]
 
