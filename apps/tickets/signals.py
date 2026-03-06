@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from apps.tickets.models import Ticket
 from apps.agents.assignment_agent import AssignmentAgent
 from apps.notifications.utils import send_notification
+from apps.tickets.patterns import upsert_pattern_from_completed_ticket
 
 User = get_user_model()
 
@@ -113,6 +114,16 @@ def notify_on_ticket_events(sender, instance: Ticket, created: bool, **kwargs):
                     data=payload(),
                 )
             )
+
+    if old_status != "completed" and instance.status == "completed":
+        def _persist_pattern():
+            try:
+                upsert_pattern_from_completed_ticket(instance)
+            except Exception:
+                # Learning persistence should never block ticket lifecycle events.
+                return
+
+        transaction.on_commit(_persist_pattern)
         tech_user = None
         if instance.assigned_technician_id and getattr(instance.assigned_technician, "profile", None):
             tech_user = instance.assigned_technician.profile.user
@@ -126,4 +137,3 @@ def notify_on_ticket_events(sender, instance: Ticket, created: bool, **kwargs):
                     data=payload(),
                 )
             )
-
