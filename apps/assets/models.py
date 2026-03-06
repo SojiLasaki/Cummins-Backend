@@ -15,8 +15,9 @@ class Asset(models.Model):
     asset_type = models.CharField(max_length=50, choices=ASSET_TYPE)
     product_id = models.CharField(max_length=10, unique=True, editable=False)
     serial_number = models.CharField(max_length=100)
-    model_number = models.CharField(max_length=100)
-    id = models.AutoField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
+    # model_number = models.CharField(max_length=100)
+    component = models.ForeignKey("inventory.Component", on_delete=models.SET_NULL, null=True, blank=True, related_name="assets")
+    id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
 
 
     def save(self, *args, **kwargs):

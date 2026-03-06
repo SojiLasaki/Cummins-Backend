@@ -17,7 +17,7 @@ def notify_customer_on_asset_update(sender, instance: Asset, created: bool, **kw
 
     def payload():
         return {
-            "asset_id": instance.id,
+            "asset_id": str(instance.id),
             "product_id": instance.product_id,
             "asset_type": instance.asset_type,
             "customer_id": str(customer.id) if customer else None,

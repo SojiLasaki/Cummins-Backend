@@ -1,3 +1,4 @@
+from __future__ import annotations
 import json
 import re
 import uuid
@@ -16,6 +17,7 @@ from apps.technicians.models import TechnicianProfile
 from apps.tickets.checklists import ensure_ticket_checklist, generate_ticket_checklist
 from apps.tickets.id_generation import generate_ticket_id
 from apps.tickets.models import Ticket
+
 
 
 PART_KEYWORDS = {

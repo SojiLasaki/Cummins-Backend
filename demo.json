@@ -1,110 +1,11 @@
 [
     {
-      "model": "users.user",
-      "pk": 3001,
-      "fields": {
-        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
-        "last_login": null,
-        "is_superuser": false,
-        "username": "shlok",
-        "first_name": "Shlok",
-        "last_name": "Tandon",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2026-03-06T11:00:00Z",
-        "email": "shlok.demo@example.com",
-        "role": "customer",
-        "groups": [],
-        "user_permissions": []
-      }
-    },
-    {
-      "model": "customers.customerprofile",
-      "pk": "cdbce4b8-f0be-48ff-ae81-25877188c5f0",
-      "fields": {
-        "user": 3001,
-        "company_name": "Shlok Logistics Demo",
-        "profile_image": null,
-        "phone_number": "+13175553001",
-        "preferences": {
-          "preferred_contact": "email"
-        },
-        "street_address": "501 Demo Parkway",
-        "street_address_2": "",
-        "city": "Indianapolis",
-        "state": "Indiana",
-        "postal_code": "46268",
-        "country": "United States",
-        "is_active": true,
-        "created_at": "2026-03-06T11:02:00Z",
-        "notes": "Single demo customer for Indianapolis Service Station."
-      }
-    },
-    {
-      "model": "users.user",
-      "pk": 3002,
-      "fields": {
-        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
-        "last_login": null,
-        "is_superuser": false,
-        "username": "sajandoe",
-        "first_name": "Sajan",
-        "last_name": "Doe",
-        "is_staff": true,
-        "is_active": true,
-        "date_joined": "2026-03-06T11:05:00Z",
-        "email": "sajandoe.demo@example.com",
-        "role": "technician",
-        "groups": [],
-        "user_permissions": []
-      }
-    },
-    {
-      "model": "users.profile",
-      "pk": "7e0055d1-8dd2-4dc0-b6be-fe9edb533552",
-      "fields": {
-        "user": 3002,
-        "profile_image": null,
-        "phone_number": "+13175553002",
-        "preferences": {
-          "theme": "system",
-          "notifications": true
-        },
-        "street_address": "100 Service Plaza",
-        "street_address_2": "",
-        "city": "Indianapolis",
-        "state": "Indiana",
-        "postal_code": "46268",
-        "country": "United States",
-        "is_active": true,
-        "created_at": "2026-03-06T11:06:00Z",
-        "notes": "Single demo technician for Indianapolis Service Station."
-      }
-    },
-    {
-      "model": "technicians.technicianprofile",
-      "pk": 46,
-      "fields": {
-        "profile": "7e0055d1-8dd2-4dc0-b6be-fe9edb533552",
-        "specialization": "engine",
-        "expertise": "senior",
-        "status": "available",
-        "hourly_rate": "72.00",
-        "station": "20000000-0000-4000-8000-000000000001",
-        "total_years_experience": 9.5,
-        "date_joined": "2026-03-06",
-        "performance_rating": 4.8,
-        "total_jobs_completed": 214,
-        "skill_score": 10
-      }
-    },
-    {
       "model": "tickets.ticket",
       "pk": "54b7fc7d-23fd-4745-a244-909e3383d52b",
       "fields": {
         "ticket_id": "INDY-TKT-2026-SHLOK-0001",
-        "customer": "cdbce4b8-f0be-48ff-ae81-25877188c5f0",
-        "assigned_technician": 46,
+        "customer": "a6e8f394-6b9c-4a4a-acdd-51f1e23ed795",
+        "assigned_technician": 26,
         "specialization": "engine",
         "title": "High-priority issue on X15 Efficiency Series (2024)",
         "description": "Customer reported critical drivability concerns tied to X15 Efficiency Series (2024). Initial intake suggests one or more related service parts require inspection or replacement.",
@@ -201,10 +102,10 @@
         "status": "in_progress",
         "specialization": "engine",
         "expertise_requirement": "senior",
-        "customer": "cdbce4b8-f0be-48ff-ae81-25877188c5f0",
-        "assigned_technician": 46,
+        "customer": "a6e8f394-6b9c-4a4a-acdd-51f1e23ed795",
+        "assigned_technician": 26,
         "fault_code": "FC-ENG-517",
-        "component": "10846ba8-2f29-4776-95f0-659ef1ad8f4e",
+        "component": null,
         "ai_summary": "Diagnostic confidence points to a high-priority engine issue centered on x15 efficiency series (2024) with likely impact to turbocharger assembly, fuel injector kit, oil filter service kit.",
         "probable_cause": "Operational stress or wear affecting x15 efficiency series (2024) and associated service parts.",
         "description": "Initial diagnostic confirms a high-priority service event involving X15 Efficiency Series (2024). Technician will inspect related parts and verify corrective action under load.",
