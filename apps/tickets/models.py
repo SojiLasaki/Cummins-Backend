@@ -92,3 +92,30 @@ class Ticket(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+class TicketResolutionPattern(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    signature_hash = models.CharField(max_length=64, unique=True)
+    specialization = models.CharField(max_length=50, choices=Ticket.SPECIALIZATION_CHOICES, default="engine")
+    component_name = models.CharField(max_length=255, blank=True)
+    fault_code = models.CharField(max_length=100, blank=True)
+    issue_text = models.TextField(blank=True)
+    issue_tokens = models.JSONField(default=list, blank=True)
+    parts_signature = models.JSONField(default=list, blank=True)
+    checklist_template = models.JSONField(default=list, blank=True)
+    evidence = models.JSONField(default=dict, blank=True)
+    success_count = models.IntegerField(default=0)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-success_count", "-updated_at"]
+        indexes = [
+            models.Index(fields=["specialization", "success_count"]),
+            models.Index(fields=["updated_at"]),
+        ]
+
+    def __str__(self):
+        return f"Pattern<{self.specialization}:{self.signature_hash[:10]}>"
