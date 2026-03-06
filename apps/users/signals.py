@@ -4,7 +4,10 @@ from .models import User, Profile, AdminUserProfile, OfficeStaffProfile
 from apps.customers.models import CustomerProfile
 
 @receiver(post_save, sender=User)
-def create_user_profiles(sender, instance, created, **kwargs):
+def create_user_profiles(sender, instance, created, raw=False, **kwargs):
+    if raw:
+        return 
+    
     if created:
         # Always create base profile
         profile = Profile.objects.create(user=instance)
@@ -20,7 +23,10 @@ def create_user_profiles(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=AdminUserProfile)
-def update_user_from_profile(sender, instance, created, **kwargs):
+def update_user_from_profile(sender, instance, created, raw=False, **kwargs):
+    if raw:
+        return 
+    
     if created:
         return
     user = getattr(instance, "user", None) or (
@@ -54,5 +60,5 @@ def set_admin_role(sender, instance, created, **kwargs):
 def set_office_staff_role(sender, instance, created, **kwargs):
     if created:
         user = instance.profile.user
-        user.role = 'office_staff'
+        user.role = 'office'
         user.save()

@@ -1,0 +1,3548 @@
+[
+    {
+      "model": "users.user",
+      "pk": 1001,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "aaron.mitchell",
+        "first_name": "Aaron",
+        "last_name": "Mitchell",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2020-01-03T09:00:00Z",
+        "email": "aaron.mitchell@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "e6b101df-e8a2-4b9a-b0ca-ca21fad9b815",
+      "fields": {
+        "user": 1001,
+        "profile_image": null,
+        "phone_number": "+13170001001",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "200 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 26,
+      "fields": {
+        "profile": "e6b101df-e8a2-4b9a-b0ca-ca21fad9b815",
+        "specialization": "engine",
+        "expertise": "junior",
+        "status": "busy",
+        "hourly_rate": "36.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 2.0,
+        "date_joined": "2020-01-03",
+        "performance_rating": 3.7,
+        "total_jobs_completed": 45,
+        "skill_score": 5
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "bcaf9a91-6f6e-4d14-b228-38558e770bb2",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 26,
+        "certification_id": "INDY-TECH-01-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2020-05-02",
+        "expiration_date": "2023-01-02"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "6a5f491e-e3ae-4948-8502-9dc2e410efb0",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 26,
+        "certification_id": "INDY-TECH-01-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2020-08-30",
+        "expiration_date": "2022-01-02"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "455e9e35-4664-41c8-b27f-2f39afa36837",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 26,
+        "certification_id": "INDY-TECH-01-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2021-01-02",
+        "expiration_date": null
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1002,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "brianna.hayes",
+        "first_name": "Brianna",
+        "last_name": "Hayes",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2021-02-04T09:00:00Z",
+        "email": "brianna.hayes@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "b7af784e-a6bc-4bee-864c-3e6aab029c0f",
+      "fields": {
+        "user": 1002,
+        "profile_image": null,
+        "phone_number": "+13170001002",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "201 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 27,
+      "fields": {
+        "profile": "b7af784e-a6bc-4bee-864c-3e6aab029c0f",
+        "specialization": "electrical",
+        "expertise": "mid",
+        "status": "available",
+        "hourly_rate": "40.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 2.8,
+        "date_joined": "2021-02-04",
+        "performance_rating": 3.88,
+        "total_jobs_completed": 56,
+        "skill_score": 6
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "a0d34c68-82cf-4c4a-879a-94683d367b58",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 27,
+        "certification_id": "INDY-TECH-02-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2021-06-04",
+        "expiration_date": "2024-02-04"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "ddac5cb7-fb9c-4f9b-9df4-589c6008f8e6",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 27,
+        "certification_id": "INDY-TECH-02-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2021-10-02",
+        "expiration_date": "2023-02-04"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "710ff1ec-ecbf-4eac-a934-728327b4e51a",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 27,
+        "certification_id": "INDY-TECH-02-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2022-02-04",
+        "expiration_date": "2025-02-03"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1003,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "caleb.turner",
+        "first_name": "Caleb",
+        "last_name": "Turner",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-03-05T09:00:00Z",
+        "email": "caleb.turner@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "ef987531-5305-4cca-8141-88c0b1d7c326",
+      "fields": {
+        "user": 1003,
+        "profile_image": null,
+        "phone_number": "+13170001003",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "202 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 28,
+      "fields": {
+        "profile": "ef987531-5305-4cca-8141-88c0b1d7c326",
+        "specialization": "engine",
+        "expertise": "mid",
+        "status": "available",
+        "hourly_rate": "44.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 3.6,
+        "date_joined": "2022-03-05",
+        "performance_rating": 4.06,
+        "total_jobs_completed": 67,
+        "skill_score": 7
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "d51fb80b-9e04-494a-8553-d84943ee3407",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 28,
+        "certification_id": "INDY-TECH-03-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2022-07-03",
+        "expiration_date": "2025-03-04"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "6e620baf-dcc1-4fee-8951-91901a8ff65d",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 28,
+        "certification_id": "INDY-TECH-03-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2022-10-31",
+        "expiration_date": "2024-03-04"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "09823851-afa8-413b-853d-3981431bfeb7",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 28,
+        "certification_id": "INDY-TECH-03-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2023-03-05",
+        "expiration_date": "2026-03-04"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1004,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "danielle.price",
+        "first_name": "Danielle",
+        "last_name": "Price",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-04-06T09:00:00Z",
+        "email": "danielle.price@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "e2c7ffc4-6d25-4ee6-aedf-2d6feca2e086",
+      "fields": {
+        "user": 1004,
+        "profile_image": null,
+        "phone_number": "+13170001004",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "203 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 29,
+      "fields": {
+        "profile": "e2c7ffc4-6d25-4ee6-aedf-2d6feca2e086",
+        "specialization": "electrical",
+        "expertise": "senior",
+        "status": "available",
+        "hourly_rate": "58.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 4.4,
+        "date_joined": "2023-04-06",
+        "performance_rating": 4.24,
+        "total_jobs_completed": 78,
+        "skill_score": 8
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "2e24c22a-7e39-4bf5-a744-96101b654267",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 29,
+        "certification_id": "INDY-TECH-04-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2023-08-04",
+        "expiration_date": "2026-04-05"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "6b8bf744-b1ba-4969-ad34-c3d1f8b77b0a",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 29,
+        "certification_id": "INDY-TECH-04-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2023-12-02",
+        "expiration_date": "2025-04-05"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "4e4bf826-aa9e-441b-a8ea-6ee73012e4bc",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 29,
+        "certification_id": "INDY-TECH-04-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2024-04-05",
+        "expiration_date": "2027-04-05"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1005,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "evan.bennett",
+        "first_name": "Evan",
+        "last_name": "Bennett",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-05-07T09:00:00Z",
+        "email": "evan.bennett@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "599accef-8134-4d2f-989a-36cf3479d01c",
+      "fields": {
+        "user": 1005,
+        "profile_image": null,
+        "phone_number": "+13170001005",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "204 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 30,
+      "fields": {
+        "profile": "599accef-8134-4d2f-989a-36cf3479d01c",
+        "specialization": "engine",
+        "expertise": "junior",
+        "status": "available",
+        "hourly_rate": "52.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 5.2,
+        "date_joined": "2024-05-07",
+        "performance_rating": 4.42,
+        "total_jobs_completed": 89,
+        "skill_score": 9
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "799b4eab-f3e1-4289-86cd-4dbce29dfdb4",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 30,
+        "certification_id": "INDY-TECH-05-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2024-09-04",
+        "expiration_date": "2027-05-07"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "86f64c0b-6d96-4b2a-a8ae-e16c19097d8c",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 30,
+        "certification_id": "INDY-TECH-05-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2025-01-02",
+        "expiration_date": "2026-05-07"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "a9b4700c-de7c-4902-9df5-42e5dfaa0d93",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 30,
+        "certification_id": "INDY-TECH-05-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2025-05-07",
+        "expiration_date": "2028-05-06"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1006,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "faith.coleman",
+        "first_name": "Faith",
+        "last_name": "Coleman",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2020-06-08T09:00:00Z",
+        "email": "faith.coleman@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "1ae2793f-a4e2-4c27-8b13-23e6e6c4c8ef",
+      "fields": {
+        "user": 1006,
+        "profile_image": null,
+        "phone_number": "+13170001006",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "205 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 31,
+      "fields": {
+        "profile": "1ae2793f-a4e2-4c27-8b13-23e6e6c4c8ef",
+        "specialization": "electrical",
+        "expertise": "mid",
+        "status": "available",
+        "hourly_rate": "56.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 6.0,
+        "date_joined": "2020-06-08",
+        "performance_rating": 4.6,
+        "total_jobs_completed": 100,
+        "skill_score": 10
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "c27a6bd6-717b-4cb9-ae77-36b2be158f11",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 31,
+        "certification_id": "INDY-TECH-06-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2020-10-06",
+        "expiration_date": "2023-06-08"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "a05ae286-6091-47da-8891-b006277594ca",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 31,
+        "certification_id": "INDY-TECH-06-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2021-02-03",
+        "expiration_date": "2022-06-08"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "4aad7af3-f788-48fe-9c31-1eb780e868d2",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 31,
+        "certification_id": "INDY-TECH-06-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2021-06-08",
+        "expiration_date": null
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1007,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "gabriel.ward",
+        "first_name": "Gabriel",
+        "last_name": "Ward",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2021-07-09T09:00:00Z",
+        "email": "gabriel.ward@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "279fa7dc-5f20-465c-81a1-420e7bbecb51",
+      "fields": {
+        "user": 1007,
+        "profile_image": null,
+        "phone_number": "+13170001007",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "206 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 32,
+      "fields": {
+        "profile": "279fa7dc-5f20-465c-81a1-420e7bbecb51",
+        "specialization": "engine",
+        "expertise": "senior",
+        "status": "busy",
+        "hourly_rate": "70.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 6.8,
+        "date_joined": "2021-07-09",
+        "performance_rating": 3.7,
+        "total_jobs_completed": 111,
+        "skill_score": 5
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "ba92b41f-912b-48ab-a513-23644fc4c10c",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 32,
+        "certification_id": "INDY-TECH-07-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2021-11-06",
+        "expiration_date": "2024-07-08"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "58f88339-451d-424d-946b-714aeaf24dff",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 32,
+        "certification_id": "INDY-TECH-07-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2022-03-06",
+        "expiration_date": "2023-07-09"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "8598a8b9-e762-40d2-9712-f8e239ce31b9",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 32,
+        "certification_id": "INDY-TECH-07-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2022-07-09",
+        "expiration_date": "2025-07-08"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1008,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "hannah.simmons",
+        "first_name": "Hannah",
+        "last_name": "Simmons",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-08-10T09:00:00Z",
+        "email": "hannah.simmons@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "2201223c-3670-4b76-8355-20a06d68954e",
+      "fields": {
+        "user": 1008,
+        "profile_image": null,
+        "phone_number": "+13170001008",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "207 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 33,
+      "fields": {
+        "profile": "2201223c-3670-4b76-8355-20a06d68954e",
+        "specialization": "electrical",
+        "expertise": "mid",
+        "status": "available",
+        "hourly_rate": "36.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 7.6,
+        "date_joined": "2022-08-10",
+        "performance_rating": 3.88,
+        "total_jobs_completed": 122,
+        "skill_score": 6
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "5516706c-9b3d-4d36-8cdd-7e26dfa1dd78",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 33,
+        "certification_id": "INDY-TECH-08-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2022-12-08",
+        "expiration_date": "2025-08-09"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "2af72797-84d7-40ca-b37f-a576ea955c48",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 33,
+        "certification_id": "INDY-TECH-08-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2023-04-07",
+        "expiration_date": "2024-08-09"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "17492522-b865-4c25-a65f-a271b8b7e887",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 33,
+        "certification_id": "INDY-TECH-08-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2023-08-10",
+        "expiration_date": "2026-08-09"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1009,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "isaac.foster",
+        "first_name": "Isaac",
+        "last_name": "Foster",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-09-11T09:00:00Z",
+        "email": "isaac.foster@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "8b7c44ba-4e0c-40ef-bd17-75a35b5c20fe",
+      "fields": {
+        "user": 1009,
+        "profile_image": null,
+        "phone_number": "+13170001009",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "208 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 34,
+      "fields": {
+        "profile": "8b7c44ba-4e0c-40ef-bd17-75a35b5c20fe",
+        "specialization": "engine",
+        "expertise": "junior",
+        "status": "available",
+        "hourly_rate": "40.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 8.4,
+        "date_joined": "2023-09-11",
+        "performance_rating": 4.06,
+        "total_jobs_completed": 133,
+        "skill_score": 7
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "95c095bd-d1c1-40ae-8b44-7f14f5a3d970",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 34,
+        "certification_id": "INDY-TECH-09-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2024-01-09",
+        "expiration_date": "2026-09-10"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "e9241ddc-2992-4d39-ae15-9f9c8fe76a48",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 34,
+        "certification_id": "INDY-TECH-09-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2024-05-08",
+        "expiration_date": "2025-09-10"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "fe228a3f-48f8-442e-81ec-8e5e46578f5b",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 34,
+        "certification_id": "INDY-TECH-09-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2024-09-10",
+        "expiration_date": "2027-09-10"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1010,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "jade.morgan",
+        "first_name": "Jade",
+        "last_name": "Morgan",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-10-12T09:00:00Z",
+        "email": "jade.morgan@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "112dc563-e2e5-40dd-a4f6-636836ab248c",
+      "fields": {
+        "user": 1010,
+        "profile_image": null,
+        "phone_number": "+13170001010",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "209 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 35,
+      "fields": {
+        "profile": "112dc563-e2e5-40dd-a4f6-636836ab248c",
+        "specialization": "electrical",
+        "expertise": "senior",
+        "status": "available",
+        "hourly_rate": "54.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 9.2,
+        "date_joined": "2024-10-12",
+        "performance_rating": 4.24,
+        "total_jobs_completed": 144,
+        "skill_score": 8
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "0e3f3acf-395a-46c8-bc43-4c36af17e4d0",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 35,
+        "certification_id": "INDY-TECH-10-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2025-02-09",
+        "expiration_date": "2027-10-12"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "9fa5274f-0c3e-4a70-952a-39b0f6f3200b",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 35,
+        "certification_id": "INDY-TECH-10-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2025-06-09",
+        "expiration_date": "2026-10-12"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "af250958-2d0c-4520-9d8e-5d9ce849b56c",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 35,
+        "certification_id": "INDY-TECH-10-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2025-10-12",
+        "expiration_date": "2028-10-11"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1011,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "kevin.ramirez",
+        "first_name": "Kevin",
+        "last_name": "Ramirez",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2020-11-13T09:00:00Z",
+        "email": "kevin.ramirez@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "7c87aa3e-77c1-41c0-82f0-f75fcd31a892",
+      "fields": {
+        "user": 1011,
+        "profile_image": null,
+        "phone_number": "+13170001011",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "210 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 36,
+      "fields": {
+        "profile": "7c87aa3e-77c1-41c0-82f0-f75fcd31a892",
+        "specialization": "engine",
+        "expertise": "mid",
+        "status": "unavailable",
+        "hourly_rate": "48.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 10.0,
+        "date_joined": "2020-11-13",
+        "performance_rating": 4.42,
+        "total_jobs_completed": 155,
+        "skill_score": 9
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "f649fa46-7e9a-4de6-9cba-75777013994d",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 36,
+        "certification_id": "INDY-TECH-11-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2021-03-13",
+        "expiration_date": "2023-11-13"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "21ec0a0b-8539-4885-9575-5a6be866924f",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 36,
+        "certification_id": "INDY-TECH-11-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2021-07-11",
+        "expiration_date": "2022-11-13"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "146b3fb2-a8ff-4088-a771-264bff92100a",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 36,
+        "certification_id": "INDY-TECH-11-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2021-11-13",
+        "expiration_date": null
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1012,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "lila.parker",
+        "first_name": "Lila",
+        "last_name": "Parker",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2021-12-14T09:00:00Z",
+        "email": "lila.parker@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "7f5b7545-0df0-4a9e-bf61-cfd44ecc81d6",
+      "fields": {
+        "user": 1012,
+        "profile_image": null,
+        "phone_number": "+13170001012",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "211 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 37,
+      "fields": {
+        "profile": "7f5b7545-0df0-4a9e-bf61-cfd44ecc81d6",
+        "specialization": "electrical",
+        "expertise": "mid",
+        "status": "available",
+        "hourly_rate": "52.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 10.8,
+        "date_joined": "2021-12-14",
+        "performance_rating": 4.6,
+        "total_jobs_completed": 166,
+        "skill_score": 10
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "bcd5a964-c0bf-4130-86b8-3cd41b87f774",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 37,
+        "certification_id": "INDY-TECH-12-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2022-04-13",
+        "expiration_date": "2024-12-13"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "2d55ec04-fd58-4056-900f-91c136e57bad",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 37,
+        "certification_id": "INDY-TECH-12-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2022-08-11",
+        "expiration_date": "2023-12-14"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "1d9302e4-0532-4f16-8ff4-9d8c512d6b22",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 37,
+        "certification_id": "INDY-TECH-12-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2022-12-14",
+        "expiration_date": "2025-12-13"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1013,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "mason.hughes",
+        "first_name": "Mason",
+        "last_name": "Hughes",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-01-15T09:00:00Z",
+        "email": "mason.hughes@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "4622d012-99a7-44d3-a558-f55c4badab3f",
+      "fields": {
+        "user": 1013,
+        "profile_image": null,
+        "phone_number": "+13170001013",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "212 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 38,
+      "fields": {
+        "profile": "4622d012-99a7-44d3-a558-f55c4badab3f",
+        "specialization": "engine",
+        "expertise": "junior",
+        "status": "busy",
+        "hourly_rate": "56.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 11.6,
+        "date_joined": "2022-01-15",
+        "performance_rating": 3.7,
+        "total_jobs_completed": 177,
+        "skill_score": 5
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "b5bec29d-1557-4923-a911-b9eac5f3655c",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 38,
+        "certification_id": "INDY-TECH-13-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2022-05-15",
+        "expiration_date": "2025-01-14"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "573af8e5-ea4a-4caf-8a94-bd26612cd961",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 38,
+        "certification_id": "INDY-TECH-13-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2022-09-12",
+        "expiration_date": "2024-01-15"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "bb98c1a1-dffb-429c-abbf-c58948d23162",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 38,
+        "certification_id": "INDY-TECH-13-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2023-01-15",
+        "expiration_date": "2026-01-14"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1014,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "nora.bailey",
+        "first_name": "Nora",
+        "last_name": "Bailey",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-02-16T09:00:00Z",
+        "email": "nora.bailey@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "70a7fcca-ecc6-4b88-b26d-4a699ae985c1",
+      "fields": {
+        "user": 1014,
+        "profile_image": null,
+        "phone_number": "+13170001014",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "213 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 39,
+      "fields": {
+        "profile": "70a7fcca-ecc6-4b88-b26d-4a699ae985c1",
+        "specialization": "electrical",
+        "expertise": "mid",
+        "status": "available",
+        "hourly_rate": "60.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 12.4,
+        "date_joined": "2023-02-16",
+        "performance_rating": 3.88,
+        "total_jobs_completed": 188,
+        "skill_score": 6
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "99637891-5a25-462f-8abe-6632abfea13a",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 39,
+        "certification_id": "INDY-TECH-14-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2023-06-16",
+        "expiration_date": "2026-02-15"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "91886c18-5169-4c93-bd01-876a4e23c58d",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 39,
+        "certification_id": "INDY-TECH-14-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2023-10-14",
+        "expiration_date": "2025-02-15"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "14f2daaa-8c48-4e07-b5d7-0662f8b9c6ab",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 39,
+        "certification_id": "INDY-TECH-14-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2024-02-16",
+        "expiration_date": "2027-02-15"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1015,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "owen.reed",
+        "first_name": "Owen",
+        "last_name": "Reed",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-03-17T09:00:00Z",
+        "email": "owen.reed@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "390c9b78-128a-4767-9bae-bc802b6539ad",
+      "fields": {
+        "user": 1015,
+        "profile_image": null,
+        "phone_number": "+13170001015",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "214 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 40,
+      "fields": {
+        "profile": "390c9b78-128a-4767-9bae-bc802b6539ad",
+        "specialization": "engine",
+        "expertise": "mid",
+        "status": "available",
+        "hourly_rate": "36.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 13.2,
+        "date_joined": "2024-03-17",
+        "performance_rating": 4.06,
+        "total_jobs_completed": 199,
+        "skill_score": 7
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "c89bb56a-511e-4263-af94-adf1fbb4c3af",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 40,
+        "certification_id": "INDY-TECH-15-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2024-07-15",
+        "expiration_date": "2027-03-17"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "cdd6ddc8-eb54-4b78-8060-4e93c4a670fd",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 40,
+        "certification_id": "INDY-TECH-15-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2024-11-12",
+        "expiration_date": "2026-03-17"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "d4e1d7de-9304-4133-8df6-a5c973c01398",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 40,
+        "certification_id": "INDY-TECH-15-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2025-03-17",
+        "expiration_date": "2028-03-16"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1016,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "paige.brooks",
+        "first_name": "Paige",
+        "last_name": "Brooks",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2020-04-18T09:00:00Z",
+        "email": "paige.brooks@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "26ee80ad-fa9d-4491-9552-c7c156107571",
+      "fields": {
+        "user": 1016,
+        "profile_image": null,
+        "phone_number": "+13170001016",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "215 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 41,
+      "fields": {
+        "profile": "26ee80ad-fa9d-4491-9552-c7c156107571",
+        "specialization": "electrical",
+        "expertise": "senior",
+        "status": "available",
+        "hourly_rate": "50.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 14.0,
+        "date_joined": "2020-04-18",
+        "performance_rating": 4.24,
+        "total_jobs_completed": 210,
+        "skill_score": 8
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "7e062312-ed7d-4664-a7c5-eed1d5b62425",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 41,
+        "certification_id": "INDY-TECH-16-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2020-08-16",
+        "expiration_date": "2023-04-18"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "cb34a08b-c52b-48c7-bdb7-3b1bdeb323e0",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 41,
+        "certification_id": "INDY-TECH-16-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2020-12-14",
+        "expiration_date": "2022-04-18"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "11d8e8a0-e045-4877-94e8-c7d168f9ea9f",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 41,
+        "certification_id": "INDY-TECH-16-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2021-04-18",
+        "expiration_date": null
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1017,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "quentin.long",
+        "first_name": "Quentin",
+        "last_name": "Long",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2021-05-19T09:00:00Z",
+        "email": "quentin.long@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "4c666a88-77f5-4757-a105-9baf84d32fb2",
+      "fields": {
+        "user": 1017,
+        "profile_image": null,
+        "phone_number": "+13170001017",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "216 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 42,
+      "fields": {
+        "profile": "4c666a88-77f5-4757-a105-9baf84d32fb2",
+        "specialization": "engine",
+        "expertise": "junior",
+        "status": "available",
+        "hourly_rate": "44.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 14.8,
+        "date_joined": "2021-05-19",
+        "performance_rating": 4.42,
+        "total_jobs_completed": 221,
+        "skill_score": 9
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "35a5d777-cb36-4eff-8b91-90b2446c3af0",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 42,
+        "certification_id": "INDY-TECH-17-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2021-09-16",
+        "expiration_date": "2024-05-18"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "a14eacde-cac2-42d3-8e4a-d7c2b761eef5",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 42,
+        "certification_id": "INDY-TECH-17-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2022-01-14",
+        "expiration_date": "2023-05-19"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "5a5efb58-10ba-4936-a845-3f8eb9d10b42",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 42,
+        "certification_id": "INDY-TECH-17-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2022-05-19",
+        "expiration_date": "2025-05-18"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1018,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "riley.carter",
+        "first_name": "Riley",
+        "last_name": "Carter",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2022-06-20T09:00:00Z",
+        "email": "riley.carter@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "d2b13992-8592-483a-9bba-fcc10d39825d",
+      "fields": {
+        "user": 1018,
+        "profile_image": null,
+        "phone_number": "+13170001018",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "217 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Electrical technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 43,
+      "fields": {
+        "profile": "d2b13992-8592-483a-9bba-fcc10d39825d",
+        "specialization": "electrical",
+        "expertise": "mid",
+        "status": "available",
+        "hourly_rate": "48.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 15.6,
+        "date_joined": "2022-06-20",
+        "performance_rating": 4.6,
+        "total_jobs_completed": 232,
+        "skill_score": 10
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "a85a4e80-ea4a-42c4-8de5-36d434a9bb37",
+      "fields": {
+        "name": "High Voltage Electrical Systems Certification",
+        "technician": 43,
+        "certification_id": "INDY-TECH-18-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2022-10-18",
+        "expiration_date": "2025-06-19"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "21aaaf46-9115-46f5-8794-d8a07a88ac30",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 43,
+        "certification_id": "INDY-TECH-18-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2023-02-15",
+        "expiration_date": "2024-06-19"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "6da81ece-d71b-450e-b947-22f703a730fd",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 43,
+        "certification_id": "INDY-TECH-18-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2023-06-20",
+        "expiration_date": "2026-06-19"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1019,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "sophia.bryant",
+        "first_name": "Sophia",
+        "last_name": "Bryant",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2023-07-21T09:00:00Z",
+        "email": "sophia.bryant@indyfleet.example.com",
+        "role": "technician",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "70807a84-21c6-4ba6-9305-0c9edcf6e201",
+      "fields": {
+        "user": 1019,
+        "profile_image": null,
+        "phone_number": "+13170001019",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "218 W Service Rd",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Engine technician assigned to Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "technicians.technicianprofile",
+      "pk": 44,
+      "fields": {
+        "profile": "70807a84-21c6-4ba6-9305-0c9edcf6e201",
+        "specialization": "engine",
+        "expertise": "senior",
+        "status": "busy",
+        "hourly_rate": "62.00",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "total_years_experience": 16.4,
+        "date_joined": "2023-07-21",
+        "performance_rating": 3.7,
+        "total_jobs_completed": 243,
+        "skill_score": 5
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "c305f2b9-186c-45af-84ee-bbfb6641e53c",
+      "fields": {
+        "name": "Cummins Engine Systems Certification",
+        "technician": 44,
+        "certification_id": "INDY-TECH-19-CERT-1",
+        "institution": "Cummins Technical Academy",
+        "date_obtained": "2023-11-18",
+        "expiration_date": "2026-07-20"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "229b587d-7a99-48fb-b818-891cc9fcb2dc",
+      "fields": {
+        "name": "Advanced Diagnostics Specialist",
+        "technician": 44,
+        "certification_id": "INDY-TECH-19-CERT-2",
+        "institution": "Global Fleet Service Institute",
+        "date_obtained": "2024-03-17",
+        "expiration_date": "2025-07-20"
+      }
+    },
+    {
+      "model": "technicians.certification",
+      "pk": "aa4dcbc2-fa97-490b-99f1-618757135cb3",
+      "fields": {
+        "name": "Industrial Safety & Lockout Certification",
+        "technician": 44,
+        "certification_id": "INDY-TECH-19-CERT-3",
+        "institution": "Industrial Safety Council",
+        "date_obtained": "2024-07-20",
+        "expiration_date": "2027-07-20"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1020,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "tanya.wells",
+        "first_name": "Tanya",
+        "last_name": "Wells",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-01-15T09:00:00Z",
+        "email": "tanya.wells@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "e28813b3-f0d6-43c4-b302-04cfee3183c0",
+      "fields": {
+        "user": 1020,
+        "profile_image": null,
+        "phone_number": "+13170001020",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "300 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 13,
+      "fields": {
+        "profile": "e28813b3-f0d6-43c4-b302-04cfee3183c0",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Unavailable"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1021,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "umar.ali",
+        "first_name": "Umar",
+        "last_name": "Ali",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-02-15T09:00:00Z",
+        "email": "umar.ali@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "a4ac3862-aea2-43aa-a5cd-c193c7c4a0c5",
+      "fields": {
+        "user": 1021,
+        "profile_image": null,
+        "phone_number": "+13170001021",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "301 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 14,
+      "fields": {
+        "profile": "a4ac3862-aea2-43aa-a5cd-c193c7c4a0c5",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Busy"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1022,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "victoria.king",
+        "first_name": "Victoria",
+        "last_name": "King",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-03-15T09:00:00Z",
+        "email": "victoria.king@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "016728c2-fc2f-44ba-9a2d-d789cd698ecb",
+      "fields": {
+        "user": 1022,
+        "profile_image": null,
+        "phone_number": "+13170001022",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "302 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 15,
+      "fields": {
+        "profile": "016728c2-fc2f-44ba-9a2d-d789cd698ecb",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Available"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1023,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "will.harper",
+        "first_name": "Will",
+        "last_name": "Harper",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-04-15T09:00:00Z",
+        "email": "will.harper@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "6f2dc884-115b-4419-93ce-a793db536498",
+      "fields": {
+        "user": 1023,
+        "profile_image": null,
+        "phone_number": "+13170001023",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "303 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 16,
+      "fields": {
+        "profile": "6f2dc884-115b-4419-93ce-a793db536498",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Available"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1024,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "xavier.scott",
+        "first_name": "Xavier",
+        "last_name": "Scott",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-05-15T09:00:00Z",
+        "email": "xavier.scott@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "9e32b79f-6075-423c-a6e6-6623dc425e13",
+      "fields": {
+        "user": 1024,
+        "profile_image": null,
+        "phone_number": "+13170001024",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "304 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 17,
+      "fields": {
+        "profile": "9e32b79f-6075-423c-a6e6-6623dc425e13",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Available"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1025,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "yasmin.hall",
+        "first_name": "Yasmin",
+        "last_name": "Hall",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-06-15T09:00:00Z",
+        "email": "yasmin.hall@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "0ed2d52d-0c7c-415d-b194-bcd9a3f309d2",
+      "fields": {
+        "user": 1025,
+        "profile_image": null,
+        "phone_number": "+13170001025",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "305 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 18,
+      "fields": {
+        "profile": "0ed2d52d-0c7c-415d-b194-bcd9a3f309d2",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Busy"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1026,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "zachary.ross",
+        "first_name": "Zachary",
+        "last_name": "Ross",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-07-15T09:00:00Z",
+        "email": "zachary.ross@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "c038cca0-fde0-4008-bc9a-bfcf18eb5b7f",
+      "fields": {
+        "user": 1026,
+        "profile_image": null,
+        "phone_number": "+13170001026",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "306 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 19,
+      "fields": {
+        "profile": "c038cca0-fde0-4008-bc9a-bfcf18eb5b7f",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Available"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1027,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "amber.cooper",
+        "first_name": "Amber",
+        "last_name": "Cooper",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-08-15T09:00:00Z",
+        "email": "amber.cooper@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "afdf587d-704d-4f4e-8d88-ceebe0b7955f",
+      "fields": {
+        "user": 1027,
+        "profile_image": null,
+        "phone_number": "+13170001027",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "307 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 20,
+      "fields": {
+        "profile": "afdf587d-704d-4f4e-8d88-ceebe0b7955f",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Unavailable"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1028,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "blake.edwards",
+        "first_name": "Blake",
+        "last_name": "Edwards",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-09-15T09:00:00Z",
+        "email": "blake.edwards@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "14a4f2b0-9b2d-4367-b8f9-30be0a20c440",
+      "fields": {
+        "user": 1028,
+        "profile_image": null,
+        "phone_number": "+13170001028",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "308 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 21,
+      "fields": {
+        "profile": "14a4f2b0-9b2d-4367-b8f9-30be0a20c440",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Available"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1029,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "chloe.morris",
+        "first_name": "Chloe",
+        "last_name": "Morris",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2025-01-15T09:00:00Z",
+        "email": "chloe.morris@indyfleet.example.com",
+        "role": "office",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.profile",
+      "pk": "6f327e83-b254-45a5-84d1-23dece64b70e",
+      "fields": {
+        "user": 1029,
+        "profile_image": null,
+        "phone_number": "+13170001029",
+        "preferences": {
+          "theme": "system",
+          "notifications": true
+        },
+        "street_address": "309 N Station Ave",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46268",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Office staff supporting dispatch, intake, service coordination, and records."
+      }
+    },
+    {
+      "model": "staffs.staffprofile",
+      "pk": 22,
+      "fields": {
+        "profile": "6f327e83-b254-45a5-84d1-23dece64b70e",
+        "station": "20000000-0000-4000-8000-000000000001",
+        "status": "Busy"
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1030,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "midwesthaul01",
+        "first_name": "Noah",
+        "last_name": "Davis",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-01-01T09:00:00Z",
+        "email": "midwesthaul01@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "0247172c-ce1f-49e6-b969-74daad7c3bad",
+      "fields": {
+        "user": 1030,
+        "company_name": "Midwest Haul Logistics",
+        "profile_image": null,
+        "phone_number": "+13170001030",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "500 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46210",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Midwest Haul Logistics serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1031,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "crossroadstransit02",
+        "first_name": "Emma",
+        "last_name": "Wilson",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-02-02T09:00:00Z",
+        "email": "crossroadstransit02@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "231ad18b-9d6d-407d-950f-42ed02bc1b93",
+      "fields": {
+        "user": 1031,
+        "company_name": "Crossroads Transit Group",
+        "profile_image": null,
+        "phone_number": "+13170001031",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "503 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46211",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Crossroads Transit Group serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1032,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "indyfreight03",
+        "first_name": "Liam",
+        "last_name": "Johnson",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-03-03T09:00:00Z",
+        "email": "indyfreight03@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "1a19adfd-dc6a-4ce9-a585-d970f1911b05",
+      "fields": {
+        "user": 1032,
+        "company_name": "Indy Freight Lines",
+        "profile_image": null,
+        "phone_number": "+13170001032",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "506 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46212",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Indy Freight Lines serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1033,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "heartlandpower04",
+        "first_name": "Olivia",
+        "last_name": "Martin",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-04-04T09:00:00Z",
+        "email": "heartlandpower04@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "5cda48d9-e5d4-4717-8cf2-9d090912da17",
+      "fields": {
+        "user": 1033,
+        "company_name": "Heartland Power Solutions",
+        "profile_image": null,
+        "phone_number": "+13170001033",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "509 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46213",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Heartland Power Solutions serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1034,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "capitalfleet05",
+        "first_name": "Elijah",
+        "last_name": "Anderson",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-05-05T09:00:00Z",
+        "email": "capitalfleet05@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "3d88bb35-1ab3-4c5a-a534-f9eba07642d7",
+      "fields": {
+        "user": 1034,
+        "company_name": "Capital Fleet Services",
+        "profile_image": null,
+        "phone_number": "+13170001034",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "512 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46214",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Capital Fleet Services serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1035,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "summitcargo06",
+        "first_name": "Ava",
+        "last_name": "Thomas",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-06-06T09:00:00Z",
+        "email": "summitcargo06@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "24705f78-3485-4100-bf26-ead1171cde9f",
+      "fields": {
+        "user": 1035,
+        "company_name": "Summit Cargo Partners",
+        "profile_image": null,
+        "phone_number": "+13170001035",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "515 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46215",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Summit Cargo Partners serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1036,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "bluebridge07",
+        "first_name": "James",
+        "last_name": "Jackson",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-07-07T09:00:00Z",
+        "email": "bluebridge07@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "dd07b9e1-6813-4553-8953-2e6c33e83121",
+      "fields": {
+        "user": 1036,
+        "company_name": "Blue Bridge Distribution",
+        "profile_image": null,
+        "phone_number": "+13170001036",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "518 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46216",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Blue Bridge Distribution serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1037,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "ironroute08",
+        "first_name": "Sophia",
+        "last_name": "White",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-08-08T09:00:00Z",
+        "email": "ironroute08@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "9ede28af-e7a3-4c71-b7eb-213814c3fda4",
+      "fields": {
+        "user": 1037,
+        "company_name": "Iron Route Carriers",
+        "profile_image": null,
+        "phone_number": "+13170001037",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "521 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46217",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Iron Route Carriers serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1038,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "northstar09",
+        "first_name": "Benjamin",
+        "last_name": "Harris",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-09-09T09:00:00Z",
+        "email": "northstar09@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "e0abc353-ba81-4e6f-b486-7e5dc17246e7",
+      "fields": {
+        "user": 1038,
+        "company_name": "NorthStar Utility Fleet",
+        "profile_image": null,
+        "phone_number": "+13170001038",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "524 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46218",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for NorthStar Utility Fleet serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1039,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "eagleworks10",
+        "first_name": "Isabella",
+        "last_name": "Clark",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-10-10T09:00:00Z",
+        "email": "eagleworks10@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "04251fb1-1b34-423b-853f-c5a6c5f12664",
+      "fields": {
+        "user": 1039,
+        "company_name": "Eagle Works Equipment",
+        "profile_image": null,
+        "phone_number": "+13170001039",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "527 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46219",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Eagle Works Equipment serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1040,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "hoosierdiesel11",
+        "first_name": "Lucas",
+        "last_name": "Lewis",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-11-11T09:00:00Z",
+        "email": "hoosierdiesel11@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "1b05900a-da52-4202-8866-ae4be93a0be7",
+      "fields": {
+        "user": 1040,
+        "company_name": "Hoosier Diesel Transport",
+        "profile_image": null,
+        "phone_number": "+13170001040",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "530 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46220",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Hoosier Diesel Transport serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1041,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "primehaul12",
+        "first_name": "Mia",
+        "last_name": "Walker",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-12-12T09:00:00Z",
+        "email": "primehaul12@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "21c0342c-7e10-487b-81d6-5a24971ab32a",
+      "fields": {
+        "user": 1041,
+        "company_name": "PrimeHaul Operations",
+        "profile_image": null,
+        "phone_number": "+13170001041",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "533 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46221",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for PrimeHaul Operations serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1042,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "riverbend13",
+        "first_name": "Henry",
+        "last_name": "Hall",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-01-13T09:00:00Z",
+        "email": "riverbend13@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "bb67f912-1bee-4331-bb44-29a49316e45e",
+      "fields": {
+        "user": 1042,
+        "company_name": "Riverbend Industrial Movers",
+        "profile_image": null,
+        "phone_number": "+13170001042",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "536 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46222",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Riverbend Industrial Movers serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1043,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "pioneergrid14",
+        "first_name": "Charlotte",
+        "last_name": "Allen",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-02-14T09:00:00Z",
+        "email": "pioneergrid14@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "715e1569-d54d-414b-9478-1c903ffec0fe",
+      "fields": {
+        "user": 1043,
+        "company_name": "Pioneer Grid Maintenance",
+        "profile_image": null,
+        "phone_number": "+13170001043",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "539 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46223",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Pioneer Grid Maintenance serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1044,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "greatlakes15",
+        "first_name": "Alexander",
+        "last_name": "Young",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-03-15T09:00:00Z",
+        "email": "greatlakes15@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "1359e3ed-2724-4340-9a82-1a4ceeea633f",
+      "fields": {
+        "user": 1044,
+        "company_name": "Great Lakes Fleet Co.",
+        "profile_image": null,
+        "phone_number": "+13170001044",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "542 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46224",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Great Lakes Fleet Co. serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1045,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "meridian16",
+        "first_name": "Amelia",
+        "last_name": "Hernandez",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-04-16T09:00:00Z",
+        "email": "meridian16@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "1fffb538-de12-43c8-8f04-5d63efc9a5b8",
+      "fields": {
+        "user": 1045,
+        "company_name": "Meridian Service Trucks",
+        "profile_image": null,
+        "phone_number": "+13170001045",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "545 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46225",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Meridian Service Trucks serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1046,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "centralmotion17",
+        "first_name": "Michael",
+        "last_name": "King",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-05-17T09:00:00Z",
+        "email": "centralmotion17@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "151ea822-5757-4f0f-80ae-733156c1d7d5",
+      "fields": {
+        "user": 1046,
+        "company_name": "Central Motion Carriers",
+        "profile_image": null,
+        "phone_number": "+13170001046",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "548 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46226",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Central Motion Carriers serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1047,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "fortis18",
+        "first_name": "Harper",
+        "last_name": "Wright",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-06-18T09:00:00Z",
+        "email": "fortis18@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "c8a87008-2447-4108-a206-6e6bb9ebc3ac",
+      "fields": {
+        "user": 1047,
+        "company_name": "Fortis Mobile Power",
+        "profile_image": null,
+        "phone_number": "+13170001047",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "551 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46227",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Fortis Mobile Power serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1048,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "roadlink19",
+        "first_name": "Evelyn",
+        "last_name": "Lopez",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-07-19T09:00:00Z",
+        "email": "roadlink19@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "dd7472fc-7263-49c9-8726-409ad46986d9",
+      "fields": {
+        "user": 1048,
+        "company_name": "RoadLink Heavy Transport",
+        "profile_image": null,
+        "phone_number": "+13170001048",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "554 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46228",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for RoadLink Heavy Transport serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1049,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "apexhaul20",
+        "first_name": "Daniel",
+        "last_name": "Hill",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-08-20T09:00:00Z",
+        "email": "apexhaul20@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "53b81449-57d7-40ce-9914-dfd7fc720901",
+      "fields": {
+        "user": 1049,
+        "company_name": "Apex Haul Systems",
+        "profile_image": null,
+        "phone_number": "+13170001049",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "557 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46229",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Apex Haul Systems serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1050,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "valorfleet21",
+        "first_name": "Abigail",
+        "last_name": "Scott",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-09-21T09:00:00Z",
+        "email": "valorfleet21@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "6c1b5f53-05a9-4d48-a50b-a9291f5657e6",
+      "fields": {
+        "user": 1050,
+        "company_name": "Valor Fleet Group",
+        "profile_image": null,
+        "phone_number": "+13170001050",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "560 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46210",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Valor Fleet Group serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1051,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "midstate22",
+        "first_name": "Matthew",
+        "last_name": "Green",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-10-22T09:00:00Z",
+        "email": "midstate22@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "bdbc0a0a-c31f-4370-8fd7-7113af04f279",
+      "fields": {
+        "user": 1051,
+        "company_name": "MidState Utility Vehicles",
+        "profile_image": null,
+        "phone_number": "+13170001051",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "563 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46211",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for MidState Utility Vehicles serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1052,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "triton23",
+        "first_name": "Ella",
+        "last_name": "Adams",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-11-23T09:00:00Z",
+        "email": "triton23@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "95cf6998-090d-4d90-b3bb-a9fe8f8d3c1c",
+      "fields": {
+        "user": 1052,
+        "company_name": "Triton Freight Network",
+        "profile_image": null,
+        "phone_number": "+13170001052",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "566 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46212",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Triton Freight Network serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1053,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "keystone24",
+        "first_name": "Joseph",
+        "last_name": "Baker",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-12-24T09:00:00Z",
+        "email": "keystone24@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "2e6befc3-50d9-4222-b8ae-c6c4efcff262",
+      "fields": {
+        "user": 1053,
+        "company_name": "Keystone Industrial Fleet",
+        "profile_image": null,
+        "phone_number": "+13170001053",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "569 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46213",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Keystone Industrial Fleet serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1054,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "vector25",
+        "first_name": "Scarlett",
+        "last_name": "Gonzalez",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-01-25T09:00:00Z",
+        "email": "vector25@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "f1647b65-c50b-48ee-ae44-befe02658748",
+      "fields": {
+        "user": 1054,
+        "company_name": "Vector Fleet Services",
+        "profile_image": null,
+        "phone_number": "+13170001054",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "572 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46214",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Vector Fleet Services serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1055,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "rustbelt26",
+        "first_name": "David",
+        "last_name": "Nelson",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-02-01T09:00:00Z",
+        "email": "rustbelt26@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "50055550-be49-4882-b2cc-2767d4bf7f85",
+      "fields": {
+        "user": 1055,
+        "company_name": "Rust Belt Equipment Co.",
+        "profile_image": null,
+        "phone_number": "+13170001055",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "575 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46215",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Rust Belt Equipment Co. serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1056,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "alliedroute27",
+        "first_name": "Grace",
+        "last_name": "Carter",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-03-02T09:00:00Z",
+        "email": "alliedroute27@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "04857a59-f3fa-4edd-a53e-3aadb7c120a2",
+      "fields": {
+        "user": 1056,
+        "company_name": "Allied Route Hauling",
+        "profile_image": null,
+        "phone_number": "+13170001056",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "578 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46216",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Allied Route Hauling serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1057,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "civicpower28",
+        "first_name": "Samuel",
+        "last_name": "Mitchell",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-04-03T09:00:00Z",
+        "email": "civicpower28@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "86202814-a948-4195-a049-a1f68d3436c4",
+      "fields": {
+        "user": 1057,
+        "company_name": "Civic Power Contractors",
+        "profile_image": null,
+        "phone_number": "+13170001057",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "581 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46217",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Civic Power Contractors serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1058,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "unionmotor29",
+        "first_name": "Victoria",
+        "last_name": "Perez",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-05-04T09:00:00Z",
+        "email": "unionmotor29@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "9a707452-56b9-4dd0-86f8-998f8b3eeb25",
+      "fields": {
+        "user": 1058,
+        "company_name": "Union Motor Carriers",
+        "profile_image": null,
+        "phone_number": "+13170001058",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "584 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46218",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Union Motor Carriers serviced through Indianapolis Service Station."
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 1059,
+      "fields": {
+        "password": "pbkdf2_sha256$720000$demo$C8rYfZ4hVx8YBzj2WbW0kQX6lR3uQkz0a1nL9mP2QwE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "highland30",
+        "first_name": "Aria",
+        "last_name": "Roberts",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-06-05T09:00:00Z",
+        "email": "highland30@customers.example.com",
+        "role": "customer",
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "customers.customerprofile",
+      "pk": "5d965827-ee44-4898-8c47-5c84d494b1b0",
+      "fields": {
+        "user": 1059,
+        "company_name": "Highland Transport Works",
+        "profile_image": null,
+        "phone_number": "+13170001059",
+        "preferences": {
+          "preferred_contact": "email",
+          "newsletter": false
+        },
+        "street_address": "587 Logistics Pkwy",
+        "street_address_2": "",
+        "city": "Indianapolis",
+        "state": "Indiana",
+        "postal_code": "46219",
+        "country": "United States",
+        "is_active": true,
+        "created_at": "2026-03-05T21:05:00Z",
+        "notes": "Primary customer account for Highland Transport Works serviced through Indianapolis Service Station."
+      }
+    }
+  ]
