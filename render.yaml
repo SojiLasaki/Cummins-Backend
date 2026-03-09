@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: breakthru-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+    startCommand: gunicorn breakthru.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        sync: false
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: breakthru-backend.onrender.com,breakthru-dashboard.vercel.app
+      - key: DJANGO_SETTINGS_MODULE
+        value: breakthru.settings.base
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cummins_db
+          property: connectionString
+      - key: REDIS_HOST
+        fromService:
+          name: redis-cache
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          name: redis-cache
+          property: port
+      - key: OPENAI_API_KEY
+        sync: false
+  
+  - type: pserv
+    name: cummins_db
+    plan: free
+    ipAllowList: []
+  
+  - type: pserv
+    name: redis-cache
+    plan: free
+    ipAllowList: []

@@ -27,17 +27,17 @@ load_dotenv(WORKSPACE_DIR / ".env")
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#)b1e^*a$(zc55^(fhaqqa%e9(xcy7zcrg(97hn+^f!o@bb%82"
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-#)b1e^*a$(zc55^(fhaqqa%e9(xcy7zcrg(97hn+^f!o@bb%82")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower() in {"1", "true", "yes"}
 
 allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "").strip()
 if allowed_hosts_env:
     ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(",") if host.strip()]
 else:
     # Development-friendly default so local UI hosts do not break login with DisallowedHost.
-    ALLOWED_HOSTS = ["*"] if DEBUG else ["localhost", "127.0.0.1"]
+    ALLOWED_HOSTS = ["*"] if DEBUG else ["localhost", "127.0.0.1", "breakthru-dashboard.vercel.app"]
 
 
 # Application definition
@@ -110,12 +110,29 @@ WSGI_APPLICATION = "breakthru.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# Use DATABASE_URL if provided (for Render), otherwise use individual settings
+import dj_database_url
+
+database_url = os.getenv("DATABASE_URL")
+if database_url:
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=database_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
+            "NAME": BASE_DIR / "db.sqlite3" if os.getenv("DB_ENGINE", "sqlite3") == "sqlite3" else os.getenv("DB_NAME", "cummins_db"),
+            "USER": os.getenv("DB_USER", ""),
+            "PASSWORD": os.getenv("DB_PASSWORD", ""),
+            "HOST": os.getenv("DB_HOST", "localhost"),
+            "PORT": os.getenv("DB_PORT", "5432"),
+        }
+    }
 
 
 # Password validation
@@ -145,7 +162,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("localhost", 6379)],  # Redis server
+            "hosts": [(os.getenv("REDIS_HOST", "localhost"), int(os.getenv("REDIS_PORT", 6379)))],
         },
     },
 }
@@ -153,16 +170,21 @@ CHANNEL_LAYERS = {
 if DEBUG and os.getenv("CORS_ALLOW_ALL_ORIGINS", "true").lower() in {"1", "true", "yes"}:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost:8080",
-        "http://127.0.0.1:8080",
-        "http://localhost:8081",
-        "http://127.0.0.1:8081",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
+    cors_origins_env = os.getenv("CORS_ALLOWED_ORIGINS", "")
+    if cors_origins_env:
+        CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+    else:
+        CORS_ALLOWED_ORIGINS = [
+            "http://localhost:8080",
+            "http://127.0.0.1:8080",
+            "http://localhost:8081",
+            "http://127.0.0.1:8081",
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "https://breakthru-dashboard.vercel.app",
+        ]
 # Let frontend send Authorization header and cookies
 CORS_ALLOW_CREDENTIALS = True
 
@@ -206,3 +228,13 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Production Security Settings
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_SECURITY_POLICY = {
+        "default-src": ("'self'",),
+    }
