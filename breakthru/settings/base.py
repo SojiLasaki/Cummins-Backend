@@ -15,12 +15,14 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 PROJECT_DIR = BASE_DIR.parent
 WORKSPACE_DIR = PROJECT_DIR.parent
 
-load_dotenv(PROJECT_DIR / ".env")
-load_dotenv(WORKSPACE_DIR / ".env")
+# load_dotenv(PROJECT_DIR / ".env")     # cummins code/.env
+# load_dotenv(WORKSPACE_DIR / ".env")   # Downloads/.env
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -110,29 +112,37 @@ WSGI_APPLICATION = "breakthru.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# Use DATABASE_URL if provided (for Render), otherwise use individual settings
+# Use DATABASE_URL if provided (for Supabase/Render), otherwise use individual settingspython 
 import dj_database_url
 
-database_url = os.getenv("DATABASE_URL")
+# For Supabase with connection pooling, use DIRECT_URL for migrations
+database_url = os.getenv("DIRECT_URL") or os.getenv("DATABASE_URL")
 if database_url:
     DATABASES = {
         "default": dj_database_url.config(
             default=database_url,
             conn_max_age=600,
             conn_health_checks=True,
+            ssl_require=True,  # Supabase requires SSL
         )
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
-            "NAME": BASE_DIR / "db.sqlite3" if os.getenv("DB_ENGINE", "sqlite3") == "sqlite3" else os.getenv("DB_NAME", "cummins_db"),
-            "USER": os.getenv("DB_USER", ""),
-            "PASSWORD": os.getenv("DB_PASSWORD", ""),
-            "HOST": os.getenv("DB_HOST", "localhost"),
-            "PORT": os.getenv("DB_PORT", "5432"),
-        }
-    }
+# else:
+#     db_engine = os.getenv("DB_ENGINE", "django.db.backends.sqlite3")
+#     is_sqlite = "sqlite3" in db_engine
+    
+#     DATABASES = {
+#         "default": {
+#             "ENGINE": db_engine,
+#             "NAME": BASE_DIR / "db.sqlite3" if is_sqlite else os.getenv("DB_NAME", "postgres"),
+#             "USER": os.getenv("DB_USER", ""),
+#             "PASSWORD": os.getenv("DB_PASSWORD", ""),
+#             "HOST": os.getenv("DB_HOST", "localhost"),
+#             "PORT": os.getenv("DB_PORT", "5432"),
+#             "OPTIONS": {
+#                 "sslmode": "require",  # For Supabase
+#             } if not is_sqlite else {},
+#         }
+#     }
 
 
 # Password validation

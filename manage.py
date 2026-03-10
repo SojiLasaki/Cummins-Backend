@@ -10,7 +10,7 @@ def main():
     # change to production if not in development
     os.environ.setdefault(
         'DJANGO_SETTINGS_MODULE',
-        'breakthru.settings.development'
+        'breakthru.settings.base' if os.getenv("DEBUG", "False").lower() in {"1", "true", "yes"} else 'breakthru.settings.production'
     )
     try:
         from django.core.management import execute_from_command_line
